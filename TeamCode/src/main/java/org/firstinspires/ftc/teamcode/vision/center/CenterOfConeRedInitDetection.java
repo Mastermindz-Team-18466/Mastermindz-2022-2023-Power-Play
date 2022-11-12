@@ -20,6 +20,7 @@ public class CenterOfConeRedInitDetection extends LinearOpMode {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam"), cameraMonitorViewId);
         centerOfConePipeline = new CenterOfConeRedPipeline();
+        camera.setPipeline(centerOfConePipeline);
 
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
         {
@@ -36,17 +37,20 @@ public class CenterOfConeRedInitDetection extends LinearOpMode {
             }
         });
 
-        telemetry.setMsTransmissionInterval(50);
+        waitForStart();
 
-        while (!isStarted() && !isStopRequested())
+        while (opModeIsActive())
         {
-            telemetry.addLine(String.format("\nCenter X: %.2f", centerOfConePipeline.x));
-            telemetry.addLine(String.format("\nCenter Y: %.2f", centerOfConePipeline.y));
-            telemetry.update();
-            sleep(20);
+            if (centerOfConePipeline.x == 0 && centerOfConePipeline.y == 0) {
+                telemetry.addLine("Cone of Interest had not been seen");
+                telemetry.update();
+            }
+            else {
+                telemetry.addLine(String.format("\nCenter X: %.2f", centerOfConePipeline.x));
+                telemetry.addLine(String.format("\nCenter Y: %.2f", centerOfConePipeline.y));
+                telemetry.update();
+            }
         }
-
-        while (opModeIsActive()) {sleep(20);}
     }
 
 }

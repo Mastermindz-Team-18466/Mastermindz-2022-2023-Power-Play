@@ -11,27 +11,22 @@ import org.openftc.easyopencv.OpenCvPipeline;
 
 import java.util.ArrayList;
 
-public class CenterOfConeRedPipeline extends OpenCvPipeline {
+public class CenterOfPipePipeline extends OpenCvPipeline {
     //Outputs
     private Mat cvtColorOutput = new Mat();
     private Mat rgbThresholdOutput = new Mat();
 
-    public double x = 0;
-    public double y = 0;
+    public float x = 0;
+    public float y = 0;
 
     @Override
-    public Mat processFrame (Mat source0) {
-        // Step CV_cvtColor0:
-        Mat cvtColorSrc = source0;
-        int cvtColorCode = Imgproc.COLOR_BGR2HSV;
-        Imgproc.cvtColor(cvtColorSrc, cvtColorOutput, cvtColorCode);
+    public Mat processFrame(Mat input) {
 
-        // Step RGB_Threshold0:
-        Mat rgbThresholdInput = cvtColorOutput;
-        double[] rgbThresholdRed = {30, 90};
-        double[] rgbThresholdGreen = {30, 90};
-        double[] rgbThresholdBlue = {130, 255};
-        rgbThreshold(source0, rgbThresholdRed, rgbThresholdGreen, rgbThresholdBlue, rgbThresholdOutput);
+        Mat rgbThresholdInput = input;
+        double[] rgbThresholdRed = {0, 60};
+        double[] rgbThresholdGreen = {70, 255};
+        double[] rgbThresholdBlue = {0, 255};
+        rgbThreshold(rgbThresholdInput, rgbThresholdRed, rgbThresholdGreen, rgbThresholdBlue, rgbThresholdOutput);
 
         ArrayList<MatOfPoint> contours = new ArrayList<MatOfPoint>();
         Mat hierarchy = new Mat();

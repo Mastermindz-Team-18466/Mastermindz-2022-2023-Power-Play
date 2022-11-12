@@ -16,17 +16,13 @@ public class CenterOfConeBluePipeline extends OpenCvPipeline {
     private Mat cvtColorOutput = new Mat();
     private Mat rgbThresholdOutput = new Mat();
 
-    public double x = 1;
-    public double y = 1;
-
-    public CenterOfConeBluePipeline() {}
+    public float x = 0;
+    public float y = 0;
 
     @Override
     public Mat processFrame(Mat input) {
         // Step CV_cvtColor0:
-        Mat cvtColorSrc = input;
-        int cvtColorCode = Imgproc.COLOR_BGR2HSV;
-        Imgproc.cvtColor(cvtColorSrc, cvtColorOutput, cvtColorCode);
+        Imgproc.cvtColor(input, cvtColorOutput, Imgproc.COLOR_BGR2HSV);
 
         // Step RGB_Threshold0:
         Mat rgbThresholdInput = cvtColorOutput;
@@ -43,7 +39,7 @@ public class CenterOfConeBluePipeline extends OpenCvPipeline {
 
         if (contours.size() > 1) {
             int largestContourIndex = 0;
-            double lastContourArea = 0;
+            double lastContourArea = 100;
             for (int i = 0; i < contours.size(); i++) {
                 double contourArea = Imgproc.contourArea(contours.get(i));
                 if (contourArea > lastContourArea) {
@@ -51,24 +47,26 @@ public class CenterOfConeBluePipeline extends OpenCvPipeline {
                     lastContourArea = contourArea;
                 }
             }
-            //get bounding rect
-            Rect boundingRect = Imgproc
-                    .boundingRect(new MatOfPoint(contours.get(largestContourIndex).toArray()));
-            Imgproc.rectangle(rgbThresholdOutput, new Point(boundingRect.x, boundingRect.y),
-                    new Point(boundingRect.x + boundingRect.width, boundingRect.y + boundingRect.height),
-                    new Scalar(255));
 
-            x = boundingRect.x + boundingRect.width / 2;
-            y = boundingRect.y + boundingRect.height / 2;
+            if (lastContourArea > 100) {
+                //get bounding rect
+                Rect boundingRect = Imgproc
+                        .boundingRect(new MatOfPoint(contours.get(largestContourIndex).toArray()));
+                Imgproc.rectangle(rgbThresholdOutput, new Point(boundingRect.x, boundingRect.y),
+                        new Point(boundingRect.x + boundingRect.width, boundingRect.y + boundingRect.height),
+                        new Scalar(255));
 
-            Imgproc.rectangle(rgbThresholdOutput, new Point(x, y), new Point(x, y), new Scalar(0));
+                x = boundingRect.x + boundingRect.width / 2;
+                y = boundingRect.y + boundingRect.height / 2;
+
+                Imgproc.rectangle(rgbThresholdOutput, new Point(x, y), new Point(x, y), new Scalar(0));
+            } else {
+                x = 0;
+                y = 0;
+            }
         }
 
         return rgbThresholdOutput;
-    }
-
-    private void cvCvtColor(Mat src, int code, Mat dst) {
-        Imgproc.cvtColor(src, dst, code);
     }
 
     private void rgbThreshold(Mat input, double[] red, double[] green, double[] blue,

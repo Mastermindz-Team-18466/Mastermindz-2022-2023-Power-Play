@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.vision.center;
 
+import com.acmerobotics.roadrunner.control.PIDFController;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -20,6 +21,7 @@ public class CenterOfConeBlueInitDetection extends LinearOpMode {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam"), cameraMonitorViewId);
         centerOfConePipeline = new CenterOfConeBluePipeline();
+        camera.setPipeline(centerOfConePipeline);
 
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
         {
@@ -36,13 +38,21 @@ public class CenterOfConeBlueInitDetection extends LinearOpMode {
             }
         });
 
-        telemetry.setMsTransmissionInterval(50);
+        waitForStart();
 
-        while (!isStarted() && !isStopRequested())
+        while (opModeIsActive())
         {
-            telemetry.addLine(String.format("\nCenter X: %.2f", 1));
-            telemetry.addLine(String.format("\nCenter Y: %.2f", 1));
-            telemetry.update();
+            if (centerOfConePipeline.x == 0 && centerOfConePipeline.y == 0) {
+                telemetry.addLine("Cone of Interest had not been seen");
+                telemetry.update();
+            }
+            else {
+                float centerToPipe = 400 - centerOfConePipeline.x;
+
+                telemetry.addLine(String.format("\nCenter X: %.2f", centerOfConePipeline.x));
+                telemetry.addLine(String.format("\nCenter Y: %.2f", centerOfConePipeline.y));
+                telemetry.update();
+            }
         }
     }
 
