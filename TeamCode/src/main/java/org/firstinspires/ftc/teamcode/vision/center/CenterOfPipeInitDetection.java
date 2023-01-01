@@ -76,7 +76,7 @@ public class CenterOfPipeInitDetection extends LinearOpMode {
                 centerToPipe = 400 - centerOfPipePipeline.x;
                 telemetry.addLine(String.format("\nCenter X: %.2f", centerOfPipePipeline.x));
                 telemetry.addLine(String.format("\nCenter To Pipe: %.2f", centerToPipe));
-                telemetry.addLine(String.format("\nPower: %.2f", power));
+                telemetry.addLine(String.format("\nPower: %.2f", power)); //pratham write better code
                 if (power < 0) {
                     telemetry.addLine("Direction: counterclockwise");
                 } else if (power > 0) {
