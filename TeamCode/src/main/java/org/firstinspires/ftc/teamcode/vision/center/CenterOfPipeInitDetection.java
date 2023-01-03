@@ -27,8 +27,8 @@ public class CenterOfPipeInitDetection extends LinearOpMode {
 
     public float centerToPipe = 0;
 
-    public static double p = 0.004, i = 0, d = 0.0001;
-    public static double f = 0.1;
+    public static double p = 0.005, i = 0, d = 0.00000001;
+    public static double f = 0;
 
     public static int target = 400;
 
@@ -55,10 +55,7 @@ public class CenterOfPipeInitDetection extends LinearOpMode {
             }
 
             @Override
-            public void onError(int errorCode)
-            {
-
-            }
+            public void onError(int errorCode) {}
         });
 
         initialize();
