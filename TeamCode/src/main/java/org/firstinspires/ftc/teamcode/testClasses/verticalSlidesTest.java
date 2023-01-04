@@ -1,21 +1,18 @@
 package org.firstinspires.ftc.teamcode.testClasses;
 
 import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-@Config
-@TeleOp
+import java.util.Arrays;
+import java.util.List;
+
 public class verticalSlidesTest extends OpMode {
     private PIDController controller;
-
-    public static double p = 0.005, i = 0, d = 0.00000001;
-    public static double f = 0;
+    public static double kp = 0.1;
 
     public static double target = 0;
     public final double ticks_in_degrees = 769 / 720;
@@ -25,7 +22,6 @@ public class verticalSlidesTest extends OpMode {
 
     @Override
     public void init() {
-        controller = new PIDController(p, i, d);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         liftMotor1 = hardwareMap.get(DcMotorEx.class, "liftMotor1");
@@ -36,25 +32,31 @@ public class verticalSlidesTest extends OpMode {
 
     @Override
     public void loop() {
-        controller.setPID(p, i, d);
-        int pos1 = liftMotor1.getCurrentPosition();
-        int pos2 = liftMotor2.getCurrentPosition();
+        move();
+    }
 
-        double pid1 = controller.calculate(pos1, target);
-        double pid2 = controller.calculate(pos2, target);
+    public void setLiftMotorPower(double power) {
+        liftMotor1.setPower(power);
+        liftMotor2.setPower(power);
+    }
 
-        double ff = Math.cos(Math.toRadians(target / ticks_in_degrees)) * f;
+    public void stop() {
+        liftMotor1.setPower(0);
+        liftMotor2.setPower(0);
+    }
 
-        double power1 = pid1 + ff;
-        double power2 = pid2 + ff;
+    public List<Integer> getCurrentPosition() {
+        return Arrays.asList(liftMotor1.getCurrentPosition(), liftMotor2.getCurrentPosition());
+    }
 
-        liftMotor1.setPower(power1);
-        liftMotor2.setPower(power2);
+    public void move() {
+        double averagePosition = getPosition();
+        double p = kp * (target - averagePosition);
+        System.out.println(averagePosition);
+        setLiftMotorPower(p);
+    }
 
-        telemetry.addData("pos1", pos1);
-        telemetry.addData("pos2", pos2);
-        telemetry.addData("target", target);
-        telemetry.update();
-
+    public double getPosition() {
+        return (getCurrentPosition().get(0) + (getCurrentPosition().get(1) * -1)) / 2 / 19.5;
     }
 }
