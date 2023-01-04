@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.testClasses;
 
+//starting position is 80
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.controller.PIDController;
