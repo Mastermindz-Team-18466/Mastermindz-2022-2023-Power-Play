@@ -5,10 +5,15 @@ import android.annotation.SuppressLint;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.acmerobotics.roadrunner.control.PIDFController;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.AnalogInput;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.vision.center.pipeline.CenterOfConeBluePipeline;
@@ -25,17 +30,19 @@ public class CenterOfPipeInitDetection extends LinearOpMode {
 
     private PIDController controller;
 
-    public float centerToPipe = 0;
+    public double centerToPipe = 0;
 
     public static double p = 0.004, i = 0, d = 0.0001;
     public static double f = 0.1;
 
-    public static int target = 400;
+    public static double targetVoltage = 0.04;
 
     private final double ticks_in_degrees = 384.5 / 180;
 
     public double power = 0;
-    public String direction = "clockwise";
+
+    DcMotor turretMotor;
+    AnalogInput analogInput;
 
 
     @Override
@@ -45,6 +52,9 @@ public class CenterOfPipeInitDetection extends LinearOpMode {
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam"), cameraMonitorViewId);
         centerOfPipePipeline = new CenterOfPipePipeline();
         camera.setPipeline(centerOfPipePipeline);
+
+        turretMotor = hardwareMap.get(DcMotor.class, "turret");
+        analogInput = hardwareMap.get(AnalogInput.class, "analog_input");
 
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
         {
@@ -65,6 +75,18 @@ public class CenterOfPipeInitDetection extends LinearOpMode {
 
         waitForStart();
 
+        if (gamepad1.a) {
+            targetVoltage = 0;
+        }
+
+        else if (gamepad1.b) {
+            targetVoltage = 3.3 / 2;
+        }
+
+        else if (gamepad1.x) {
+            targetVoltage = 3.3 * 3 / 4;
+        }
+
         while (opModeIsActive())
         {
             if (centerOfPipePipeline.x == 0 && centerOfPipePipeline.y == 0) {
@@ -73,17 +95,13 @@ public class CenterOfPipeInitDetection extends LinearOpMode {
             }
             else {
                 repeat();
-                centerToPipe = 400 - centerOfPipePipeline.x;
-                telemetry.addLine(String.format("\nCenter X: %.2f", centerOfPipePipeline.x));
+                centerToPipe = 3.3 / 2 - analogInput.getVoltage();
+                telemetry.addLine(String.format("\nCenter X: %.2f", centerOfPipePipeline.x / 800 * 3.3));
                 telemetry.addLine(String.format("\nCenter To Pipe: %.2f", centerToPipe));
-                telemetry.addLine(String.format("\nPower: %.2f", power)); //pratham write better code
-                if (power < 0) {
-                    telemetry.addLine("Direction: counterclockwise");
-                } else if (power > 0) {
-                    telemetry.addLine("Direction: clockwise");
-                } else {
-                    telemetry.addLine("In the center!");
-                }
+                telemetry.addLine(String.format("\nPower: %.2f", power));
+
+                turretMotor.setPower(power);
+
                 telemetry.update();
             }
         }
@@ -94,9 +112,9 @@ public class CenterOfPipeInitDetection extends LinearOpMode {
     }
 
     public void repeat() {
-        controller.setPID(p, i, d);
-        double pid = controller.calculate(centerOfPipePipeline.x, target);
-        double ff = Math.cos(Math.toRadians(target / ticks_in_degrees));
+        controller.setPIDF(p, i, d, f);
+        double pid = controller.calculate(centerOfPipePipeline.x, targetVoltage);
+        double ff = Math.cos(Math.toRadians(targetVoltage / ticks_in_degrees));
 
         power = pid;
     }

@@ -1,19 +1,20 @@
 package org.firstinspires.ftc.teamcode.testClasses;
 
+//starting position is 80
+
 import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@Config
-@TeleOp
+import java.util.Arrays;
+import java.util.List;
+
 public class verticalSlidesTest extends OpMode {
     private PIDController controller;
 
@@ -29,6 +30,7 @@ public class verticalSlidesTest extends OpMode {
     @Override
     public void init() {
         controller = new PIDController(kp, ki, kd);
+
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         liftMotor1 = hardwareMap.get(DcMotorEx.class, "liftMotor1");
