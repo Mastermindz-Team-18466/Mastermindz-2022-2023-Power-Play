@@ -5,6 +5,12 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.teleop.Claw;
+import org.firstinspires.ftc.teamcode.teleop.HorizontalSlides;
+import org.firstinspires.ftc.teamcode.teleop.Turret;
+import org.firstinspires.ftc.teamcode.teleop.V4B;
+import org.firstinspires.ftc.teamcode.teleop.VerticalSlides;
+
 import java.util.Arrays;
 import java.util.List;
 

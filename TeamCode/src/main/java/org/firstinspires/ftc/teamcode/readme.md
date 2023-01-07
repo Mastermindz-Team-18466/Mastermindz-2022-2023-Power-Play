@@ -75,7 +75,7 @@ Driver Station's OpMode list.
 Each OpMode sample class begins with several lines of code like the ones shown below:
 
 ```
- @TeleOpTest(name="Template: Linear OpMode", group="Linear Opmode")
+ @TeleOp(name="Template: Linear OpMode", group="Linear Opmode")
  @Disabled
 ```
 

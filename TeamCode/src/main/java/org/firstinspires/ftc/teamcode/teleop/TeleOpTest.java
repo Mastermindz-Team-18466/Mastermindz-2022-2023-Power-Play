@@ -1,4 +1,3 @@
-
 package org.firstinspires.ftc.teamcode.teleop;
 
 import com.acmerobotics.dashboard.config.Config;
@@ -9,6 +8,13 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.teleop.Claw;
+import org.firstinspires.ftc.teamcode.teleop.HorizontalSlides;
+import org.firstinspires.ftc.teamcode.teleop.Outtake;
+import org.firstinspires.ftc.teamcode.teleop.TeleOpFieldCentric;
+import org.firstinspires.ftc.teamcode.teleop.Turret;
+import org.firstinspires.ftc.teamcode.teleop.V4B;
+import org.firstinspires.ftc.teamcode.teleop.VerticalSlides;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @TeleOp (name = "TeleOp", group = "Concept")
@@ -60,7 +66,6 @@ public class TeleOpTest extends LinearOpMode {
 
             //To do: Distance Sensor
 
-            telemetry.addData("Battery Status", )
             telemetry.addData("X: ", poseEstimate.getX());
             telemetry.addData("Y: ", poseEstimate.getY());
             telemetry.addData("Robot Heading: ", poseEstimate.getHeading());
