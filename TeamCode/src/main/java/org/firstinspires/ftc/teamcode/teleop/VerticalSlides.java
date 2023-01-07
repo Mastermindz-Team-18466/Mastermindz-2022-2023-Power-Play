@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+import com.arcrobotics.ftclib.controller.PIDFController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -11,7 +12,10 @@ import java.util.List;
 public class VerticalSlides {
     DcMotor left_linear_slide, right_linear_slide;
     Gamepad gamepad;
-    public static double kp = 0.1;
+    public PIDFController controller;
+
+    public static double kp = 0.0008, ki = 0, kd = 0.00001;
+    public static double f = 0;
 
     public enum State {
         BOTTOM,
@@ -38,42 +42,36 @@ public class VerticalSlides {
     public void control(State state) {
         if (state == State.BOTTOM) {
             targetPosition = 0;
-            move(targetPosition);
+            loop(targetPosition);
         } else if (state == State.LOW) {
             targetPosition = 1250;
-            move(targetPosition);
+            loop(targetPosition);
         } else if (state == State.MID) {
             targetPosition = 2500;
-            move(targetPosition);
+            loop(targetPosition);
         } else if (state == State.HIGH) {
             targetPosition = 5000;
-            move(targetPosition);
+            loop(targetPosition);
         }
     }
 
-    public void setLiftMotorPower(double power) {
+    public void loop(double targetPosition) {
+        controller.setPIDF(kp, ki, kd, f);
+
+        double pos = left_linear_slide.getCurrentPosition();
+
+        double pid = controller.calculate(pos, targetPosition);
+
+        double power = pid;
+
         left_linear_slide.setPower(power);
         right_linear_slide.setPower(power);
-    }
 
-    public void stop() {
-        left_linear_slide.setPower(0);
-        right_linear_slide.setPower(0);
-    }
-
-    public List<Integer> getCurrentPosition() {
-        return Arrays.asList(left_linear_slide.getCurrentPosition(), right_linear_slide.getCurrentPosition());
-    }
-
-    public void move(double position) {
-        double averagePosition = getPosition();
-        double p = kp * (targetPosition - averagePosition);
-
-        System.out.println(averagePosition);
-        setLiftMotorPower(p);
-    }
-
-    public double getPosition() {
-        return (getCurrentPosition().get(0) + (getCurrentPosition().get(1) * -1)) / 2 / 19.5;
+        if (left_linear_slide.getCurrentPosition() >= targetPosition - 50 && left_linear_slide.getCurrentPosition() <= targetPosition + 50) {
+            left_linear_slide.setPower(0);
+            right_linear_slide.setPower(0);
+        } else {
+            loop(targetPosition);
+        }
     }
 }

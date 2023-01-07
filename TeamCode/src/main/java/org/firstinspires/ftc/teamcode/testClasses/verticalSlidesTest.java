@@ -48,7 +48,7 @@ public class verticalSlidesTest extends OpMode {
     public void loop() {
         controller.setPIDF(kp, ki, kd, f);
 
-        int pos1 = liftMotor1.getCurrentPosition();
+        int pos1 = liftMotor2.getCurrentPosition();
 
         double pid1 = controller.calculate(pos1, target);
 

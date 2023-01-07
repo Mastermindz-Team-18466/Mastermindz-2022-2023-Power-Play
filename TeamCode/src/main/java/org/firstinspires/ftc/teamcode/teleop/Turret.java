@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.arcrobotics.ftclib.controller.PIDFController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -13,8 +14,16 @@ public class Turret {
     TeleOpFieldCentric driver;
 
     public final double ticks_in_degrees = 769 / 720;
+    public static double kp = 0.0008, ki = 0, kd = 0.00001;
+    public static double f = 0;
+
+    public PIDFController controller;
+    public double ticks;
+
+    public static double target = 0;
 
     public Turret(Gamepad gamepad, HardwareMap hardwareMap) {
+        controller = new PIDFController(kp, ki, kd, f);
         turret_motor = hardwareMap.get(DcMotor.class, "leftLinear_slide");
         this.gamepad = gamepad;
         driver = new TeleOpFieldCentric(hardwareMap, new SampleMecanumDrive(hardwareMap), gamepad);
@@ -33,11 +42,36 @@ public class Turret {
         Pose2d poseEstimate = driver.drive.getPoseEstimate();
 
         double angle = getAngle(new double[] {pipe_vector_x - poseEstimate.getX(), pipe_vector_y - poseEstimate.getY()}, new double[] {0, 0}, new double[] {poseEstimate.getX() + x, poseEstimate.getY() + y});
-        double ticks = angle * ticks_in_degrees;
 
-        turret_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        if (degrees + angle > 360 || degrees + angle < -360) {
+            if (angle > 0) {
+                angle = angle - 360;
+            } else {
+                angle = 360 + angle;
+            }
+        }
 
-        System.out.println(angle);
+        ticks = turret_motor.getCurrentPosition() + angle * ticks_in_degrees;
+
+        loop(ticks);
+    }
+
+    public void loop(double ticks) {
+        controller.setPIDF(kp, ki, kd, f);
+
+        double pos = turret_motor.getCurrentPosition();
+
+        double pid = controller.calculate(pos, ticks);
+
+        double power = pid;
+
+        turret_motor.setPower(power);
+
+        if (turret_motor.getCurrentPosition() >= ticks - 5 && turret_motor.getCurrentPosition() <= ticks + 5) {
+            turret_motor.setPower(0);
+        } else {
+            loop(ticks);
+        }
     }
 
     public static double getAngle(double[] a, double[] b, double[] c) {
