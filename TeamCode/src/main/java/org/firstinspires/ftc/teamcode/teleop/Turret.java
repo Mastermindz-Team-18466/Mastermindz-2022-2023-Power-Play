@@ -13,12 +13,12 @@ public class Turret {
     Gamepad gamepad;
     TeleOpFieldCentric driver;
 
-    public final double ticks_in_degrees = 769 / 720;
+    public static final double ticks_in_degrees = 769 / 720;
     public static double kp = 0.0008, ki = 0, kd = 0.00001;
     public static double f = 0;
 
     public PIDFController controller;
-    public double ticks;
+    public static double ticks;
 
     public static double target = 0;
 

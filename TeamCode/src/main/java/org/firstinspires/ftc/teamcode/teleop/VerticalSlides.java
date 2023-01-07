@@ -17,6 +17,9 @@ public class VerticalSlides {
     public static double kp = 0.0008, ki = 0, kd = 0.00001;
     public static double f = 0;
 
+    public static double left_position;
+    public static double right_position;
+
     public enum State {
         BOTTOM,
         LOW,
@@ -63,6 +66,9 @@ public class VerticalSlides {
         double pid = controller.calculate(pos, targetPosition);
 
         double power = pid;
+
+        left_position = left_linear_slide.getCurrentPosition();
+        right_position = right_linear_slide.getCurrentPosition();
 
         left_linear_slide.setPower(power);
         right_linear_slide.setPower(power);

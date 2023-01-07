@@ -8,8 +8,6 @@ import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.PoseStorage;
-import org.firstinspires.ftc.teamcode.auto.Trajectories;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
@@ -59,6 +57,21 @@ public class TeleOpTest extends LinearOpMode {
                 outtake.setOuttakePos(Outtake.outtakePosEnum.PLACE_ON_POLE);
                 outtake.setOuttakeInstructions(Outtake.outtakeInstructionsEnum.TURN_TURRET);
             }
+
+            //To do: Distance Sensor
+
+            telemetry.addData("Battery Status", )
+            telemetry.addData("X: ", poseEstimate.getX());
+            telemetry.addData("Y: ", poseEstimate.getY());
+            telemetry.addData("Robot Heading: ", poseEstimate.getHeading());
+            telemetry.addData("Turret Rotation: ", "Min: -180; Current: " + outtake.turret.ticks / outtake.turret.ticks_in_degrees + "; Max: 180");
+            telemetry.addData("Vertical Extension (Left): ", outtake.verticalSlides.left_position);
+            telemetry.addData("Vertical Extension (Right): ", outtake.verticalSlides.right_position);
+            telemetry.addData("Horizontal Extension: ", outtake.horizontalSlides.position);
+            telemetry.addData("Claw Position: ", "Min: 0; Current: " + outtake.claw.position + "; Max: 0.8");
+            telemetry.addData("V4B Position (Left): ", outtake.v4b.left_position);
+            telemetry.addData("V4B Position (Right): ", outtake.v4b.right_position);
+
 
             outtake.update();
         }

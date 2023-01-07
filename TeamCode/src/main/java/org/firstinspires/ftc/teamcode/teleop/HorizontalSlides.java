@@ -13,6 +13,8 @@ public class HorizontalSlides {
     Gamepad gamepad;
     public static double kp = 0.1;
 
+    public static double position;
+
     public enum State {
         RETRACTED,
         EXTENDED

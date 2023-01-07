@@ -76,7 +76,7 @@ public class Outtake {
                         break;
                     case EXTEND_HORIZONTAL_SLIDES:
                         if (System.currentTimeMillis() - prevAction > 250) {
-                            horizontalSlides.control(HorizontalSlides.State.EXTENDED);
+                            // horizontalSlides.control(HorizontalSlides.State.EXTENDED);
                             prevAction = System.currentTimeMillis();
                             outtakeInstructions = outtakeInstructions.CLOSE_CLAW;
                         }
@@ -90,7 +90,7 @@ public class Outtake {
                         break;
                     case RETRACT_HORIZONTAL_SLIDES:
                         if (System.currentTimeMillis() - prevAction > 250) {
-                            horizontalSlides.control(HorizontalSlides.State.RETRACTED);
+                            // horizontalSlides.control(HorizontalSlides.State.RETRACTED);
                         }
                         break;
                 }
@@ -112,7 +112,7 @@ public class Outtake {
                         break;
                     case EXTEND_HORIZONTAL_SLIDES:
                         if (System.currentTimeMillis() - prevAction > 500) {
-                            horizontalSlides.control(HorizontalSlides.State.EXTENDED);
+                            // horizontalSlides.control(HorizontalSlides.State.EXTENDED);
                         }
                         break;
                 }
@@ -127,7 +127,7 @@ public class Outtake {
                         break;
                     case RETRACT_HORIZONTAL_SLIDES:
                         if (System.currentTimeMillis() - prevAction > 250) {
-                            horizontalSlides.control(HorizontalSlides.State.RETRACTED);
+                            // horizontalSlides.control(HorizontalSlides.State.RETRACTED);
                             prevAction = System.currentTimeMillis();
                             outtakeInstructions = outtakeInstructions.RETRACT_VERTICAL_SLIDES;
                         }
