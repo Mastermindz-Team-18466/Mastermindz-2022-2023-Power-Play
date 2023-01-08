@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.testClasses;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp(name = "Servo_Test", group = "Test")
@@ -21,7 +20,7 @@ public class ServoTest extends LinearOpMode {
                 testServo.setPosition(0);
             } else if (gamepad1.b) {
                 testServo.setPosition(1);
-            } else if(gamepad1.x){
+            } else if (gamepad1.x) {
                 testServo.setPosition(0.5);
             }
         }

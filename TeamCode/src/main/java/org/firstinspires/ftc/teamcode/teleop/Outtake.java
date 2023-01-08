@@ -1,18 +1,7 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
-
-import org.firstinspires.ftc.teamcode.teleop.Claw;
-import org.firstinspires.ftc.teamcode.teleop.HorizontalSlides;
-import org.firstinspires.ftc.teamcode.teleop.Turret;
-import org.firstinspires.ftc.teamcode.teleop.V4B;
-import org.firstinspires.ftc.teamcode.teleop.VerticalSlides;
-
-import java.util.Arrays;
-import java.util.List;
 
 @Config
 public class Outtake {
@@ -21,38 +10,12 @@ public class Outtake {
     public final Claw claw;
     public final HorizontalSlides horizontalSlides;
     public final VerticalSlides verticalSlides;
-
-    public enum outtakePosEnum {
-        NEUTRAL,
-        GRAB_CLAW,
-        PLACE_ON_POLE,
-        OPEN_CLAW,
-        CLOSE_CLAW
-    }
-
-    public enum outtakeInstructionsEnum {
-        // Grabbing Cone
-        TURN_TURRET,
-        OPEN_CLAW,
-        EXTEND_HORIZONTAL_SLIDES,
-        CLOSE_CLAW,
-        RETRACT_HORIZONTAL_SLIDES,
-
-        // Place on Pole
-        EXTEND_VERTICAL_SLIDES,
-        RETRACT_VERTICAL_SLIDES,
-        ZEROING_TURRET,
-    }
-
+    public long currentTime = 0;
+    HardwareMap hardwareMap;
     private outtakePosEnum outtakePos;
     private outtakeInstructionsEnum outtakeInstructions;
-
-    HardwareMap hardwareMap;
-
-    private long startTime = System.currentTimeMillis();
+    private final long startTime = System.currentTimeMillis();
     private long prevAction = System.currentTimeMillis();
-    public long currentTime = 0;
-
     public Outtake(HardwareMap hardwareMap, Turret turret, Claw claw, V4B v4b, HorizontalSlides horizontalSlides, VerticalSlides verticalSlides) {
         this.turret = turret;
         this.horizontalSlides = horizontalSlides;
@@ -71,27 +34,27 @@ public class Outtake {
                     case TURN_TURRET:
                         turret.control();
                         prevAction = System.currentTimeMillis();
-                        outtakeInstructions = outtakeInstructions.OPEN_CLAW;
+                        outtakeInstructions = outtakeInstructionsEnum.OPEN_CLAW;
                         break;
                     case OPEN_CLAW:
                         if (System.currentTimeMillis() - prevAction > 250) {
                             claw.control(Claw.State.OPEN);
                             prevAction = System.currentTimeMillis();
-                            outtakeInstructions = outtakeInstructions.EXTEND_HORIZONTAL_SLIDES;
+                            outtakeInstructions = outtakeInstructionsEnum.EXTEND_HORIZONTAL_SLIDES;
                         }
                         break;
                     case EXTEND_HORIZONTAL_SLIDES:
                         if (System.currentTimeMillis() - prevAction > 250) {
                             // horizontalSlides.control(HorizontalSlides.State.EXTENDED);
                             prevAction = System.currentTimeMillis();
-                            outtakeInstructions = outtakeInstructions.CLOSE_CLAW;
+                            outtakeInstructions = outtakeInstructionsEnum.CLOSE_CLAW;
                         }
                         break;
                     case CLOSE_CLAW:
                         if (System.currentTimeMillis() - prevAction > 500) {
                             claw.control(Claw.State.CLOSE);
                             prevAction = System.currentTimeMillis();
-                            outtakeInstructions = outtakeInstructions.RETRACT_HORIZONTAL_SLIDES;
+                            outtakeInstructions = outtakeInstructionsEnum.RETRACT_HORIZONTAL_SLIDES;
                         }
                         break;
                     case RETRACT_HORIZONTAL_SLIDES:
@@ -107,13 +70,13 @@ public class Outtake {
                     case TURN_TURRET:
                         turret.control();
                         prevAction = System.currentTimeMillis();
-                        outtakeInstructions = outtakeInstructions.EXTEND_VERTICAL_SLIDES;
+                        outtakeInstructions = outtakeInstructionsEnum.EXTEND_VERTICAL_SLIDES;
                         break;
                     case EXTEND_VERTICAL_SLIDES:
                         if (System.currentTimeMillis() - prevAction > 250) {
                             verticalSlides.control(VerticalSlides.State.HIGH);
                             prevAction = System.currentTimeMillis();
-                            outtakeInstructions = outtakeInstructions.EXTEND_HORIZONTAL_SLIDES;
+                            outtakeInstructions = outtakeInstructionsEnum.EXTEND_HORIZONTAL_SLIDES;
                         }
                         break;
                     case EXTEND_HORIZONTAL_SLIDES:
@@ -129,13 +92,13 @@ public class Outtake {
                     case CLOSE_CLAW:
                         claw.control(Claw.State.CLOSE);
                         prevAction = System.currentTimeMillis();
-                        outtakeInstructions = outtakeInstructions.RETRACT_HORIZONTAL_SLIDES;
+                        outtakeInstructions = outtakeInstructionsEnum.RETRACT_HORIZONTAL_SLIDES;
                         break;
                     case RETRACT_HORIZONTAL_SLIDES:
                         if (System.currentTimeMillis() - prevAction > 250) {
                             // horizontalSlides.control(HorizontalSlides.State.RETRACTED);
                             prevAction = System.currentTimeMillis();
-                            outtakeInstructions = outtakeInstructions.RETRACT_VERTICAL_SLIDES;
+                            outtakeInstructions = outtakeInstructionsEnum.RETRACT_VERTICAL_SLIDES;
                         }
                         break;
                     case RETRACT_VERTICAL_SLIDES:
@@ -170,5 +133,27 @@ public class Outtake {
 
     public void setOuttakeInstructions(outtakeInstructionsEnum instruction) {
         outtakeInstructions = instruction;
+    }
+
+    public enum outtakePosEnum {
+        NEUTRAL,
+        GRAB_CLAW,
+        PLACE_ON_POLE,
+        OPEN_CLAW,
+        CLOSE_CLAW
+    }
+
+    public enum outtakeInstructionsEnum {
+        // Grabbing Cone
+        TURN_TURRET,
+        OPEN_CLAW,
+        EXTEND_HORIZONTAL_SLIDES,
+        CLOSE_CLAW,
+        RETRACT_HORIZONTAL_SLIDES,
+
+        // Place on Pole
+        EXTEND_VERTICAL_SLIDES,
+        RETRACT_VERTICAL_SLIDES,
+        ZEROING_TURRET,
     }
 }

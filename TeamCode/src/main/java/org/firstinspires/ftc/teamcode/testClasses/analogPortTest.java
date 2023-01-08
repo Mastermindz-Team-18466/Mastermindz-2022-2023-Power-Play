@@ -4,8 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.HardwareDevice;
 
 @TeleOp
 public class analogPortTest extends LinearOpMode {
@@ -20,11 +18,11 @@ public class analogPortTest extends LinearOpMode {
         analogInput = hardwareMap.get(AnalogInput.class, "analog_input");
         waitForStart();
         while (opModeIsActive()) {
-            if (gamepad1.a){
+            if (gamepad1.a) {
                 turretMotor.setPower(0.4);
-            } else if (gamepad1.b){
+            } else if (gamepad1.b) {
                 turretMotor.setPower(-0.4);
-            } else{
+            } else {
                 turretMotor.setPower(0);
             }
             telemetry.addData("TurretVoltage", analogInput.getVoltage());

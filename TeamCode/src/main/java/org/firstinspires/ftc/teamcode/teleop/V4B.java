@@ -1,22 +1,15 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class V4B {
+    public static double left_position;
+    public static double right_position;
     Servo left;
     Servo right;
     Gamepad gamepad;
-
-    public static double left_position;
-    public static double right_position;
-
-    public enum State {
-        EXTEND,
-        RETRACT
-    }
 
     public V4B(Gamepad gamepad, HardwareMap hardwareMap) {
         this.gamepad = gamepad;
@@ -29,12 +22,18 @@ public class V4B {
         if (state == State.EXTEND) {
             left.setPosition(0.8);
             right.setPosition(0.8);
-        } if (state == State.RETRACT) {
+        }
+        if (state == State.RETRACT) {
             left.setPosition(0);
             right.setPosition(0);
         }
 
         left_position = left.getPosition();
         right_position = right.getPosition();
+    }
+
+    public enum State {
+        EXTEND,
+        RETRACT
     }
 }

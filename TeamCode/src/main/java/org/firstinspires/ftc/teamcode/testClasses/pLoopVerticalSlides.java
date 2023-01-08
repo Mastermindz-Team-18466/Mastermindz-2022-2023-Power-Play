@@ -1,28 +1,22 @@
 package org.firstinspires.ftc.teamcode.testClasses;
 
-        import com.acmerobotics.dashboard.FtcDashboard;
-        import com.acmerobotics.dashboard.config.Config;
-        import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-        import com.arcrobotics.ftclib.controller.PIDController;
-        import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-        import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-        import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-        import com.qualcomm.robotcore.hardware.DcMotorEx;
-        import com.qualcomm.robotcore.hardware.DcMotorSimple;
-        import com.qualcomm.robotcore.hardware.Gamepad;
-        import com.qualcomm.robotcore.hardware.Servo;
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.arcrobotics.ftclib.controller.PIDController;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @Config
 @TeleOp
 public class pLoopVerticalSlides extends OpMode {
-    private PIDController controller, controller1;
-
     public static double kp = 0.0008, ki = 0, kd = 0.00001;
     public static double f = 0;
-
     public static double target = 0;
     public final double ticks_in_degrees = 769 / 720;
-
+    private PIDController controller, controller1;
     private DcMotorEx liftMotor1;
     private DcMotorEx liftMotor2;
 

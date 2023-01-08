@@ -6,27 +6,14 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import java.util.Arrays;
-import java.util.List;
-
 public class VerticalSlides {
-    DcMotor left_linear_slide, right_linear_slide;
-    Gamepad gamepad;
-    public PIDFController controller;
-
     public static double kp = 0.0008, ki = 0, kd = 0.00001;
     public static double f = 0;
-
     public static double left_position;
     public static double right_position;
-
-    public enum State {
-        BOTTOM,
-        LOW,
-        MID,
-        HIGH
-    }
-
+    public PIDFController controller;
+    DcMotor left_linear_slide, right_linear_slide;
+    Gamepad gamepad;
     int targetPosition = 0;
 
     public VerticalSlides(Gamepad gamepad, HardwareMap hardwareMap) {
@@ -79,5 +66,12 @@ public class VerticalSlides {
         } else {
             loop(targetPosition);
         }
+    }
+
+    public enum State {
+        BOTTOM,
+        LOW,
+        MID,
+        HIGH
     }
 }
