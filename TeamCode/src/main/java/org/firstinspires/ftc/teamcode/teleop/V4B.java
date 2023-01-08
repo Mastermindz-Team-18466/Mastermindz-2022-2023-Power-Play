@@ -10,6 +10,9 @@ public class V4B {
     Servo right;
     Gamepad gamepad;
 
+    public static double left_position;
+    public static double right_position;
+
     public enum State {
         EXTEND,
         RETRACT
@@ -30,5 +33,8 @@ public class V4B {
             left.setPosition(0);
             right.setPosition(0);
         }
+
+        left_position = left.getPosition();
+        right_position = right.getPosition();
     }
 }

@@ -10,6 +10,8 @@ public class Claw {
     Gamepad gamepad;
     DistanceSensor distance;
 
+    public static double position;
+
     public enum State {
         OPEN,
         CLOSE
@@ -29,5 +31,7 @@ public class Claw {
         } if (state == State.CLOSE) {
             claw.setPosition(0);
         }
+
+        position = claw.getPosition();
     }
 }
