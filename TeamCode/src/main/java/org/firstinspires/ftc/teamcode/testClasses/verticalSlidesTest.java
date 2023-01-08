@@ -52,8 +52,6 @@ public class verticalSlidesTest extends OpMode {
 
         double pid1 = controller.calculate(pos1, target);
 
-        // double ff = Math.cos(Math.toRadians(target / ticks_in_degrees)) * f;
-
         double power1 = pid1;
 
         liftMotor1.setPower(power1);
