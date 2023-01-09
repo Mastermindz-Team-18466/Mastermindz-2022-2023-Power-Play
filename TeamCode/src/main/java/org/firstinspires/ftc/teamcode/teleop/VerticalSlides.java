@@ -60,7 +60,7 @@ public class VerticalSlides {
         left_linear_slide.setPower(power);
         right_linear_slide.setPower(power);
 
-        if (left_linear_slide.getCurrentPosition() >= targetPosition - 50 && left_linear_slide.getCurrentPosition() <= targetPosition + 50) {
+        if (left_linear_slide.getCurrentPosition() >= targetPosition - 100 && left_linear_slide.getCurrentPosition() <= targetPosition + 100) {
             left_linear_slide.setPower(0);
             right_linear_slide.setPower(0);
         } else {

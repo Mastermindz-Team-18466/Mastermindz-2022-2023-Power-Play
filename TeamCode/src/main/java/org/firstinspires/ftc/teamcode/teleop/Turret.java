@@ -106,7 +106,7 @@ public class Turret {
 
         turret_motor.setPower(power);
 
-        if (turret_motor.getCurrentPosition() >= ticks - 5 && turret_motor.getCurrentPosition() <= ticks + 5) {
+        if (turret_motor.getCurrentPosition() >= ticks - 100 && turret_motor.getCurrentPosition() <= ticks + 100) {
             turret_motor.setPower(0);
         } else {
             loop(ticks);
