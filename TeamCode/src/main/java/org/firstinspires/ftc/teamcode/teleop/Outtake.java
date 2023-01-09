@@ -59,6 +59,21 @@ public class Outtake {
                 }
                 break;
 
+            case REDO_FOR_GRAB:
+                switch(outtakeInstructions) {
+                    case TURN_TURRET:
+                        turret.control();
+                        prevAction = System.currentTimeMillis();
+                        outtakeInstructions = outtakeInstructionsEnum.EXTEND_VERTICAL_SLIDES;
+                        break;
+                    case RETRACT_VERTICAL_SLIDES:
+                        if (System.currentTimeMillis() - prevAction > 250) {
+                            verticalSlides.control(VerticalSlides.State.BOTTOM);
+                        }
+                        break;
+                }
+                break;
+
             case PLACE_ON_POLE:
                 switch (outtakeInstructions) {
                     case TURN_TURRET:
@@ -135,6 +150,7 @@ public class Outtake {
         PLACE_ON_POLE,
         OPEN_CLAW,
         CLOSE_CLAW,
+        REDO_FOR_GRAB
     }
 
     public enum outtakeInstructionsEnum {

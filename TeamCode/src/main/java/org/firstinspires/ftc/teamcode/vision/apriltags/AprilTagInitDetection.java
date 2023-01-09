@@ -21,6 +21,8 @@ public class AprilTagInitDetection extends LinearOpMode
 
     static final double FEET_PER_METER = 3.28084;
 
+    public static int id = 0;
+
     // Lens intrinsics
     // UNITS ARE PIXELS
     // NOTE: this calibration is for the C270 webcam at 800x448.
