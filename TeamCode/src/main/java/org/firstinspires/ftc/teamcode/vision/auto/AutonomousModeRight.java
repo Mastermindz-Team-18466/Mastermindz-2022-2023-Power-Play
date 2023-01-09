@@ -1,11 +1,9 @@
 package org.firstinspires.ftc.teamcode.vision.auto;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.checkerframework.checker.units.qual.A;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.teleop.Claw;
 import org.firstinspires.ftc.teamcode.teleop.HorizontalSlides;
@@ -15,7 +13,6 @@ import org.firstinspires.ftc.teamcode.teleop.Turret;
 import org.firstinspires.ftc.teamcode.teleop.V4B;
 import org.firstinspires.ftc.teamcode.teleop.VerticalSlides;
 import org.firstinspires.ftc.teamcode.vision.apriltags.AprilTagDetectionPipeline;
-import org.firstinspires.ftc.teamcode.vision.apriltags.AprilTagInitDetection;
 import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -23,9 +20,9 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import java.util.ArrayList;
 
-@Autonomous(name = "AutonomousMode", group = "Concept")
+@Autonomous(name = "AutonomousModeRight", group = "Concept")
 //@Disabled
-class AutonomousMode extends LinearOpMode {
+class AutonomousModeRight extends LinearOpMode {
     OpenCvCamera webcam;
 
     static final double FEET_PER_METER = 3.28084;
@@ -37,7 +34,7 @@ class AutonomousMode extends LinearOpMode {
     AprilTagDetection tagOfInterest = null;
 
     TeleOpFieldCentric driver;
-    public Outtake outtake = new Outtake(hardwareMap, new Turret(gamepad2, hardwareMap), new Claw(gamepad2, hardwareMap), new V4B(gamepad2, hardwareMap), new HorizontalSlides(gamepad2, hardwareMap), new VerticalSlides(gamepad2, hardwareMap));
+    public Outtake outtake = new Outtake(false, hardwareMap, new Turret(gamepad2, hardwareMap), new Claw(gamepad2, hardwareMap), new V4B(gamepad2, hardwareMap), new HorizontalSlides(gamepad2, hardwareMap), new VerticalSlides(gamepad2, hardwareMap));
 
     @Override
     public void runOpMode() throws InterruptedException {

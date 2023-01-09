@@ -6,11 +6,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
-import kotlin.OverloadResolutionByLambdaReturnType;
-
 @TeleOp(name = "TeleOp", group = "Concept")
 //@Disabled
-public class TeleOpTest extends LinearOpMode {
+public class TeleOpModeRight extends LinearOpMode {
 
     TeleOpFieldCentric driver;
     Outtake outtake;
@@ -20,7 +18,7 @@ public class TeleOpTest extends LinearOpMode {
         TeleOpFieldCentric driver = new TeleOpFieldCentric(hardwareMap, new SampleMecanumDrive(hardwareMap), gamepad1);
         driver.drive.setPoseEstimate(new Pose2d(0, 0));
 
-        outtake = new Outtake(hardwareMap, new Turret(gamepad2, hardwareMap), new Claw(gamepad2, hardwareMap), new V4B(gamepad2, hardwareMap), new HorizontalSlides(gamepad2, hardwareMap), new VerticalSlides(gamepad2, hardwareMap));
+        outtake = new Outtake(false, hardwareMap, new Turret(gamepad2, hardwareMap), new Claw(gamepad2, hardwareMap), new V4B(gamepad2, hardwareMap), new HorizontalSlides(gamepad2, hardwareMap), new VerticalSlides(gamepad2, hardwareMap));
 
         outtake.setOuttakePos(Outtake.outtakePosEnum.NEUTRAL);
         outtake.setOuttakeInstructions(Outtake.outtakeInstructionsEnum.CLOSE_CLAW);

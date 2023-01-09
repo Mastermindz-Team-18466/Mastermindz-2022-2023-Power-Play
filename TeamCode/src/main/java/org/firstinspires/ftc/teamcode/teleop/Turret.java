@@ -8,6 +8,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Turret {
     public static final double ticks_in_degrees = 769 / 720;
     public static double kp = 0.0008, ki = 0, kd = 0.00001;
@@ -27,21 +30,56 @@ public class Turret {
         driver.drive.setPoseEstimate(new Pose2d(0, 0));
     }
 
+    public static Pose2d closestPose(List<Pose2d> poses, Pose2d targetPose) {
+        Pose2d closestPose = poses.get(0);
+        double closestDistance = distance(poses.get(0), targetPose);
+        for (int i = 1; i < poses.size(); i++) {
+            Pose2d pose = poses.get(i);
+            double poseDistance = distance(pose, targetPose);
+            if (poseDistance < closestDistance) {
+                closestDistance = poseDistance;
+                closestPose = pose;
+            }
+        }
+        return closestPose;
+    }
+
+    private static double distance(Pose2d pose1, Pose2d pose2) {
+        return Math.sqrt(Math.pow(pose1.getX() - pose2.getX(), 2) + Math.pow(pose1.getY() - pose2.getY(), 2));
+    }
+
     public static double getAngle(double[] a, double[] b, double[] c) {
         double ang = Math.toDegrees(Math.atan2(c[1] - b[1], c[0] - b[0]) - Math.atan2(a[1] - b[1], a[0] - b[0]));
         return -180 + ang;
     }
 
-    public void control() {
-        double pipe_vector_x = 23.5;
-        double pipe_vector_y = -70.5;
+    public void control(boolean left) {
+        List<Pose2d> poses = new ArrayList<>();
+
+        if (left) {
+            poses.add(new Pose2d(-1.5 * 23.5, 2 * 23.5));
+            poses.add(new Pose2d(-0.5 * 23.5, 3 * 23.5));
+            poses.add(new Pose2d(-1.5 * 23.5, 4 * 23.5));
+            poses.add(new Pose2d(-2.5 * 23.5, 3 * 23.5));
+        } else {
+            poses.add(new Pose2d(1.5 * 23.5, 2 * 23.5));
+            poses.add(new Pose2d(0.5 * 23.5, 3 * 23.5));
+            poses.add(new Pose2d(1.5 * 23.5, 4 * 23.5));
+            poses.add(new Pose2d(2.5 * 23.5, 3 * 23.5));
+        }
+
+        Pose2d poseEstimate = driver.drive.getPoseEstimate();
+
+        Pose2d closestPose = closestPose(poses, poseEstimate);
+        double pipe_vector_x = closestPose.getX();
+        double pipe_vector_y = closestPose.getY();
 
         double degrees = turret_motor.getCurrentPosition() / ticks_in_degrees;
         double x = Math.sin(degrees * Math.PI / 180);
         double y = Math.cos(degrees * Math.PI / 180);
 
         driver.drive.update();
-        Pose2d poseEstimate = driver.drive.getPoseEstimate();
+        poseEstimate = driver.drive.getPoseEstimate();
 
         double angle = getAngle(new double[]{pipe_vector_x - poseEstimate.getX(), pipe_vector_y - poseEstimate.getY()}, new double[]{0, 0}, new double[]{poseEstimate.getX() + x, poseEstimate.getY() + y});
 

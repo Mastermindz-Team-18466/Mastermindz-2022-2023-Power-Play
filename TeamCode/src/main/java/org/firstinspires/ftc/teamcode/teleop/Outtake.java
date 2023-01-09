@@ -16,8 +16,9 @@ public class Outtake {
     private outtakeInstructionsEnum outtakeInstructions;
     private final long startTime = System.currentTimeMillis();
     private long prevAction = System.currentTimeMillis();
+    public boolean left;
 
-    public Outtake(HardwareMap hardwareMap, Turret turret, Claw claw, V4B v4b, HorizontalSlides horizontalSlides, VerticalSlides verticalSlides) {
+    public Outtake(boolean left, HardwareMap hardwareMap, Turret turret, Claw claw, V4B v4b, HorizontalSlides horizontalSlides, VerticalSlides verticalSlides) {
         this.turret = turret;
         this.horizontalSlides = horizontalSlides;
         this.verticalSlides = verticalSlides;
@@ -26,6 +27,7 @@ public class Outtake {
         outtakeInstructions = outtakeInstructionsEnum.ZEROING_TURRET;
         this.claw = claw;
         this.v4b = v4b;
+        this.left = left;
     }
 
     public void update() {
@@ -33,13 +35,13 @@ public class Outtake {
             case GRAB_CLAW:
                 switch (outtakeInstructions) {
                     case TURN_TURRET:
-                        turret.control();
+                        turret.control(left);
                         prevAction = System.currentTimeMillis();
                         outtakeInstructions = outtakeInstructionsEnum.EXTEND_HORIZONTAL_SLIDES;
                         break;
                     case EXTEND_HORIZONTAL_SLIDES:
                         if (System.currentTimeMillis() - prevAction > 250) {
-                            horizontalSlides.control(HorizontalSlides.State.EXTENDED, true);
+                            horizontalSlides.control(HorizontalSlides.State.EXTENDED, true, left);
                             prevAction = System.currentTimeMillis();
                             outtakeInstructions = outtakeInstructionsEnum.CLOSE_CLAW;
                         }
@@ -53,7 +55,7 @@ public class Outtake {
                         break;
                     case RETRACT_HORIZONTAL_SLIDES:
                         if (System.currentTimeMillis() - prevAction > 250) {
-                            horizontalSlides.control(HorizontalSlides.State.RETRACTED, false);
+                            horizontalSlides.control(HorizontalSlides.State.RETRACTED, false, left);
                         }
                         break;
                 }
@@ -62,7 +64,7 @@ public class Outtake {
             case REDO_FOR_GRAB:
                 switch(outtakeInstructions) {
                     case TURN_TURRET:
-                        turret.control();
+                        turret.control(left);
                         prevAction = System.currentTimeMillis();
                         outtakeInstructions = outtakeInstructionsEnum.EXTEND_VERTICAL_SLIDES;
                         break;
@@ -77,7 +79,7 @@ public class Outtake {
             case PLACE_ON_POLE:
                 switch (outtakeInstructions) {
                     case TURN_TURRET:
-                        turret.control();
+                        turret.control(left);
                         prevAction = System.currentTimeMillis();
                         outtakeInstructions = outtakeInstructionsEnum.EXTEND_VERTICAL_SLIDES;
                         break;
@@ -90,7 +92,7 @@ public class Outtake {
                         break;
                     case EXTEND_HORIZONTAL_SLIDES:
                         if (System.currentTimeMillis() - prevAction > 500) {
-                            horizontalSlides.control(HorizontalSlides.State.EXTENDED, false);
+                            horizontalSlides.control(HorizontalSlides.State.EXTENDED, false, left);
                         }
                         break;
                 }
@@ -105,7 +107,7 @@ public class Outtake {
                         break;
                     case RETRACT_HORIZONTAL_SLIDES:
                         if (System.currentTimeMillis() - prevAction > 250) {
-                            horizontalSlides.control(HorizontalSlides.State.RETRACTED, false);
+                            horizontalSlides.control(HorizontalSlides.State.RETRACTED, false, left);
                             prevAction = System.currentTimeMillis();
                             outtakeInstructions = outtakeInstructionsEnum.RETRACT_VERTICAL_SLIDES;
                         }
