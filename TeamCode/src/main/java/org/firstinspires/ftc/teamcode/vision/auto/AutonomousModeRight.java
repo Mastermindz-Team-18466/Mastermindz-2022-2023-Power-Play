@@ -34,7 +34,7 @@ class AutonomousModeRight extends LinearOpMode {
     AprilTagDetection tagOfInterest = null;
 
     TeleOpFieldCentric driver;
-    public Outtake outtake = new Outtake(false, hardwareMap, new Turret(gamepad2, hardwareMap), new Claw(gamepad2, hardwareMap), new V4B(gamepad2, hardwareMap), new HorizontalSlides(gamepad2, hardwareMap), new VerticalSlides(gamepad2, hardwareMap));
+    public Outtake outtake = new Outtake(hardwareMap, new Turret(false, gamepad2, hardwareMap), new Claw(gamepad2, hardwareMap), new V4B(gamepad2, hardwareMap), new HorizontalSlides(false, gamepad2, hardwareMap), new VerticalSlides(gamepad2, hardwareMap));
 
     @Override
     public void runOpMode() throws InterruptedException {

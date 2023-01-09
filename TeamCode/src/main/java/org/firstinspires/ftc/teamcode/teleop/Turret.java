@@ -22,12 +22,14 @@ public class Turret {
     Gamepad gamepad;
     TeleOpFieldCentric driver;
 
-    public Turret(Gamepad gamepad, HardwareMap hardwareMap) {
+    public Turret(boolean left, Gamepad gamepad, HardwareMap hardwareMap) {
         controller = new PIDFController(kp, ki, kd, f);
         turret_motor = hardwareMap.get(DcMotor.class, "leftLinear_slide");
         this.gamepad = gamepad;
         driver = new TeleOpFieldCentric(hardwareMap, new SampleMecanumDrive(hardwareMap), gamepad);
-        driver.drive.setPoseEstimate(new Pose2d(0, 0));
+
+        if (left) driver.drive.setPoseEstimate(new Pose2d(-1.5 * 23.5, -3 * 23.5));
+        else driver.drive.setPoseEstimate(new Pose2d(1.5 * 23.5, -3 * 23.5));
     }
 
     public static Pose2d closestPose(List<Pose2d> poses, Pose2d targetPose) {
@@ -53,20 +55,13 @@ public class Turret {
         return -180 + ang;
     }
 
-    public void control(boolean left) {
+    public void control() {
         List<Pose2d> poses = new ArrayList<>();
 
-        if (left) {
-            poses.add(new Pose2d(-1.5 * 23.5, 2 * 23.5));
-            poses.add(new Pose2d(-0.5 * 23.5, 3 * 23.5));
-            poses.add(new Pose2d(-1.5 * 23.5, 4 * 23.5));
-            poses.add(new Pose2d(-2.5 * 23.5, 3 * 23.5));
-        } else {
-            poses.add(new Pose2d(1.5 * 23.5, 2 * 23.5));
-            poses.add(new Pose2d(0.5 * 23.5, 3 * 23.5));
-            poses.add(new Pose2d(1.5 * 23.5, 4 * 23.5));
-            poses.add(new Pose2d(2.5 * 23.5, 3 * 23.5));
-        }
+        poses.add(new Pose2d(0, 1 * 23.5));
+        poses.add(new Pose2d(0, -1 * 23.5));
+        poses.add(new Pose2d(1 * 23.5, 0));
+        poses.add(new Pose2d(-1 * 23.5, 0));
 
         Pose2d poseEstimate = driver.drive.getPoseEstimate();
 
