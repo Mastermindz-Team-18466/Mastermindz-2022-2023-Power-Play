@@ -4,21 +4,24 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.Storage;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 @TeleOp(name = "TeleOp", group = "Concept")
 //@Disabled
-public class TeleOpModeRight extends LinearOpMode {
+public class TeleOpMode extends LinearOpMode {
 
     TeleOpFieldCentric driver;
     Outtake outtake;
 
     @Override
     public void runOpMode() {
-        TeleOpFieldCentric driver = new TeleOpFieldCentric(hardwareMap, new SampleMecanumDrive(hardwareMap), gamepad1);
+        driver = new TeleOpFieldCentric(hardwareMap, new SampleMecanumDrive(hardwareMap), gamepad1);
         driver.drive.setPoseEstimate(new Pose2d(0, 0));
 
-        outtake = new Outtake(hardwareMap, new Turret(false, gamepad2, hardwareMap), new Claw(gamepad2, hardwareMap), new V4B(gamepad2, hardwareMap), new HorizontalSlides(false, gamepad2, hardwareMap), new VerticalSlides(gamepad2, hardwareMap));
+        boolean left = Storage.getLeft();
+
+        outtake = new Outtake(hardwareMap, new Turret(left, gamepad2, hardwareMap), new Claw(gamepad2, hardwareMap), new V4B(gamepad2, hardwareMap), new HorizontalSlides(left, gamepad2, hardwareMap), new VerticalSlides(gamepad2, hardwareMap));
 
         outtake.setOuttakePos(Outtake.outtakePosEnum.NEUTRAL);
         outtake.setOuttakeInstructions(Outtake.outtakeInstructionsEnum.CLOSE_CLAW);

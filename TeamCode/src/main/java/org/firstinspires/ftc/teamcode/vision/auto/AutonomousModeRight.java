@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.Storage;
 import org.firstinspires.ftc.teamcode.teleop.Claw;
 import org.firstinspires.ftc.teamcode.teleop.HorizontalSlides;
 import org.firstinspires.ftc.teamcode.teleop.Outtake;
@@ -58,6 +59,8 @@ class AutonomousModeRight extends LinearOpMode {
 
             }
         });
+
+        Storage.setLeft(false);
 
         telemetry.setMsTransmissionInterval(50);
 
