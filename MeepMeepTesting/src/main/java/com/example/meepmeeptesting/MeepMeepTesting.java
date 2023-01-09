@@ -8,6 +8,8 @@ import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
 import java.util.Vector;
 
+import sun.text.ComposedCharIter;
+
 public class MeepMeepTesting {
     public static double INCHES_PER_TILE = 23.5;
     public static void main(String[] args) {
@@ -19,15 +21,17 @@ public class MeepMeepTesting {
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(1.5 * INCHES_PER_TILE, -3 * INCHES_PER_TILE, Math.toRadians(90)))
 
+                                // Cycle
                                 .forward(INCHES_PER_TILE * 2.5)
-                                /*strafe version:
+
+                                /* Strafe:
                                 .strafeRight(INCHES_PER_TILE * 0.5)
                                 .strafeLeft(INCHES_PER_TILE * 0.5)
                                 */
-                                /* parking
-                                .forward(INCHES_PER_TILE * 2)
-//                                .strafeTo(new Vector2d(INCHES_PER_TILE * 2.5, INCHES_PER_TILE * 2.5 ))
-*/
+
+                                // Parking:
+                                .splineTo(new Vector2d(INCHES_PER_TILE * 2.5, INCHES_PER_TILE * 2.5), Math.toRadians(45))
+
                                 .build()
                 );
 

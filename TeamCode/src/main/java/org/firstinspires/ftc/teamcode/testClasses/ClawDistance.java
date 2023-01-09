@@ -20,7 +20,7 @@ public class ClawDistance extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()) {
             if (distance.getDistance(DistanceUnit.CM) < 2.2) {
-                claw.setPosition(1);
+                claw.setPosition(0.8);
             } else {  // Otherwise, stop the motor
                 claw.setPosition(0);
             }

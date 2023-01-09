@@ -6,11 +6,12 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
+import kotlin.OverloadResolutionByLambdaReturnType;
+
 @TeleOp(name = "TeleOp", group = "Concept")
 //@Disabled
 public class TeleOpTest extends LinearOpMode {
 
-    Mode currentMode = Mode.DRIVER_CONTROL;
     TeleOpFieldCentric driver;
     Outtake outtake;
 
@@ -46,8 +47,6 @@ public class TeleOpTest extends LinearOpMode {
                 outtake.setOuttakeInstructions(Outtake.outtakeInstructionsEnum.TURN_TURRET);
             }
 
-            //To do: Distance Sensor
-
             telemetry.addData("X: ", poseEstimate.getX());
             telemetry.addData("Y: ", poseEstimate.getY());
             telemetry.addData("Robot Heading: ", poseEstimate.getHeading());
@@ -61,15 +60,43 @@ public class TeleOpTest extends LinearOpMode {
 
 
             outtake.update();
+
+            outtake.verticalSlides.left_linear_slide.setPower(gamepad2.left_stick_y);
+            outtake.verticalSlides.right_linear_slide.setPower(gamepad2.left_stick_y);
+            outtake.turret.turret_motor.setPower(gamepad2.left_stick_x);
+
+            while (gamepad2.dpad_left) {
+                double horizontal_servo_left_position = Math.max(0.27, outtake.horizontalSlides.left_servo.getPosition() - 0.05);
+                double horizontal_servo_right_position = Math.max(0.37, outtake.horizontalSlides.left_servo.getPosition() - 0.05);
+                outtake.horizontalSlides.left_servo.setPosition(horizontal_servo_left_position);
+                outtake.horizontalSlides.right_servo.setPosition(horizontal_servo_right_position);
+            }
+
+            while (gamepad2.dpad_right) {
+                double horizontal_servo_left_position = Math.min(0.72, outtake.horizontalSlides.left_servo.getPosition() - 0.05);
+                double horizontal_servo_right_position = Math.min(0.82, outtake.horizontalSlides.left_servo.getPosition() - 0.05);
+                outtake.horizontalSlides.left_servo.setPosition(horizontal_servo_left_position);
+                outtake.horizontalSlides.right_servo.setPosition(horizontal_servo_right_position);
+            }
+
+            while (gamepad2.dpad_up) {
+                double v4b_left_position = Math.min(0.8, outtake.v4b.left.getPosition() + 0.05);
+                double v4b_right_position = Math.min(0.8, outtake.v4b.right.getPosition() + 0.05);
+                outtake.v4b.left.setPosition(v4b_left_position);
+                outtake.v4b.right.setPosition(v4b_right_position);
+            }
+
+            while (gamepad2.dpad_down) {
+                double v4b_left_position = Math.max(0, outtake.horizontalSlides.left_servo.getPosition() - 0.05);
+                double v4b_right_position = Math.max(0, outtake.horizontalSlides.left_servo.getPosition() - 0.05);
+                outtake.v4b.left.setPosition(v4b_left_position);
+                outtake.v4b.right.setPosition(v4b_right_position);
+            }
         }
 
         telemetry.addData(">", "Done");
         telemetry.update();
 
 
-    }
-
-    enum Mode {
-        DRIVER_CONTROL, AUTONOMOUS_CONTROL,
     }
 }

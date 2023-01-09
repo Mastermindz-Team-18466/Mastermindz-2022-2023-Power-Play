@@ -58,6 +58,10 @@ public class Turret {
         loop(ticks);
     }
 
+    public void fine_tune() {
+        turret_motor.setPower(gamepad.left_stick_x);
+    }
+
     public void loop(double ticks) {
         controller.setPIDF(kp, ki, kd, f);
 

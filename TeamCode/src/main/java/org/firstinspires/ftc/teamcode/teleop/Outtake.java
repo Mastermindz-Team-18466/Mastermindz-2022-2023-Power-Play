@@ -16,6 +16,7 @@ public class Outtake {
     private outtakeInstructionsEnum outtakeInstructions;
     private final long startTime = System.currentTimeMillis();
     private long prevAction = System.currentTimeMillis();
+
     public Outtake(HardwareMap hardwareMap, Turret turret, Claw claw, V4B v4b, HorizontalSlides horizontalSlides, VerticalSlides verticalSlides) {
         this.turret = turret;
         this.horizontalSlides = horizontalSlides;
@@ -34,18 +35,11 @@ public class Outtake {
                     case TURN_TURRET:
                         turret.control();
                         prevAction = System.currentTimeMillis();
-                        outtakeInstructions = outtakeInstructionsEnum.OPEN_CLAW;
-                        break;
-                    case OPEN_CLAW:
-                        if (System.currentTimeMillis() - prevAction > 250) {
-                            claw.control(Claw.State.OPEN);
-                            prevAction = System.currentTimeMillis();
-                            outtakeInstructions = outtakeInstructionsEnum.EXTEND_HORIZONTAL_SLIDES;
-                        }
+                        outtakeInstructions = outtakeInstructionsEnum.EXTEND_HORIZONTAL_SLIDES;
                         break;
                     case EXTEND_HORIZONTAL_SLIDES:
                         if (System.currentTimeMillis() - prevAction > 250) {
-                            // horizontalSlides.control(HorizontalSlides.State.EXTENDED);
+                            horizontalSlides.control(HorizontalSlides.State.EXTENDED, true);
                             prevAction = System.currentTimeMillis();
                             outtakeInstructions = outtakeInstructionsEnum.CLOSE_CLAW;
                         }
@@ -59,7 +53,7 @@ public class Outtake {
                         break;
                     case RETRACT_HORIZONTAL_SLIDES:
                         if (System.currentTimeMillis() - prevAction > 250) {
-                            // horizontalSlides.control(HorizontalSlides.State.RETRACTED);
+                            horizontalSlides.control(HorizontalSlides.State.RETRACTED, false);
                         }
                         break;
                 }
@@ -81,7 +75,7 @@ public class Outtake {
                         break;
                     case EXTEND_HORIZONTAL_SLIDES:
                         if (System.currentTimeMillis() - prevAction > 500) {
-                            // horizontalSlides.control(HorizontalSlides.State.EXTENDED);
+                            horizontalSlides.control(HorizontalSlides.State.EXTENDED, false);
                         }
                         break;
                 }
@@ -96,7 +90,7 @@ public class Outtake {
                         break;
                     case RETRACT_HORIZONTAL_SLIDES:
                         if (System.currentTimeMillis() - prevAction > 250) {
-                            // horizontalSlides.control(HorizontalSlides.State.RETRACTED);
+                            horizontalSlides.control(HorizontalSlides.State.RETRACTED, false);
                             prevAction = System.currentTimeMillis();
                             outtakeInstructions = outtakeInstructionsEnum.RETRACT_VERTICAL_SLIDES;
                         }
@@ -140,7 +134,7 @@ public class Outtake {
         GRAB_CLAW,
         PLACE_ON_POLE,
         OPEN_CLAW,
-        CLOSE_CLAW
+        CLOSE_CLAW,
     }
 
     public enum outtakeInstructionsEnum {
