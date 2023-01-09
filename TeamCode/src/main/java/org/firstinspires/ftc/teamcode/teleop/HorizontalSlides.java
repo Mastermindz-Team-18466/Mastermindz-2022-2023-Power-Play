@@ -28,7 +28,7 @@ public class HorizontalSlides {
         EXTENDED
     }
 
-    public HorizontalSlides(boolean left, Gamepad gamepad, HardwareMap hardwareMap) {
+    public HorizontalSlides(Gamepad gamepad, HardwareMap hardwareMap) {
         this.gamepad = gamepad;
         
         distance = hardwareMap.get(DistanceSensor.class, "Distance");
@@ -37,9 +37,6 @@ public class HorizontalSlides {
         claw = hardwareMap.get(Servo.class, "Claw");
         
         driver = new TeleOpFieldCentric(hardwareMap, new SampleMecanumDrive(hardwareMap), gamepad);
-
-        if (left) driver.drive.setPoseEstimate(new Pose2d(-1.5 * 23.5, -3 * 23.5));
-        else driver.drive.setPoseEstimate(new Pose2d(1.5 * 23.5, -3 * 23.5));
     }
 
     public static Pose2d closestPose(List<Pose2d> poses, Pose2d targetPose) {

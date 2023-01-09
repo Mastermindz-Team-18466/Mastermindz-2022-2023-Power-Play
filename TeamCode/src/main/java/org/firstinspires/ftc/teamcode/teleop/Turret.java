@@ -22,14 +22,11 @@ public class Turret {
     Gamepad gamepad;
     TeleOpFieldCentric driver;
 
-    public Turret(boolean left, Gamepad gamepad, HardwareMap hardwareMap) {
+    public Turret(Gamepad gamepad, HardwareMap hardwareMap) {
         controller = new PIDFController(kp, ki, kd, f);
         turret_motor = hardwareMap.get(DcMotor.class, "leftLinear_slide");
         this.gamepad = gamepad;
         driver = new TeleOpFieldCentric(hardwareMap, new SampleMecanumDrive(hardwareMap), gamepad);
-
-        if (left) driver.drive.setPoseEstimate(new Pose2d(-1.5 * 23.5, -3 * 23.5));
-        else driver.drive.setPoseEstimate(new Pose2d(1.5 * 23.5, -3 * 23.5));
     }
 
     public static Pose2d closestPose(List<Pose2d> poses, Pose2d targetPose) {

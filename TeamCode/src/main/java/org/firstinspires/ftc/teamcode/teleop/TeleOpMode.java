@@ -17,11 +17,11 @@ public class TeleOpMode extends LinearOpMode {
     @Override
     public void runOpMode() {
         driver = new TeleOpFieldCentric(hardwareMap, new SampleMecanumDrive(hardwareMap), gamepad1);
-        driver.drive.setPoseEstimate(new Pose2d(0, 0));
+        driver.drive.setPoseEstimate(driver.drive.getPoseEstimate());
 
         boolean left = Storage.getLeft();
 
-        outtake = new Outtake(hardwareMap, new Turret(left, gamepad2, hardwareMap), new Claw(gamepad2, hardwareMap), new V4B(gamepad2, hardwareMap), new HorizontalSlides(left, gamepad2, hardwareMap), new VerticalSlides(gamepad2, hardwareMap));
+        outtake = new Outtake(hardwareMap, new Turret(gamepad2, hardwareMap), new Claw(gamepad2, hardwareMap), new V4B(gamepad2, hardwareMap), new HorizontalSlides(gamepad2, hardwareMap), new VerticalSlides(gamepad2, hardwareMap));
 
         outtake.setOuttakePos(Outtake.outtakePosEnum.NEUTRAL);
         outtake.setOuttakeInstructions(Outtake.outtakeInstructionsEnum.CLOSE_CLAW);
