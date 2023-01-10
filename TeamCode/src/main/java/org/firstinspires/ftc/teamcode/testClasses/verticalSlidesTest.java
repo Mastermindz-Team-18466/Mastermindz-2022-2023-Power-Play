@@ -60,7 +60,7 @@ public class verticalSlidesTest extends OpMode {
         liftMotor2.setPower(power1);
 
         double feedforwardForce = feedforward.calculate(liftMotor2.getVelocity());
-        feedforwardForce = Math.max(-maxForce, Math.min(maxForce, feedforwardForce));
+        feedforwardForce = Math.max(negativeMaxForce, Math.min(maxForce, feedforwardForce));
         liftMotor1.setPower(feedforwardForce);
         liftMotor2.setPower(feedforwardForce);
 
