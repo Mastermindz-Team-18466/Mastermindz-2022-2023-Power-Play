@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
 import com.arcrobotics.ftclib.controller.PIDFController;
+import com.arcrobotics.ftclib.controller.wpilibcontroller.ElevatorFeedforward;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -12,21 +14,31 @@ public class VerticalSlides {
     public static double left_position;
     public static double right_position;
     public PIDFController controller;
-    DcMotor left_linear_slide, right_linear_slide;
+    DcMotorEx left_linear_slide, right_linear_slide;
     Gamepad gamepad;
     int targetPosition = 0;
 
+    private static final double kS = 0.1; // position error gain
+    private static final double kG = 0.05; // velocity error gain
+    private static final double kA = 0.01; // acceleration error gain
+    private static final double kV = 0.1; // jerk error gain
+    private ElevatorFeedforward feedforward;
+    private static final double maxForce = 769/740;
+    double negativeMaxForce = -maxForce;
+
     public VerticalSlides(Gamepad gamepad, HardwareMap hardwareMap) {
-        left_linear_slide = hardwareMap.get(DcMotor.class, "leftLinear_slide");
+        left_linear_slide = hardwareMap.get(DcMotorEx.class, "leftLinear_slide");
         left_linear_slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         left_linear_slide.setDirection(DcMotorSimple.Direction.FORWARD);
 
         //Right Linear Slide
-        right_linear_slide = hardwareMap.get(DcMotor.class, "rightLinear_slide");
+        right_linear_slide = hardwareMap.get(DcMotorEx.class, "rightLinear_slide");
         right_linear_slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         right_linear_slide.setDirection(DcMotorSimple.Direction.REVERSE);
 
         this.gamepad = gamepad;
+
+        feedforward = new ElevatorFeedforward(kS, kG, kA, kV);
     }
 
     public void control(State state) {
@@ -60,7 +72,13 @@ public class VerticalSlides {
         left_linear_slide.setPower(power);
         right_linear_slide.setPower(power);
 
-        if (left_linear_slide.getCurrentPosition() >= targetPosition - 50 && left_linear_slide.getCurrentPosition() <= targetPosition + 50) {
+        double feedforwardForce = feedforward.calculate(left_linear_slide.getVelocity());
+        feedforwardForce = Math.max(negativeMaxForce, Math.min(maxForce, feedforwardForce));
+
+        left_linear_slide.setPower(feedforwardForce);
+        right_linear_slide.setPower(feedforwardForce);
+
+        if (left_linear_slide.getCurrentPosition() >= targetPosition - 100 && left_linear_slide.getCurrentPosition() <= targetPosition + 100) {
             left_linear_slide.setPower(0);
             right_linear_slide.setPower(0);
         } else {
