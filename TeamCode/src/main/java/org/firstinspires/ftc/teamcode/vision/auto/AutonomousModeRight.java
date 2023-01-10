@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 @Autonomous(name = "AutonomousModeRight", group = "Concept")
 //@Disabled
-class AutonomousModeRight extends LinearOpMode {
+public class AutonomousModeRight extends LinearOpMode {
     OpenCvCamera webcam;
 
     static final double FEET_PER_METER = 3.28084;

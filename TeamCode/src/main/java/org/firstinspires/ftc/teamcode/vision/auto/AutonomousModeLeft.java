@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 @Autonomous(name = "AutonomousModeLeft", group = "Concept")
 //@Disabled
-class AutonomousModeLeft extends LinearOpMode {
+public class AutonomousModeLeft extends LinearOpMode {
     OpenCvCamera webcam;
 
     int LEFT = 1;
