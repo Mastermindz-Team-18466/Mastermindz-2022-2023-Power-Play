@@ -21,7 +21,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import java.util.ArrayList;
 
-@Autonomous(name = "AutonomousModeRight", group = "Concept")
+@Autonomous(name = "AutonomousModeLeft", group = "Concept")
 //@Disabled
 class AutonomousModeLeft extends LinearOpMode {
     OpenCvCamera webcam;

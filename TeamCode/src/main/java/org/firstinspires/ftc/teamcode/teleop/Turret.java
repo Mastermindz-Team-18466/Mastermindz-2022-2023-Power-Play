@@ -47,9 +47,26 @@ public class Turret {
         return Math.sqrt(Math.pow(pose1.getX() - pose2.getX(), 2) + Math.pow(pose1.getY() - pose2.getY(), 2));
     }
 
-    public static double getAngle(double[] a, double[] b, double[] c) {
-        double ang = Math.toDegrees(Math.atan2(c[1] - b[1], c[0] - b[0]) - Math.atan2(a[1] - b[1], a[0] - b[0]));
-        return -180 + ang;
+    public static double angleBetween(double[] a, double[] b) {
+        // Calculate the dot product
+        double dotProduct = a[0] * b[0] + a[1] * b[1];
+
+        // Calculate the magnitudes of the vectors
+        double magnitudeA = Math.sqrt(a[0] * a[0] + a[1] * a[1]);
+        double magnitudeB = Math.sqrt(b[0] * b[0] + b[1] * b[1]);
+
+        // Calculate the angle (in radians)
+        double angle = Math.acos(dotProduct / (magnitudeA * magnitudeB));
+
+        // Determine the direction of the angle using the cross product
+        double crossProduct = a[0] * b[1] - a[1] * b[0];
+        if (crossProduct < 0) {
+            // Angle is positive (clockwise)
+            return Math.toDegrees(angle);
+        } else {
+            // Angle is negative (counterclockwise)
+            return Math.toDegrees(-angle);
+        }
     }
 
     public void control() {
@@ -63,17 +80,18 @@ public class Turret {
         Pose2d poseEstimate = driver.drive.getPoseEstimate();
 
         Pose2d closestPose = closestPose(poses, poseEstimate);
-        double pipe_vector_x = closestPose.getX();
-        double pipe_vector_y = closestPose.getY();
-
-        double degrees = turret_motor.getCurrentPosition() / ticks_in_degrees;
-        double x = Math.sin(degrees * Math.PI / 180);
-        double y = Math.cos(degrees * Math.PI / 180);
 
         driver.drive.update();
         poseEstimate = driver.drive.getPoseEstimate();
 
-        double angle = getAngle(new double[]{pipe_vector_x - poseEstimate.getX(), pipe_vector_y - poseEstimate.getY()}, new double[]{0, 0}, new double[]{poseEstimate.getX() + x, poseEstimate.getY() + y});
+        double[] pipe = {closestPose.getX(), closestPose.getY()};
+        double[] me = {poseEstimate.getX(), poseEstimate.getY()};
+        double degrees = turret_motor.getCurrentPosition() / ticks_in_degrees;
+
+        double[] a = {23.5 * Math.sin(Math.toRadians(degrees)), 23.5 * Math.cos(Math.toRadians(degrees))};
+        double[] b = {pipe[0] - me[0], pipe[1] - me[1]};
+
+        double angle = angleBetween(a, b);
 
         if (degrees + angle > 360 || degrees + angle < -360) {
             if (angle > 0) {
