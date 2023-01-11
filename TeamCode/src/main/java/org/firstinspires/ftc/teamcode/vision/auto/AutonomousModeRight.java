@@ -162,6 +162,7 @@ public class AutonomousModeRight extends LinearOpMode {
                         outtake.setOuttakeInstructions(Outtake.outtakeInstructionsEnum.TURN_TURRET);
                     })
                     .build()
+
             );
 
             if (currentTime - startTime >= 2600 && !driver.drive.isBusy()) {

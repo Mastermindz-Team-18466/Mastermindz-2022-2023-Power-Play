@@ -134,6 +134,14 @@ public class Outtake {
                         break;
                 }
                 break;
+
+            case RESET_TURRET:
+                switch(outtakeInstructions) {
+                    case RESET_TURRET:
+                        turret.reset();
+                        break;
+                }
+                break;
         }
     }
 
@@ -151,7 +159,8 @@ public class Outtake {
         PLACE_ON_POLE,
         OPEN_CLAW,
         CLOSE_CLAW,
-        REDO_FOR_GRAB
+        REDO_FOR_GRAB,
+        RESET_TURRET
     }
 
     public enum outtakeInstructionsEnum {
@@ -166,5 +175,7 @@ public class Outtake {
         EXTEND_VERTICAL_SLIDES,
         RETRACT_VERTICAL_SLIDES,
         ZEROING_TURRET,
+
+        RESET_TURRET
     }
 }

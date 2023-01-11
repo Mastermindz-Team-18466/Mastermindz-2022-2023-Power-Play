@@ -24,7 +24,7 @@ public class Turret {
 
     public Turret(Gamepad gamepad, HardwareMap hardwareMap) {
         controller = new PIDFController(kp, ki, kd, f);
-        turret_motor = hardwareMap.get(DcMotor.class, "leftLinear_slide");
+        turret_motor = hardwareMap.get(DcMotor.class, "turretMotor");
         this.gamepad = gamepad;
         driver = new TeleOpFieldCentric(hardwareMap, new SampleMecanumDrive(hardwareMap), gamepad);
     }
@@ -119,12 +119,17 @@ public class Turret {
 
         double power = pid;
 
-        turret_motor.setPower(power);
+        turret_motor.setPower(power / 1.5);
 
         if (turret_motor.getCurrentPosition() >= ticks - 100 && turret_motor.getCurrentPosition() <= ticks + 100) {
             turret_motor.setPower(0);
         } else {
             loop(ticks);
         }
+    }
+
+    public void reset() {
+        turret_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        turret_motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 }
