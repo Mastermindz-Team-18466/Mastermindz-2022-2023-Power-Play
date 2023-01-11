@@ -23,6 +23,7 @@ public class turretTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         turretMotor = hardwareMap.get(DcMotorEx.class, "turretMotor");
+        turretMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         double integral = 0;
         double previousError = 0;
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());

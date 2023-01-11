@@ -26,10 +26,10 @@ public class ClawDistance extends LinearOpMode {
         while (opModeIsActive()) {
             telemetry.addData("Distance", distance.getDistance(DistanceUnit.CM));
             telemetry.update();
-            if (distance.getDistance(DistanceUnit.CM) < 5) {
-                claw.setPosition(0.85);
+            if (distance.getDistance(DistanceUnit.CM) < 6) {
+                claw.setPosition(0.9);
             } else {  // Otherwise, stop the motor
-                claw.setPosition(0.2);
+                claw.setPosition(0.4);
             }
         }
     }
