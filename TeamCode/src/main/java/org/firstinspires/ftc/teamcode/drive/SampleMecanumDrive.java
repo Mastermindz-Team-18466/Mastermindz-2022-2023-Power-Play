@@ -68,7 +68,7 @@ public class SampleMecanumDrive extends MecanumDrive {
     private final DcMotorEx leftRear;
     private final DcMotorEx rightRear;
     private final DcMotorEx rightFront;
-    private final List<DcMotorEx> motors;
+    public final List<DcMotorEx> motors;
 
     private BNO055IMU imu;
     private final VoltageSensor batteryVoltageSensor;

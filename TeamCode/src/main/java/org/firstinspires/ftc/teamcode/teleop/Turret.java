@@ -12,9 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Turret {
-    public static final double ticks_in_degrees = 769 / 720;
-    public static double kp = 0.0008, ki = 0, kd = 0.00001;
-    public static double f = 0;
+    public static final double ticks_in_degrees = 2403.125/360;
+    public static double kp = 0.02;
+    public static double ki = 0.00;
+    public static double kd = 0.00003;
+    public static double f = 0.1;
     public static double ticks;
     public static double target = 0;
     public PIDFController controller;
@@ -56,7 +58,7 @@ public class Turret {
         double magnitudeB = Math.sqrt(b[0] * b[0] + b[1] * b[1]);
 
         // Calculate the angle (in radians)
-        double angle = Math.acos(dotProduct / (magnitudeA * magnitudeB));
+        double angle = Math.toDegrees(Math.acos(dotProduct / (magnitudeA * magnitudeB)));
 
         // Determine the direction of the angle using the cross product
         double crossProduct = a[0] * b[1] - a[1] * b[0];
@@ -103,7 +105,9 @@ public class Turret {
 
         ticks = turret_motor.getCurrentPosition() + angle * ticks_in_degrees;
 
-        loop(ticks);
+        System.out.println("CRAZY TEST: " + angle);
+
+        // loop(ticks);
     }
 
     public void fine_tune() {

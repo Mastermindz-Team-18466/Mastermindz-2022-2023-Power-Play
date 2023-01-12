@@ -22,6 +22,7 @@ public class HorizontalSlides {
 
     DistanceSensor distance;
     TeleOpFieldCentric driver;
+    public static double ranged_d;
 
     public enum State {
         RETRACTED,
@@ -34,7 +35,8 @@ public class HorizontalSlides {
         distance = hardwareMap.get(DistanceSensor.class, "Distance");
         left_servo = hardwareMap.get(Servo.class, "leftServo");
         right_servo = hardwareMap.get(Servo.class, "rightServo");
-        claw = hardwareMap.get(Servo.class, "Claw");
+        right_servo.setDirection(Servo.Direction.REVERSE);
+        claw = hardwareMap.get(Servo.class, "claw");
         
         driver = new TeleOpFieldCentric(hardwareMap, new SampleMecanumDrive(hardwareMap), gamepad);
     }
@@ -77,7 +79,9 @@ public class HorizontalSlides {
 
             d = Math.min(21.5, d);
 
-            double ranged_d = d / (21.5 / 0.45) + 0.27;
+            ranged_d = d / (21.5 / 0.45) + 0.27;
+
+            System.out.println("CRAZY TEST 2: " + ranged_d);
 
             right_servo.setPosition(ranged_d);
             left_servo.setPosition(ranged_d + offset);
@@ -93,16 +97,16 @@ public class HorizontalSlides {
     
     public void fine_tune() {
         while (gamepad.dpad_left == true) {
-            double left_pos = Math.max(0.27, left_servo.getPosition() - 0.05);
-            double right_pos = Math.max(0.37, right_servo.getPosition() - 0.05);
+            double left_pos = Math.max(0.37, left_servo.getPosition() - 0.005);
+            double right_pos = Math.max(0.27, right_servo.getPosition() - 0.005);
 
             left_servo.setPosition(left_pos);
             right_servo.setPosition(right_pos);
         }
 
         while (gamepad.dpad_right == true)  {
-            double left_pos = Math.min(0.72, left_servo.getPosition() + 0.05);
-            double right_pos = Math.min(0.82, right_servo.getPosition() + 0.05);
+            double left_pos = Math.min(0.82, left_servo.getPosition() + 0.05);
+            double right_pos = Math.min(0.72, right_servo.getPosition() + 0.05);
 
             left_servo.setPosition(left_pos);
             right_servo.setPosition(right_pos);
@@ -110,8 +114,8 @@ public class HorizontalSlides {
     }
 
     public void ir() {
-        if (distance.getDistance(DistanceUnit.CM) < 2.2) {
-            claw.setPosition(0.8);
+        if (distance.getDistance(DistanceUnit.CM) < 6) {
+            claw.setPosition(0.9);
         }
     }
 }

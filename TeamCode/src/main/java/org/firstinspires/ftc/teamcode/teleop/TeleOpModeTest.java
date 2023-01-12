@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -9,9 +7,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.Storage;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
-@TeleOp(name = "TeleOp", group = "Concept")
+@TeleOp(name = "TeleOpTest", group = "Concept")
 //@Disabled
-public class TeleOpMode extends LinearOpMode {
+public class TeleOpModeTest extends LinearOpMode {
 
     TeleOpFieldCentric driver;
     Outtake outtake;
@@ -19,7 +17,7 @@ public class TeleOpMode extends LinearOpMode {
     @Override
     public void runOpMode() {
         driver = new TeleOpFieldCentric(hardwareMap, new SampleMecanumDrive(hardwareMap), gamepad1);
-        driver.drive.setPoseEstimate(driver.drive.getPoseEstimate());
+        driver.drive.setPoseEstimate(new Pose2d(1.5 * 23.5, -3 * 23.5, Math.toRadians(-90)));
 
         boolean left = Storage.getLeft();
 
@@ -77,15 +75,15 @@ public class TeleOpMode extends LinearOpMode {
             outtake.turret.turret_motor.setPower(gamepad2.left_stick_x);
 
             while (gamepad2.dpad_left) {
-                double horizontal_servo_left_position = Math.max(0.27, outtake.horizontalSlides.left_servo.getPosition() - 0.05);
-                double horizontal_servo_right_position = Math.max(0.37, outtake.horizontalSlides.left_servo.getPosition() - 0.05);
+                double horizontal_servo_left_position = Math.max(0.37, outtake.horizontalSlides.left_servo.getPosition() - 0.05);
+                double horizontal_servo_right_position = Math.max(0.27, outtake.horizontalSlides.left_servo.getPosition() - 0.05);
                 outtake.horizontalSlides.left_servo.setPosition(horizontal_servo_left_position);
                 outtake.horizontalSlides.right_servo.setPosition(horizontal_servo_right_position);
             }
 
             while (gamepad2.dpad_right) {
-                double horizontal_servo_left_position = Math.min(0.72, outtake.horizontalSlides.left_servo.getPosition() - 0.05);
-                double horizontal_servo_right_position = Math.min(0.82, outtake.horizontalSlides.left_servo.getPosition() - 0.05);
+                double horizontal_servo_left_position = Math.min(0.82, outtake.horizontalSlides.left_servo.getPosition() + 0.05);
+                double horizontal_servo_right_position = Math.min(0.72, outtake.horizontalSlides.left_servo.getPosition() + 0.05);
                 outtake.horizontalSlides.left_servo.setPosition(horizontal_servo_left_position);
                 outtake.horizontalSlides.right_servo.setPosition(horizontal_servo_right_position);
             }

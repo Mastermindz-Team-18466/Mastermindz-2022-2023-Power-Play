@@ -57,6 +57,8 @@ public class Outtake {
                             horizontalSlides.control(HorizontalSlides.State.RETRACTED, false);
                         }
                         break;
+                    case NOTHING:
+                        if (System.currentTimeMillis() - prevAction > 500) {}
                 }
                 break;
 
@@ -65,13 +67,15 @@ public class Outtake {
                     case TURN_TURRET:
                         turret.control();
                         prevAction = System.currentTimeMillis();
-                        outtakeInstructions = outtakeInstructionsEnum.EXTEND_VERTICAL_SLIDES;
+                        outtakeInstructions = outtakeInstructionsEnum.RETRACT_VERTICAL_SLIDES;
                         break;
                     case RETRACT_VERTICAL_SLIDES:
                         if (System.currentTimeMillis() - prevAction > 250) {
                             verticalSlides.control(VerticalSlides.State.BOTTOM);
                         }
                         break;
+                    case NOTHING:
+                        if (System.currentTimeMillis() - prevAction > 500) {}
                 }
                 break;
 
@@ -94,6 +98,8 @@ public class Outtake {
                             horizontalSlides.control(HorizontalSlides.State.EXTENDED, false);
                         }
                         break;
+                    case NOTHING:
+                        if (System.currentTimeMillis() - prevAction > 50) {}
                 }
                 break;
 
@@ -116,14 +122,19 @@ public class Outtake {
                             verticalSlides.control(VerticalSlides.State.BOTTOM);
                         }
                         break;
+                    case NOTHING:
+                        if (System.currentTimeMillis() - prevAction > 500) {}
                 }
                 break;
 
             case OPEN_CLAW:
                 switch (outtakeInstructions) {
                     case OPEN_CLAW:
+                        System.out.println("HEY");
                         claw.control(Claw.State.OPEN);
                         break;
+                    case NOTHING:
+                        if (System.currentTimeMillis() - prevAction > 250) {}
                 }
                 break;
 
@@ -160,7 +171,7 @@ public class Outtake {
         OPEN_CLAW,
         CLOSE_CLAW,
         REDO_FOR_GRAB,
-        RESET_TURRET
+        RESET_TURRET,
     }
 
     public enum outtakeInstructionsEnum {
@@ -176,6 +187,7 @@ public class Outtake {
         RETRACT_VERTICAL_SLIDES,
         ZEROING_TURRET,
 
-        RESET_TURRET
+        RESET_TURRET,
+        NOTHING
     }
 }

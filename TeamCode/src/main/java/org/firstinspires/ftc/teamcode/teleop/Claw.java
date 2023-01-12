@@ -15,16 +15,16 @@ public class Claw {
         this.gamepad = gamepad;
 
         claw = hardwareMap.get(Servo.class, "claw");
-        distance = hardwareMap.get(DistanceSensor.class, "distance");
+        distance = hardwareMap.get(DistanceSensor.class, "Distance");
     }
 
     public void control(State state) {
         if (state == State.OPEN) {
             claw.setDirection(Servo.Direction.FORWARD);
-            claw.setPosition(0.8);
+            claw.setPosition(0.9);
         }
         if (state == State.CLOSE) {
-            claw.setPosition(0);
+            claw.setPosition(0.4);
         }
 
         position = claw.getPosition();

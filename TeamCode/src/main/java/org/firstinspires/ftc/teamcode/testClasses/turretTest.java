@@ -12,10 +12,10 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 @Config
 public class turretTest extends LinearOpMode {
 
-    public static double Kp = 0.00;
+    public static double Kp = 0.02;
     public static double Ki = 0.00;
-    public static double Kd = 0.00;
-    public static double Kf = 0.00;
+    public static double Kd = 0.00003;
+    public static double Kf = 0.1;
     public static double targetPosition = 0;
 
     private DcMotorEx turretMotor;
@@ -37,7 +37,7 @@ public class turretTest extends LinearOpMode {
 
             double power = Kp * error + Ki * integral + Kd * derivative + Kf;
 
-            turretMotor.setPower(power);
+            turretMotor.setPower(power / 1.5);
 
             telemetry.addData("Current pos", turretMotor.getCurrentPosition());
             telemetry.addData("Power", power);
