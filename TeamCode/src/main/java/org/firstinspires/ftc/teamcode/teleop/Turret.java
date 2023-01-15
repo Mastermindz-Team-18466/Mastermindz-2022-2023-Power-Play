@@ -11,33 +11,47 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import java.util.ArrayList;
 import java.util.List;
 
+// This class is responsible for controlling the turret of the robot. It uses a PIDF controller to rotate the turret to a target angle.
+// It also uses a DcMotor to rotate the turret and a SampleMecanumDrive to get the robot's current position.
 public class Turret {
+    // Constants for the PIDF controller and the conversion from degrees to ticks
     public static final double ticks_in_degrees = 2403.125/360;
     public static double kp = 0.02;
     public static double ki = 0.00;
     public static double kd = 0.00003;
     public static double f = 0.1;
     public static double ticks;
-    public static double target = 0;
+
+    // PIDF controller, DcMotor and SampleMecanumDrive objects
     public PIDFController controller;
     DcMotor turret_motor;
     Gamepad gamepad;
-    TeleOpFieldCentric driver;
 
     public Turret(Gamepad gamepad, HardwareMap hardwareMap) {
+        // initialize PIDF controller
         controller = new PIDFController(kp, ki, kd, f);
+
+        // initialize turret motor
         turret_motor = hardwareMap.get(DcMotor.class, "turretMotor");
         this.gamepad = gamepad;
-        driver = new TeleOpFieldCentric(hardwareMap, new SampleMecanumDrive(hardwareMap), gamepad);
     }
 
+    // This method calculates the closest pose from a list of poses to a target pose using the distance formula.
     public static Pose2d closestPose(List<Pose2d> poses, Pose2d targetPose) {
+        // Initialize the closest pose to the first pose in the list
         Pose2d closestPose = poses.get(0);
         double closestDistance = distance(poses.get(0), targetPose);
+
+        // Iterate through the list of poses
         for (int i = 1; i < poses.size(); i++) {
             Pose2d pose = poses.get(i);
+
+            // Calculate the distance
             double poseDistance = distance(pose, targetPose);
+
+            // Check if the current pose is closer than the closest pose
             if (poseDistance < closestDistance) {
+                // Update
                 closestDistance = poseDistance;
                 closestPose = pose;
             }
@@ -45,10 +59,12 @@ public class Turret {
         return closestPose;
     }
 
+    // This method calculates the distance between two poses using the distance formula.
     private static double distance(Pose2d pose1, Pose2d pose2) {
         return Math.sqrt(Math.pow(pose1.getX() - pose2.getX(), 2) + Math.pow(pose1.getY() - pose2.getY(), 2));
     }
 
+    // This method calculates the angle between two vectors using the dot product and cross product.
     public static double angleBetween(double[] a, double[] b) {
         // Calculate the dot product
         double dotProduct = a[0] * b[0] + a[1] * b[1];
@@ -71,7 +87,9 @@ public class Turret {
         }
     }
 
-    public void control() {
+    // This method takes in the current pose of the robot and returns the number of ticks needed for the turret to rotate to the closest target
+    public double returnTicks(Pose2d robot) {
+        // A list of possible target poses
         List<Pose2d> poses = new ArrayList<>();
 
         poses.add(new Pose2d(0, 1 * 23.5));
@@ -79,23 +97,23 @@ public class Turret {
         poses.add(new Pose2d(1 * 23.5, 0));
         poses.add(new Pose2d(-1 * 23.5, 0));
 
-        Pose2d poseEstimate = driver.drive.getPoseEstimate();
+        // Finding the closest target pose
+        Pose2d closestPose = closestPose(poses, robot);
 
-        Pose2d closestPose = closestPose(poses, poseEstimate);
-
-        driver.drive.update();
-        poseEstimate = driver.drive.getPoseEstimate();
-
+        // Rewriting Pose2d as initial and terminal points
         double[] pipe = {closestPose.getX(), closestPose.getY()};
-        double[] me = {poseEstimate.getX(), poseEstimate.getY()};
+        double[] me = {robot.getX(), robot.getY()};
         double degrees = turret_motor.getCurrentPosition() / ticks_in_degrees;
 
+        // Using the initial and terminal points to create vectors
         double[] a = {23.5 * Math.sin(Math.toRadians(degrees)), 23.5 * Math.cos(Math.toRadians(degrees))};
         double[] b = {pipe[0] - me[0], pipe[1] - me[1]};
 
+        // Calculating the angle between the robot's current position and the closest target
         double angle = angleBetween(a, b);
 
-        if (degrees + angle > 360 || degrees + angle < -360) {
+        // Limiting the angle to a range between 180 and -180 degrees
+        if (degrees + angle > 180 || degrees + angle < -180) {
             if (angle > 0) {
                 angle = angle - 360;
             } else {
@@ -103,11 +121,13 @@ public class Turret {
             }
         }
 
+        // Returning the number of ticks needed to rotate the turret to the target angle
         ticks = turret_motor.getCurrentPosition() + angle * ticks_in_degrees;
+        return ticks;
+    }
 
-        System.out.println("CRAZY TEST: " + angle);
-
-        // loop(ticks);
+    public void control(Pose2d robot) {
+        // loop(returnTicks(robot));
     }
 
     public void fine_tune() {
@@ -123,9 +143,12 @@ public class Turret {
 
         double power = pid;
 
+        // Limit the power to 66.7% of its initial speed
         turret_motor.setPower(power / 1.5);
 
+        // Check if the DcMotor is within a 200 tick range of the target
         if (turret_motor.getCurrentPosition() >= ticks - 100 && turret_motor.getCurrentPosition() <= ticks + 100) {
+            // If so, stop
             turret_motor.setPower(0);
         } else {
             loop(ticks);

@@ -3,6 +3,31 @@ package org.firstinspires.ftc.teamcode.teleop;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+/*
+Variables:
+update() method is the main method for controlling the outtake system of the robot.
+outtakePos and outtakeInstructions are enums that are used to keep track of the current state of the outtake system.
+currentTime variable is used to keep track of the current time, which is used to time certain actions in the outtake system.
+prevAction variable keeps track of the time of the previous action, which is used to time certain actions in the outtake system.
+
+Switch and Case Statement:
+switch(outtakePos) is used to determine which state the outtake system is currently in.
+switch(outtakeInstructions) is used to determine which instruction to execute in the current state.
+
+Components:
+turret, v4b, claw, horizontalSlides, verticalSlides are objects representing different subsystems of the robot.
+driver is a TeleOpFieldCentric object which is used to get the robot's current position and orientation.
+
+Time-based Instructions:
+if (System.currentTimeMillis() - prevAction > 250) is used to time certain actions in the outtake system, waiting 250 milliseconds before proceeding to the next instruction.
+
+Commands:
+horizontalSlides.control(driver.drive.getPoseEstimate(), true) is used to extend the horizontal slides to grab the object.
+verticalSlides.control(VerticalSlides.State.BOTTOM) is used to lower the vertical slides to the bottom position.
+claw.control(Claw.State.CLOSE) is used to close the claw to grab the object.
+horizontalSlides.left_servo.setPosition(0.37) and horizontalSlides.right_servo.setPosition(0.27) are used to retract the horizontal slides after the object is grabbed.
+ */
+
 @Config
 public class Outtake {
     public final Turret turret;
@@ -14,14 +39,16 @@ public class Outtake {
     HardwareMap hardwareMap;
     private outtakePosEnum outtakePos;
     private outtakeInstructionsEnum outtakeInstructions;
+    private TeleOpFieldCentric driver;
     private final long startTime = System.currentTimeMillis();
     private long prevAction = System.currentTimeMillis();
     public static boolean left;
 
-    public Outtake(HardwareMap hardwareMap, Turret turret, Claw claw, V4B v4b, HorizontalSlides horizontalSlides, VerticalSlides verticalSlides) {
+    public Outtake(HardwareMap hardwareMap, TeleOpFieldCentric driver, Turret turret, Claw claw, V4B v4b, HorizontalSlides horizontalSlides, VerticalSlides verticalSlides) {
         this.turret = turret;
         this.horizontalSlides = horizontalSlides;
         this.verticalSlides = verticalSlides;
+        this.driver = driver;
 
         outtakePos = outtakePosEnum.NEUTRAL;
         outtakeInstructions = outtakeInstructionsEnum.ZEROING_TURRET;
@@ -34,13 +61,13 @@ public class Outtake {
             case GRAB_CLAW:
                 switch (outtakeInstructions) {
                     case TURN_TURRET:
-                        turret.control();
+                        turret.control(driver.drive.getPoseEstimate());
                         prevAction = System.currentTimeMillis();
                         outtakeInstructions = outtakeInstructionsEnum.EXTEND_HORIZONTAL_SLIDES;
                         break;
                     case EXTEND_HORIZONTAL_SLIDES:
                         if (System.currentTimeMillis() - prevAction > 250) {
-                            horizontalSlides.control(HorizontalSlides.State.EXTENDED, true);
+                            horizontalSlides.control(driver.drive.getPoseEstimate(), true);
                             prevAction = System.currentTimeMillis();
                             outtakeInstructions = outtakeInstructionsEnum.CLOSE_CLAW;
                         }
@@ -54,35 +81,43 @@ public class Outtake {
                         break;
                     case RETRACT_HORIZONTAL_SLIDES:
                         if (System.currentTimeMillis() - prevAction > 250) {
-                            horizontalSlides.control(HorizontalSlides.State.RETRACTED, false);
+                            horizontalSlides.left_servo.setPosition(0.37);
+                            horizontalSlides.right_servo.setPosition(0.27);
+
+                            prevAction = System.currentTimeMillis();
+                            outtakeInstructions = outtakeInstructionsEnum.NOTHING;
                         }
                         break;
                     case NOTHING:
                         if (System.currentTimeMillis() - prevAction > 500) {}
+                        break;
                 }
                 break;
 
             case REDO_FOR_GRAB:
                 switch(outtakeInstructions) {
                     case TURN_TURRET:
-                        turret.control();
+                        turret.control(driver.drive.getPoseEstimate());
                         prevAction = System.currentTimeMillis();
                         outtakeInstructions = outtakeInstructionsEnum.RETRACT_VERTICAL_SLIDES;
                         break;
                     case RETRACT_VERTICAL_SLIDES:
                         if (System.currentTimeMillis() - prevAction > 250) {
                             verticalSlides.control(VerticalSlides.State.BOTTOM);
+                            prevAction = System.currentTimeMillis();
+                            outtakeInstructions = outtakeInstructionsEnum.NOTHING;
                         }
                         break;
                     case NOTHING:
                         if (System.currentTimeMillis() - prevAction > 500) {}
+                        break;
                 }
                 break;
 
             case PLACE_ON_POLE:
                 switch (outtakeInstructions) {
                     case TURN_TURRET:
-                        turret.control();
+                        turret.control(driver.drive.getPoseEstimate());
                         prevAction = System.currentTimeMillis();
                         outtakeInstructions = outtakeInstructionsEnum.EXTEND_VERTICAL_SLIDES;
                         break;
@@ -95,11 +130,14 @@ public class Outtake {
                         break;
                     case EXTEND_HORIZONTAL_SLIDES:
                         if (System.currentTimeMillis() - prevAction > 500) {
-                            horizontalSlides.control(HorizontalSlides.State.EXTENDED, false);
+                            horizontalSlides.control(driver.drive.getPoseEstimate(), false);
+                            prevAction = System.currentTimeMillis();
+                            outtakeInstructions = outtakeInstructionsEnum.NOTHING;
                         }
                         break;
                     case NOTHING:
-                        if (System.currentTimeMillis() - prevAction > 50) {}
+                        if (System.currentTimeMillis() - prevAction > 500) {}
+                        break;
                 }
                 break;
 
@@ -112,7 +150,9 @@ public class Outtake {
                         break;
                     case RETRACT_HORIZONTAL_SLIDES:
                         if (System.currentTimeMillis() - prevAction > 250) {
-                            horizontalSlides.control(HorizontalSlides.State.RETRACTED, false);
+                            horizontalSlides.left_servo.setPosition(0.37);
+                            horizontalSlides.right_servo.setPosition(0.27);
+
                             prevAction = System.currentTimeMillis();
                             outtakeInstructions = outtakeInstructionsEnum.RETRACT_VERTICAL_SLIDES;
                         }
@@ -120,21 +160,26 @@ public class Outtake {
                     case RETRACT_VERTICAL_SLIDES:
                         if (System.currentTimeMillis() - prevAction > 250) {
                             verticalSlides.control(VerticalSlides.State.BOTTOM);
+                            prevAction = System.currentTimeMillis();
+                            outtakeInstructions = outtakeInstructionsEnum.NOTHING;
                         }
                         break;
                     case NOTHING:
                         if (System.currentTimeMillis() - prevAction > 500) {}
+                        break;
                 }
                 break;
 
             case OPEN_CLAW:
                 switch (outtakeInstructions) {
                     case OPEN_CLAW:
-                        System.out.println("HEY");
                         claw.control(Claw.State.OPEN);
+                        prevAction = System.currentTimeMillis();
+                        outtakeInstructions = outtakeInstructionsEnum.NOTHING;
                         break;
                     case NOTHING:
-                        if (System.currentTimeMillis() - prevAction > 250) {}
+                        if (System.currentTimeMillis() - prevAction > 500) {}
+                        break;
                 }
                 break;
 
@@ -142,6 +187,11 @@ public class Outtake {
                 switch (outtakeInstructions) {
                     case CLOSE_CLAW:
                         claw.control(Claw.State.CLOSE);
+                        prevAction = System.currentTimeMillis();
+                        outtakeInstructions = outtakeInstructionsEnum.NOTHING;
+                        break;
+                    case NOTHING:
+                        if (System.currentTimeMillis() - prevAction > 500) {}
                         break;
                 }
                 break;
@@ -150,6 +200,11 @@ public class Outtake {
                 switch(outtakeInstructions) {
                     case RESET_TURRET:
                         turret.reset();
+                        prevAction = System.currentTimeMillis();
+                        outtakeInstructions = outtakeInstructionsEnum.NOTHING;
+                        break;
+                    case NOTHING:
+                        if (System.currentTimeMillis() - prevAction > 500) {}
                         break;
                 }
                 break;
