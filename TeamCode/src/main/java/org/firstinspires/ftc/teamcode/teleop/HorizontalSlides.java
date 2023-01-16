@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -13,34 +14,41 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import java.util.ArrayList;
 import java.util.List;
 
+// This class is responsible for controlling the horizontal slides of the robot. It uses a servo to extend and retract the slides.
+// It also uses a distance sensor to detect the distance between the robot and a target.
 public class HorizontalSlides {
     public static double position;
     Servo left_servo, right_servo, claw;
     Gamepad gamepad;
-    
+
+    // Offset is used to adjust the position of the left servo to align with the right servo
     public static double offset = 0.1;
 
     DistanceSensor distance;
-    TeleOpFieldCentric driver;
-    public static double ranged_d;
 
     public enum State {
-        RETRACTED,
-        EXTENDED
+        EXTENDED, RETRACTED
     }
 
+    // Constructor initializes all the required hardware
     public HorizontalSlides(Gamepad gamepad, HardwareMap hardwareMap) {
         this.gamepad = gamepad;
-        
-        distance = hardwareMap.get(DistanceSensor.class, "Distance");
+
+        // initialize distance sensor
+        distance = hardwareMap.get(RevColorSensorV3.class, "Distance");
+
+        // initialize left and right servos
         left_servo = hardwareMap.get(Servo.class, "leftServo");
         right_servo = hardwareMap.get(Servo.class, "rightServo");
+
+        // set the direction of the right servo to reverse
         right_servo.setDirection(Servo.Direction.REVERSE);
+
+        // initialize claw servo
         claw = hardwareMap.get(Servo.class, "claw");
-        
-        driver = new TeleOpFieldCentric(hardwareMap, new SampleMecanumDrive(hardwareMap), gamepad);
     }
 
+    // This method finds the closest pose from a list of poses to a target pose
     public static Pose2d closestPose(List<Pose2d> poses, Pose2d targetPose) {
         Pose2d closestPose = poses.get(0);
         double closestDistance = distance(poses.get(0), targetPose);
@@ -55,67 +63,34 @@ public class HorizontalSlides {
         return closestPose;
     }
 
+    // This method finds the distance between two poses
     private static double distance(Pose2d pose1, Pose2d pose2) {
         return Math.sqrt(Math.pow(pose1.getX() - pose2.getX(), 2) + Math.pow(pose1.getY() - pose2.getY(), 2));
     }
 
-    public void control(State state, boolean withIr) {
-        if (state == State.EXTENDED) {
-            List<Pose2d> poses = new ArrayList<>();
+    // This method calculates the position of the servo based on the robot's pose and the closest pipe
+    private double returnPosition(Pose2d robot) {
+        // Add predefined pipe positions to the list
+        List<Pose2d> poses = new ArrayList<>();
 
-            poses.add(new Pose2d(0, 1 * 23.5));
-            poses.add(new Pose2d(0, -1 * 23.5));
-            poses.add(new Pose2d(1 * 23.5, 0));
-            poses.add(new Pose2d(-1 * 23.5, 0));
+        poses.add(new Pose2d(0, 1 * 23.5));
+        poses.add(new Pose2d(0, -1 * 23.5));
+        poses.add(new Pose2d(1 * 23.5, 0));
+        poses.add(new Pose2d(-1 * 23.5, 0));
 
-            Pose2d poseEstimate = driver.drive.getPoseEstimate();
+        // Find the closest pose to the robot
+        Pose2d pipe = closestPose(poses, robot);
 
-            Pose2d pipe = closestPose(poses, poseEstimate);
+        // Limit the distance to a maximum value
+        double d = distance(robot, pipe);
+        d = Math.min(34.252, d) / (34.252 / 0.45) + 0.27;
 
-            driver.drive.update();
-            poseEstimate = driver.drive.getPoseEstimate();
-
-            double d = Math.sqrt(Math.pow((pipe.getX() - poseEstimate.getX()), 2) + Math.pow((pipe.getY() - poseEstimate.getY()), 2));
-
-            d = Math.min(21.5, d);
-
-            ranged_d = d / (21.5 / 0.45) + 0.27;
-
-            System.out.println("CRAZY TEST 2: " + ranged_d);
-
-            right_servo.setPosition(ranged_d);
-            left_servo.setPosition(ranged_d + offset);
-
-            if (withIr) ir();
-
-        } else {
-            right_servo.setPosition(0.27);
-            left_servo.setPosition(0.27 + offset);
-        }
-        
-    }
-    
-    public void fine_tune() {
-        while (gamepad.dpad_left == true) {
-            double left_pos = Math.max(0.37, left_servo.getPosition() - 0.005);
-            double right_pos = Math.max(0.27, right_servo.getPosition() - 0.005);
-
-            left_servo.setPosition(left_pos);
-            right_servo.setPosition(right_pos);
-        }
-
-        while (gamepad.dpad_right == true)  {
-            double left_pos = Math.min(0.82, left_servo.getPosition() + 0.05);
-            double right_pos = Math.min(0.72, right_servo.getPosition() + 0.05);
-
-            left_servo.setPosition(left_pos);
-            right_servo.setPosition(right_pos);
-        }
+        return d;
     }
 
-    public void ir() {
-        if (distance.getDistance(DistanceUnit.CM) < 6) {
-            claw.setPosition(0.9);
-        }
+    // This method controls the position of the servo to extend or retract the slides
+    public void control(Pose2d robot, boolean withIr) {
+        left_servo.setPosition(returnPosition(robot) + offset);
+        right_servo.setPosition(returnPosition(robot));
     }
 }

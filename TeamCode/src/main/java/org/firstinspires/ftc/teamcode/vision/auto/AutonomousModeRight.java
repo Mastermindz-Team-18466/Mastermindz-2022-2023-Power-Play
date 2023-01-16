@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Storage;
+import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.teleop.Claw;
 import org.firstinspires.ftc.teamcode.teleop.HorizontalSlides;
 import org.firstinspires.ftc.teamcode.teleop.Outtake;
@@ -34,8 +35,8 @@ public class AutonomousModeRight extends LinearOpMode {
 
     AprilTagDetection tagOfInterest = null;
 
-    TeleOpFieldCentric driver;
-    public Outtake outtake = new Outtake(hardwareMap, new Turret(gamepad2, hardwareMap), new Claw(gamepad2, hardwareMap), new V4B(gamepad2, hardwareMap), new HorizontalSlides(gamepad2, hardwareMap), new VerticalSlides(gamepad2, hardwareMap));
+    TeleOpFieldCentric driver = new TeleOpFieldCentric(hardwareMap, new SampleMecanumDrive(hardwareMap), gamepad1);;
+    public Outtake outtake = new Outtake(hardwareMap, driver, new Turret(gamepad2, hardwareMap), new Claw(gamepad2, hardwareMap), new V4B(gamepad2, hardwareMap), new HorizontalSlides(gamepad2, hardwareMap), new VerticalSlides(gamepad2, hardwareMap));
 
     @Override
     public void runOpMode() throws InterruptedException {

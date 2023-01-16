@@ -11,17 +11,17 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 //@Disabled
 public class TeleOpModeTest extends LinearOpMode {
 
-    TeleOpFieldCentric driver;
+    public static TeleOpFieldCentric driver;
     Outtake outtake;
 
     @Override
     public void runOpMode() {
         driver = new TeleOpFieldCentric(hardwareMap, new SampleMecanumDrive(hardwareMap), gamepad1);
-        driver.drive.setPoseEstimate(new Pose2d(1.5 * 23.5, -3 * 23.5, Math.toRadians(-90)));
+        driver.drive.setPoseEstimate(new Pose2d(-3 * 23.5, 1.5 * 23.5));
 
         boolean left = Storage.getLeft();
 
-        outtake = new Outtake(hardwareMap, new Turret(gamepad2, hardwareMap), new Claw(gamepad2, hardwareMap), new V4B(gamepad2, hardwareMap), new HorizontalSlides(gamepad2, hardwareMap), new VerticalSlides(gamepad2, hardwareMap));
+        outtake = new Outtake(hardwareMap, driver, new Turret(gamepad2, hardwareMap), new Claw(gamepad2, hardwareMap), new V4B(gamepad2, hardwareMap), new HorizontalSlides(gamepad2, hardwareMap), new VerticalSlides(gamepad2, hardwareMap));
 
         outtake.setOuttakePos(Outtake.outtakePosEnum.CLOSE_CLAW);
         outtake.setOuttakeInstructions(Outtake.outtakeInstructionsEnum.CLOSE_CLAW);
@@ -54,25 +54,26 @@ public class TeleOpModeTest extends LinearOpMode {
             telemetry.addData("X: ", poseEstimate.getX());
             telemetry.addData("Y: ", poseEstimate.getY());
             telemetry.addData("Robot Heading: ", poseEstimate.getHeading());
-            telemetry.addData("Turret Rotation: ", outtake.turret.ticks);
             telemetry.addData("Turret Rotation: ", "Min: -180; Current: " + outtake.turret.ticks / outtake.turret.ticks_in_degrees + "; Max: 180");
             telemetry.addData("Vertical Extension (Left): ", outtake.verticalSlides.left_position);
             telemetry.addData("Vertical Extension (Right): ", outtake.verticalSlides.right_position);
-            telemetry.addData("Vertical Extension (Right): ", outtake.verticalSlides.power);
             telemetry.addData("Horizontal Extension: ", outtake.horizontalSlides.position);
-            telemetry.addData("Horizontal Extension: ", outtake.horizontalSlides.ranged_d);
             telemetry.addData("Claw Position: ", "Min: 0; Current: " + outtake.claw.position + "; Max: 0.8");
-            telemetry.addData("V4B Position (Left): ", outtake.v4b.left_position);
-            telemetry.addData("V4B Position (Right): ", outtake.v4b.right_position);
+            telemetry.addData("V4B Position: ", outtake.v4b.position);
 
             telemetry.update();
 
 
             outtake.update();
 
-            outtake.verticalSlides.left_linear_slide.setPower(gamepad2.left_stick_y);
-            outtake.verticalSlides.right_linear_slide.setPower(gamepad2.left_stick_y);
-            outtake.turret.turret_motor.setPower(gamepad2.left_stick_x);
+            if (outtake.verticalSlides.left_linear_slide.getCurrentPosition() > 3200) {
+                outtake.verticalSlides.left_linear_slide.setPower(gamepad2.left_stick_y);
+                outtake.verticalSlides.right_linear_slide.setPower(gamepad2.left_stick_y);
+            }
+
+            if ((outtake.turret.turret_motor.getCurrentPosition() / outtake.turret.ticks_in_degrees) > 180 || (outtake.turret.turret_motor.getCurrentPosition() / outtake.turret.ticks_in_degrees) < -180) {
+                outtake.turret.turret_motor.setPower(gamepad2.left_stick_x);
+            }
 
             while (gamepad2.dpad_left) {
                 double horizontal_servo_left_position = Math.max(0.37, outtake.horizontalSlides.left_servo.getPosition() - 0.05);
@@ -89,13 +90,13 @@ public class TeleOpModeTest extends LinearOpMode {
             }
 
             while (gamepad2.dpad_up) {
-                double v4b_left_position = Math.min(0.5, outtake.v4b.left.getPosition() + 0.05);
-                outtake.v4b.left.setPosition(v4b_left_position);
+                double v4b_left_position = Math.min(0.5, outtake.v4b.v4b.getPosition() + 0.05);
+                outtake.v4b.v4b.setPosition(v4b_left_position);
             }
 
             while (gamepad2.dpad_down) {
-                double v4b_left_position = Math.max(0, outtake.v4b.left.getPosition() - 0.05);
-                outtake.v4b.left.setPosition(v4b_left_position);
+                double v4b_left_position = Math.max(0, outtake.v4b.v4b.getPosition() - 0.05);
+                outtake.v4b.v4b.setPosition(v4b_left_position);
             }
         }
 
