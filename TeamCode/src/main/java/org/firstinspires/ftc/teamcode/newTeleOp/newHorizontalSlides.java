@@ -16,10 +16,10 @@ public class newHorizontalSlides {
 
     public void set(double targetPosition) {
 
-        if (targetPosition > 0.72) {
+        if (targetPosition >= 0.72) {
             targetPosition = 0.72;
         }
-        if (targetPosition < 0.27) {
+        if (targetPosition <= 0.27) {
             targetPosition = 0.27;
         }
 

@@ -29,10 +29,10 @@ public class newTurret {
 
     public void set(int targetPosition) {
 
-        if (targetPosition > 1201) {
+        if (targetPosition >= 1201) {
             targetPosition = 1201;
         }
-        if (targetPosition < -1201) {
+        if (targetPosition <= -1201) {
             targetPosition = -1201;
         }
 

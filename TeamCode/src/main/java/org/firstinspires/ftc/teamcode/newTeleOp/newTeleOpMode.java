@@ -54,7 +54,7 @@ public class newTeleOpMode extends LinearOpMode {
 
         inOutTake.setVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
         inOutTake.setInstructions(IntakeAndOuttake.Instructions.CLOSED);
-        inOutTake.setSpecificInstruction(IntakeAndOuttake.specificInstructions.NO_DEPOSIT_CONE);
+        inOutTake.setSpecificInstruction(IntakeAndOuttake.specificInstructions.INITIAL_CLOSE);
 
         driver.drive.setPoseEstimate(PoseStorage.currentPose);
 
@@ -112,7 +112,7 @@ public class newTeleOpMode extends LinearOpMode {
 
                     //cycle
                     if (currentGamepad2.b && !previousGamepad2.b) {
-                        //intake
+                        //intake\
                         if (cycleCheck == 0) {
                             if (closedToIntakeCheck == 1) {
                                 inOutTake.setVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
@@ -139,6 +139,7 @@ public class newTeleOpMode extends LinearOpMode {
             telemetry.addData("VerticalTargetPos:", inOutTake.verticalTargetPos);
             telemetry.addData("VerticalCurrentPos:", verticalSlides.liftMotor1.getCurrentPosition());
             telemetry.addData("ServoPos:", clawAndV4B.v4b.getPosition());
+            telemetry.addData("currentVerticalPos:");
             telemetry.update();
         }
     }

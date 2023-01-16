@@ -35,10 +35,10 @@ public class newVerticalSlides {
 
     public void set(int targetPosition) {
 
-        if (targetPosition > 3200) {
+        if (targetPosition >= 3200) {
             targetPosition = 3200;
         }
-        if (targetPosition < 0) {
+        if (targetPosition <= 0) {
             targetPosition = 0;
         }
 

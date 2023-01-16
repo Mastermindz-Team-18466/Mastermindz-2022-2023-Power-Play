@@ -25,7 +25,6 @@ public class IntakeAndOuttake {
     public double clawTargetPos;
 
 
-
     public enum verticalPos {
         GROUND,
         BOTTOM,
@@ -42,6 +41,7 @@ public class IntakeAndOuttake {
     }
 
     public enum specificInstructions {
+        INITIAL_CLOSE,
         DEPOSIT_CONE,
         NO_DEPOSIT_CONE,
         CLOSED_TO_INTAKE,
@@ -49,7 +49,8 @@ public class IntakeAndOuttake {
         DELAY_DEPOSIT_TO_NO_DEPOSIT,
         TURRET_RESET_DELAY,
         TURRET_RESET_DELAY2,
-        INCREASE_DEPOSIT_ACCURACY
+        INCREASE_DEPOSIT_ACCURACY,
+        DELAY1
     }
 
     private static verticalPos verticalPos;
@@ -61,7 +62,7 @@ public class IntakeAndOuttake {
     public IntakeAndOuttake(newTurret turret, clawAndV4B clawAndV4B, newVerticalSlides verticalSlides, newHorizontalSlides horizontalSlides, RevColorSensorV3 distance) {
         verticalPos = IntakeAndOuttake.verticalPos.GROUND;
         Instructions = IntakeAndOuttake.Instructions.CLOSED;
-        specificInstruction = specificInstructions.NO_DEPOSIT_CONE;
+        specificInstruction = specificInstructions.INITIAL_CLOSE;
 
         this.clawAndV4B = clawAndV4B;
         this.turret = turret;
@@ -76,13 +77,15 @@ public class IntakeAndOuttake {
             case GROUND:
                 switch (Instructions) {
                     case CLOSED:
-                        verticalTargetPos = 0;
-                        turretTargetPos = 0;
-                        horizontalTargetPos = 0.72;
-                        clawTargetPos = 0.9;
-                        prevAction = System.currentTimeMillis();
-                        specificInstruction = specificInstructions.V4B_DOWN_TO_UP;
                         switch (specificInstruction) {
+                            case INITIAL_CLOSE:
+                                verticalTargetPos = 0;
+                                turretTargetPos = 0;
+                                horizontalTargetPos = 0.72;
+                                clawTargetPos = 0.9;
+                                prevAction = System.currentTimeMillis();
+                                specificInstruction = specificInstructions.V4B_DOWN_TO_UP;
+                                break;
                             case V4B_DOWN_TO_UP:
                                 if (System.currentTimeMillis() - prevAction > 250) {
                                     v4bTargetPos = 0.72;
@@ -137,10 +140,16 @@ public class IntakeAndOuttake {
                                     verticalTargetPos = 0;
                                     v4bTargetPos = 0.42 + v4bIntakeOffset;
                                     prevAction = System.currentTimeMillis();
-                                    if (System.currentTimeMillis() - prevAction > 250) {
-                                        clawTargetPos = 0.5;
-                                        prevAction = System.currentTimeMillis();
-                                    }
+                                    specificInstruction = specificInstructions.DELAY1;
+                                }
+                                break;
+                            case DELAY1:
+                                turretTargetPos = 0 + turretIntakeOffset;
+                                v4bTargetPos = 0.42 + v4bIntakeOffset;
+                                horizontalTargetPos = 0.45 + horizontalIntakeOffset;
+                                if (System.currentTimeMillis() - prevAction > 250) {
+                                    clawTargetPos = 0.5;
+                                    prevAction = System.currentTimeMillis();
                                 }
                                 break;
                         }

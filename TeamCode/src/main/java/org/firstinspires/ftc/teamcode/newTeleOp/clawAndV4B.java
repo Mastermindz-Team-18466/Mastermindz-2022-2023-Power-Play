@@ -8,6 +8,8 @@ public class clawAndV4B {
     Servo claw;
     Servo v4b;
 
+    double aTargetPos;
+
     public clawAndV4B(HardwareMap hardwareMap) {
         claw = hardwareMap.get(Servo.class, "claw");
         v4b = hardwareMap.servo.get("v4b_left");
@@ -18,13 +20,16 @@ public class clawAndV4B {
     }
 
     public void v4bTargetPos(double targetPos) {
-        if (targetPos > 0.72) {
-            targetPos = 0.72;
+
+        aTargetPos = targetPos;
+
+        if (aTargetPos > 0.72) {
+            aTargetPos = 0.72;
         }
-        if (targetPos < 0.27) {
-            targetPos = 0.27;
+        if (aTargetPos < 0.27) {
+            aTargetPos = 0.27;
         }
 
-        v4b.setPosition(targetPos);
+        v4b.setPosition(aTargetPos);
     }
 }
