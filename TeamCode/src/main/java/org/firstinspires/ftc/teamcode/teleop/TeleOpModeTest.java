@@ -23,7 +23,7 @@ public class TeleOpModeTest extends LinearOpMode {
 
         outtake = new Outtake(hardwareMap, new Turret(gamepad2, hardwareMap), new Claw(gamepad2, hardwareMap), new V4B(gamepad2, hardwareMap), new HorizontalSlides(gamepad2, hardwareMap), new VerticalSlides(gamepad2, hardwareMap));
 
-        outtake.setOuttakePos(Outtake.outtakePosEnum.NEUTRAL);
+        outtake.setOuttakePos(Outtake.outtakePosEnum.CLOSE_CLAW);
         outtake.setOuttakeInstructions(Outtake.outtakeInstructionsEnum.CLOSE_CLAW);
 
         waitForStart();

@@ -7,30 +7,28 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.newTeleOp.clawAndV4B;
+
 @Config
 @TeleOp(name = "V4BTest", group = "Test")
 public class V4BTest extends LinearOpMode {
 
-    public static double endPos1 = 0.72; //21.5 in
-    public static double endPos2 = 0.27;
-    private Servo leftServo;
+    clawAndV4B v4b;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        leftServo = hardwareMap.servo.get("v4b_left");
+        v4b = new clawAndV4B(hardwareMap);
 
         waitForStart();
         while (opModeIsActive()) {
             if (gamepad1.a) {
-                leftServo.setPosition(endPos1);
+                v4b.v4bTargetPos(0.27);
             } else if (gamepad1.b) {
-                leftServo.setPosition(endPos2);
+                v4b.v4bTargetPos(0.72);
             }
         }
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         telemetry.addData("Running:", telemetry);
-        telemetry.addData("endPos1:", endPos1);
-        telemetry.addData("endPos2:", endPos2);
         telemetry.update();
     }
 }
