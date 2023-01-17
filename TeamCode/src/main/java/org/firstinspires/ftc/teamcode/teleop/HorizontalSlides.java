@@ -1,51 +1,30 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.qualcomm.hardware.rev.RevColorSensorV3;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.teleop.TeleOpFieldCentric;
 
 import java.util.ArrayList;
 import java.util.List;
 
-// This class is responsible for controlling the horizontal slides of the robot. It uses a servo to extend and retract the slides.
-// It also uses a distance sensor to detect the distance between the robot and a target.
 public class HorizontalSlides {
-    public static double position;
-    Servo left_servo, right_servo, claw;
-    Gamepad gamepad;
-
-    // Offset is used to adjust the position of the left servo to align with the right servo
     public static double offset = 0.1;
+    public static Servo right_servo;
+    public static Servo left_servo;
+    public static TeleOpFieldCentric driver;
+    private Gamepad gamepad;
 
-    DistanceSensor distance;
-
-    public enum State {
-        EXTENDED, RETRACTED
-    }
-
-    // Constructor initializes all the required hardware
-    public HorizontalSlides(Gamepad gamepad, HardwareMap hardwareMap) {
-        this.gamepad = gamepad;
-
-        // initialize distance sensor
-        distance = hardwareMap.get(RevColorSensorV3.class, "Distance");
-
-        // initialize left and right servos
-        left_servo = hardwareMap.get(Servo.class, "leftServo");
-        right_servo = hardwareMap.get(Servo.class, "rightServo");
-
-        // set the direction of the right servo to reverse
+    public HorizontalSlides(HardwareMap hardwareMap) {
+        right_servo = hardwareMap.servo.get("rightServo");
+        left_servo = hardwareMap.servo.get("leftServo");
         right_servo.setDirection(Servo.Direction.REVERSE);
-
-        // initialize claw servo
-        claw = hardwareMap.get(Servo.class, "claw");
+        driver = new TeleOpFieldCentric(hardwareMap, new SampleMecanumDrive(hardwareMap), gamepad);
+        driver.drive.setPoseEstimate(driver.drive.getPoseEstimate());
     }
 
     // This method finds the closest pose from a list of poses to a target pose
@@ -69,7 +48,7 @@ public class HorizontalSlides {
     }
 
     // This method calculates the position of the servo based on the robot's pose and the closest pipe
-    private double returnPosition(Pose2d robot) {
+    private double returnPosition() {
         // Add predefined pipe positions to the list
         List<Pose2d> poses = new ArrayList<>();
 
@@ -78,19 +57,30 @@ public class HorizontalSlides {
         poses.add(new Pose2d(1 * 23.5, 0));
         poses.add(new Pose2d(-1 * 23.5, 0));
 
+        driver.drive.update();
+
+        System.out.println("Driver Pos: " + driver.drive.getPoseEstimate());
+        Pose2d robot = new Pose2d(driver.drive.getPoseEstimate().getX() + 14, driver.drive.getPoseEstimate().getY());
+
         // Find the closest pose to the robot
         Pose2d pipe = closestPose(poses, robot);
 
         // Limit the distance to a maximum value
-        double d = distance(robot, pipe);
-        d = Math.min(34.252, d) / (34.252 / 0.45) + 0.27;
-
-        return d;
+        System.out.println("Dist: " + distance(robot, pipe));
+        return distance(robot, pipe);
     }
 
-    // This method controls the position of the servo to extend or retract the slides
-    public void control(Pose2d robot, boolean withIr) {
-        left_servo.setPosition(returnPosition(robot) + offset);
-        right_servo.setPosition(returnPosition(robot));
+    public void control(Pose2d robot, boolean ir) {
+        double targetPosition = returnPosition();
+
+        if (targetPosition > 0.72) {
+            targetPosition = 0.72;
+        }
+        if (targetPosition < 0.27) {
+            targetPosition = 0.27;
+        }
+
+        right_servo.setPosition(targetPosition);
+        left_servo.setPosition(targetPosition + offset);
     }
 }

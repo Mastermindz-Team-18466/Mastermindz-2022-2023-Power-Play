@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.teleop;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.teleop.HorizontalSlides;
+
 /*
 Variables:
 update() method is the main method for controlling the outtake system of the robot.

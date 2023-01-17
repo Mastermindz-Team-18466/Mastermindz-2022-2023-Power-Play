@@ -34,7 +34,7 @@ public class AutonomousModeLeft extends LinearOpMode {
     AprilTagDetection tagOfInterest = null;
 
     TeleOpFieldCentric driver = new TeleOpFieldCentric(hardwareMap, new SampleMecanumDrive(hardwareMap), gamepad1);
-    public Outtake outtake = new Outtake(hardwareMap, driver, new Turret(gamepad2, hardwareMap), new Claw(gamepad2, hardwareMap), new V4B(gamepad2, hardwareMap), new HorizontalSlides(gamepad2, hardwareMap), new VerticalSlides(gamepad2, hardwareMap));
+    public Outtake outtake = new Outtake(hardwareMap, driver, new Turret(gamepad2, hardwareMap), new Claw(gamepad2, hardwareMap), new V4B(gamepad2, hardwareMap), new HorizontalSlides(hardwareMap), new VerticalSlides(gamepad2, hardwareMap));
 
     @Override
     public void runOpMode() throws InterruptedException {

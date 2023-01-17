@@ -21,7 +21,7 @@ public class TeleOpModeTest extends LinearOpMode {
 
         boolean left = Storage.getLeft();
 
-        outtake = new Outtake(hardwareMap, driver, new Turret(gamepad2, hardwareMap), new Claw(gamepad2, hardwareMap), new V4B(gamepad2, hardwareMap), new HorizontalSlides(gamepad2, hardwareMap), new VerticalSlides(gamepad2, hardwareMap));
+        outtake = new Outtake(hardwareMap, driver, new Turret(gamepad2, hardwareMap), new Claw(gamepad2, hardwareMap), new V4B(gamepad2, hardwareMap), new HorizontalSlides(hardwareMap), new VerticalSlides(gamepad2, hardwareMap));
 
         outtake.setOuttakePos(Outtake.outtakePosEnum.CLOSE_CLAW);
         outtake.setOuttakeInstructions(Outtake.outtakeInstructionsEnum.CLOSE_CLAW);
@@ -57,7 +57,6 @@ public class TeleOpModeTest extends LinearOpMode {
             telemetry.addData("Turret Rotation: ", "Min: -180; Current: " + outtake.turret.ticks / outtake.turret.ticks_in_degrees + "; Max: 180");
             telemetry.addData("Vertical Extension (Left): ", outtake.verticalSlides.left_position);
             telemetry.addData("Vertical Extension (Right): ", outtake.verticalSlides.right_position);
-            telemetry.addData("Horizontal Extension: ", outtake.horizontalSlides.position);
             telemetry.addData("Claw Position: ", "Min: 0; Current: " + outtake.claw.position + "; Max: 0.8");
             telemetry.addData("V4B Position: ", outtake.v4b.position);
 
