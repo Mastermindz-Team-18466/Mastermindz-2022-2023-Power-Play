@@ -15,7 +15,7 @@ public class newVerticalSlides {
     public DcMotorEx liftMotor1;
     private DcMotorEx liftMotor2;
 
-    public int previousTargetPos;
+    public double previousTargetPos;
 
     public newVerticalSlides(HardwareMap hardwareMap) {
         controller = new PIDController(p, i, d);
@@ -33,7 +33,7 @@ public class newVerticalSlides {
 
     }
 
-    public void set(int targetPosition) {
+    public void set(double targetPosition) {
 
         if (targetPosition >= 3200) {
             targetPosition = 3200;

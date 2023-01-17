@@ -1,58 +1,58 @@
 package org.firstinspires.ftc.teamcode.testClasses;
 
+//starting position is 80
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.arcrobotics.ftclib.controller.PIDController;
+import com.arcrobotics.ftclib.controller.PIDFController;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.newTeleOp.newTurret;
+import java.util.Arrays;
+import java.util.List;
 
 @TeleOp
 @Config
-public class turretTest extends LinearOpMode {
+public class turretTest extends OpMode {
+    private PIDController controller;
 
-//    public static double Kp = 0.02;
-//    public static double Ki = 0.00;
-//    public static double Kd = 0.00003;
-//    public static double Kf = 0.1;
-//    public static double targetPosition = 0;
-//
-//    private DcMotorEx turretMotor;
+    public static double p = 0, i = 0, d = 0;
+    public static double f = 0;
 
-    newTurret turret;
+    public static double targetPosition = 0;
+
+    private DcMotorEx turret;
 
     @Override
-    public void runOpMode() throws InterruptedException {
-//        turretMotor = hardwareMap.get(DcMotorEx.class, "turretMotor");
-//        turretMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        double integral = 0;
-//        double previousError = 0;
-//        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+    public void init() {
+        controller = new PIDController(p, i, d);
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        turret = new newTurret(hardwareMap);
+        turret = hardwareMap.get(DcMotorEx.class, "turretMotor");
 
-        waitForStart();
-        while (opModeIsActive()) {
-//            double error  = targetPosition - turretMotor.getCurrentPosition();
-//            integral = integral + error;
-//            double derivative = error - previousError;
-//            previousError = error;
-//
-//            double power = Kp * error + Ki * integral + Kd * derivative + Kf;
-//
-//            turretMotor.setPower(power / 1.5);
-//
-//            telemetry.addData("Current pos", turretMotor.getCurrentPosition());
-//            telemetry.addData("Power", power);
-//            telemetry.addData("Error", error);
-//            telemetry.addData("Target Pos", targetPosition);
+    }
 
-            turret.set(100);
+    @Override
+    public void loop() {
+        controller.setPID(p, i, d);
+        double slidePos = turret.getCurrentPosition();
 
-            telemetry.update();
-        }
+        double pid = controller.calculate(slidePos, targetPosition);
+
+        double power = pid + f;
+
+        turret.setPower(power);
+
+        telemetry.addData("targetPos", targetPosition);
+        telemetry.addData("currentPos", slidePos);
+        telemetry.update();
     }
 }

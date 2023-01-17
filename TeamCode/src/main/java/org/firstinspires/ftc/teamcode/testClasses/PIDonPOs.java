@@ -1,34 +1,38 @@
 package org.firstinspires.ftc.teamcode.testClasses;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.teleop.TeleOpFieldCentric;
 
-@TeleOp(name = "pidonposition", group = "Test")
 @Config
+@TeleOp(name = "pidonposition", group = "Test")
 public class PIDonPOs extends LinearOpMode {
-    double kpx = 0;
-    double kix = 0;
-    double kdx = 0;
-    double kpy = 0;
-    double kiy = 0;
-    double kdy = 0;
-    double kpt = 0;
-    double kit = 0;
-    double kdt = 0;
-    double xTargetPosition = 0;
-    double yTargetPosition = 0;
-    double tTargetPosition = 0;
+    public static double kpx = 0;
+    public static double kix = 0;
+    public static double kdx = 0;
+    public static double kpy = 0;
+    public static double kiy = 0;
+    public static double kdy = 0;
+    public static double kpt = 0;
+    public static double kit = 0;
+    public static double kdt = 0;
+    public static double xTargetPosition = 0;
+    public static double yTargetPosition = 0;
+    public static double tTargetPosition = 0;
 
     @Override
     public void runOpMode() throws InterruptedException {
+        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        Pose2d poseEstimate = drive.getPoseEstimate();
         TeleOpFieldCentric driver = new TeleOpFieldCentric(hardwareMap, new SampleMecanumDrive(hardwareMap), gamepad1);
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         waitForStart();
         while (opModeIsActive()) {
@@ -46,6 +50,13 @@ public class PIDonPOs extends LinearOpMode {
             driver.drive.motors.get(1).setPower(x_rotated - y_rotated + t);
             driver.drive.motors.get(2).setPower(x_rotated - y_rotated - t);
             driver.drive.motors.get(3).setPower(x_rotated + y_rotated - t);
+
+            telemetry.addData("X: ", poseEstimate.getX());
+            telemetry.addData("Y: ", poseEstimate.getY());
+            telemetry.addData("Robot Heading: ", poseEstimate.getHeading());
+            telemetry.addData("Running: ", telemetry);
+
+            telemetry.update();
         }
     }
 

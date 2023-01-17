@@ -12,46 +12,20 @@ public class IntakeAndOuttake {
     public RevColorSensorV3 distance;
 
 
-    public int turretIntakeOffset = 0;
-    public int horizontalIntakeOffset = 0;
-    public int v4bIntakeOffset = 0;
+    public double turretIntakeOffset = 0;
+    public double horizontalIntakeOffset = 0;
+    public double v4bIntakeOffset = 0;
 
-    public int verticalOffset = 0;
+    public double turretOuttakeOffset = 0;
+    public double horizontalOuttakeOffset = 0;
+    public double v4bOuttakeOffset = 0;
+    public double verticalOuttakeOffset = 0;
 
-    public int turretTargetPos;
-    public int verticalTargetPos;
+    public double turretTargetPos;
+    public double verticalTargetPos;
     public double horizontalTargetPos;
     public double v4bTargetPos;
     public double clawTargetPos;
-
-
-    public enum verticalPos {
-        GROUND,
-        BOTTOM,
-        MID,
-        TOP
-    }
-
-    public enum Instructions {
-        CLOSED,
-        INTAKE,
-        STACK_INTAKE,
-        DEPOSIT,
-        PARK
-    }
-
-    public enum specificInstructions {
-        INITIAL_CLOSE,
-        DEPOSIT_CONE,
-        NO_DEPOSIT_CONE,
-        CLOSED_TO_INTAKE,
-        V4B_DOWN_TO_UP,
-        DELAY_DEPOSIT_TO_NO_DEPOSIT,
-        TURRET_RESET_DELAY,
-        TURRET_RESET_DELAY2,
-        INCREASE_DEPOSIT_ACCURACY,
-        DELAY1
-    }
 
     private static verticalPos verticalPos;
     private static Instructions Instructions;
@@ -138,7 +112,7 @@ public class IntakeAndOuttake {
                                 if (System.currentTimeMillis() - prevAction > 500) {
                                     horizontalTargetPos = 0.45 + horizontalIntakeOffset;
                                     verticalTargetPos = 0;
-                                    v4bTargetPos = 0.42 + v4bIntakeOffset;
+                                    v4bTargetPos = 0.53 + v4bIntakeOffset;
                                     prevAction = System.currentTimeMillis();
                                     specificInstruction = specificInstructions.DELAY1;
                                 }
@@ -154,12 +128,43 @@ public class IntakeAndOuttake {
                                 break;
                         }
                         break;
-//                    case DEPOSIT:
-
-
+                    case DEPOSIT:
+                        switch (specificInstruction) {
+                            case CLOSE_CLAW:
+                                clawTargetPos = 0.9;
+                                prevAction = System.currentTimeMillis();
+                                specificInstruction = specificInstruction.RETRACT_HORIZONTAL_SLIDES;
+                                break;
+                            case RETRACT_HORIZONTAL_SLIDES:
+                                if (System.currentTimeMillis() - prevAction > 250) {
+                                    horizontalTargetPos = 0.6 + horizontalIntakeOffset;
+                                    turretTargetPos = 900;
+                                }
+                                break;
+                        }
+                        break;
                 }
                 break;
-//            case TOP:
+            case TOP:
+                switch (Instructions) {
+                    case DEPOSIT:
+                        switch (specificInstruction) {
+                            case CLOSE_CLAW:
+                                clawAndV4B.clawControl(0.9);
+                                prevAction = System.currentTimeMillis();
+                                specificInstruction = specificInstruction.RETRACT_HORIZONTAL_SLIDES;
+                                break;
+                            case RETRACT_HORIZONTAL_SLIDES:
+                                if (System.currentTimeMillis() - prevAction > 250) {
+                                    horizontalTargetPos = 0.6 + horizontalIntakeOffset;
+                                    turretTargetPos = 900;
+                                    verticalTargetPos = 3200;
+                                }
+                                break;
+                        }
+                        break;
+                }
+
         }
 
         turret.set(turretTargetPos);
@@ -167,6 +172,39 @@ public class IntakeAndOuttake {
         horizontalSlides.set(horizontalTargetPos);
         clawAndV4B.v4bTargetPos(v4bTargetPos);
         clawAndV4B.clawControl(clawTargetPos);
+    }
+
+    public enum verticalPos {
+        GROUND,
+        BOTTOM,
+        MID,
+        TOP
+    }
+
+    public enum Instructions {
+        CLOSED,
+        INTAKE,
+        STACK_INTAKE,
+        DEPOSIT,
+        PARK
+    }
+
+    public enum specificInstructions {
+        INITIAL_CLOSE,
+        DEPOSIT_CONE,
+        NO_DEPOSIT_CONE,
+        CLOSED_TO_INTAKE,
+        V4B_DOWN_TO_UP,
+        DELAY_DEPOSIT_TO_NO_DEPOSIT,
+        TURRET_RESET_DELAY,
+        TURRET_RESET_DELAY2,
+        INCREASE_DEPOSIT_ACCURACY,
+        DELAY1,
+
+        //deposit
+        CLOSE_CLAW,
+        RETRACT_HORIZONTAL_SLIDES,
+        EXTEND_VERTICAL_SLIDES
     }
 
     public void setVerticalPos(verticalPos pos) {
@@ -180,6 +218,4 @@ public class IntakeAndOuttake {
     public void setSpecificInstruction(specificInstructions specificInstructions) {
         specificInstruction = specificInstructions;
     }
-
-
 }

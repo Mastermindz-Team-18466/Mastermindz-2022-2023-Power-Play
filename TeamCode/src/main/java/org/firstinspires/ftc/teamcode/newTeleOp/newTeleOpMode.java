@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.newAuto.Trajectories;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.teleop.TeleOpFieldCentric;
 
-@TeleOp(name = "newTeleOpMode", group = "Concept")
+@TeleOp(name = "newTeleOpMode", group = "Conceplt")
 //@Disabled
 public class newTeleOpMode extends LinearOpMode {
 
@@ -40,8 +40,6 @@ public class newTeleOpMode extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-
-        PhotonCore.enable();
         TeleOpFieldCentric driver = new TeleOpFieldCentric(hardwareMap, new SampleMecanumDrive(hardwareMap), gamepad1);
 
         turret = new newTurret(hardwareMap);
@@ -75,12 +73,9 @@ public class newTeleOpMode extends LinearOpMode {
             currentGamepad1.copy(gamepad1);
 
             previousGamepad2.copy(currentGamepad2);
-            currentGamepad2.copy(gamepad1);
+            currentGamepad2.copy(gamepad2);
 
             Pose2d poseEstimate = driver.drive.getPoseEstimate();
-
-            previousGamepad1.copy(currentGamepad1);
-            previousGamepad2.copy(currentGamepad2);
 
             switch (currentMode) {
                 case DRIVER_CONTROL:
@@ -92,11 +87,11 @@ public class newTeleOpMode extends LinearOpMode {
                     if (currentGamepad2.dpad_left && !previousGamepad2.dpad_left) {
                         inOutTake.horizontalIntakeOffset -= 0.025;
                     }
-                    if (currentGamepad2.dpad_right && !previousGamepad2.a) {
+                    if (currentGamepad2.dpad_right && !previousGamepad2.dpad_right) {
                         inOutTake.horizontalIntakeOffset += 0.025;
                     }
 
-                    if (currentGamepad2.a && !previousGamepad2.x) {
+                    if (currentGamepad2.x && !previousGamepad2.x) {
                         inOutTake.turretIntakeOffset -= 8;
                     }
                     if (currentGamepad2.b && !previousGamepad2.b) {
@@ -110,9 +105,19 @@ public class newTeleOpMode extends LinearOpMode {
                         clawAndV4B.claw.setPosition(0.5);
                     }
 
+                    if (currentGamepad2.y && !previousGamepad2.y) {
+                        inOutTake.setVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
+                        inOutTake.setInstructions(IntakeAndOuttake.Instructions.CLOSED);
+                        inOutTake.setSpecificInstruction(IntakeAndOuttake.specificInstructions.INITIAL_CLOSE);
+                        cycleCheck = 0;
+                        closedToIntakeCheck = 1;
+
+                    }
+
                     //cycle
-                    if (currentGamepad2.b && !previousGamepad2.b) {
-                        //intake\
+                    if (currentGamepad2.a && !previousGamepad2.a) {
+                        //intake
+                        System.out.println("Inside Loop!");
                         if (cycleCheck == 0) {
                             if (closedToIntakeCheck == 1) {
                                 inOutTake.setVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
@@ -127,6 +132,13 @@ public class newTeleOpMode extends LinearOpMode {
                                 cycleCheck = 1;
                             }
                         }
+
+                        else if (cycleCheck == 1){
+                            inOutTake.setVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
+                            inOutTake.setInstructions(IntakeAndOuttake.Instructions.DEPOSIT);
+                            inOutTake.setSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
+                            cycleCheck = 0;
+                        }
                     }
 
 
@@ -139,7 +151,6 @@ public class newTeleOpMode extends LinearOpMode {
             telemetry.addData("VerticalTargetPos:", inOutTake.verticalTargetPos);
             telemetry.addData("VerticalCurrentPos:", verticalSlides.liftMotor1.getCurrentPosition());
             telemetry.addData("ServoPos:", clawAndV4B.v4b.getPosition());
-            telemetry.addData("currentVerticalPos:");
             telemetry.update();
         }
     }
