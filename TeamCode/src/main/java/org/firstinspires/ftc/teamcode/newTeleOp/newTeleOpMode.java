@@ -5,6 +5,7 @@ import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.exception.RobotCoreException;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.PoseStorage;
@@ -47,11 +48,24 @@ public class newTeleOpMode extends LinearOpMode {
         horizontalSlides = new newHorizontalSlides(hardwareMap);
         distance = hardwareMap.get(RevColorSensorV3.class, "Distance");
 
+        turret.turretMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        turret.turretMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        turret.turretMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+//        verticalSlides.liftMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        verticalSlides.liftMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        verticalSlides.liftMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
+//        verticalSlides.liftMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        verticalSlides.liftMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         inOutTake = new IntakeAndOuttake(turret, clawAndV4B, verticalSlides, horizontalSlides, distance);
 
         inOutTake.setVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
         inOutTake.setInstructions(IntakeAndOuttake.Instructions.CLOSED);
         inOutTake.setSpecificInstruction(IntakeAndOuttake.specificInstructions.INITIAL_CLOSE);
+
 
         driver.drive.setPoseEstimate(PoseStorage.currentPose);
 
@@ -62,7 +76,12 @@ public class newTeleOpMode extends LinearOpMode {
         Gamepad previousGamepad2 = new Gamepad();
 
 
-        waitForStart();
+        while (!isStarted() && !isStopRequested() && !opModeIsActive()) {
+            inOutTake.update();
+        }
+
+
+            waitForStart();
 
         while (opModeIsActive()) {
             driver.drive.update();
@@ -84,14 +103,30 @@ public class newTeleOpMode extends LinearOpMode {
 //                    }
 
                     if (currentGamepad2.dpad_left && !previousGamepad2.dpad_left) {
-                        inOutTake.horizontalIntakeOffset -= 0.025;
+                        if (IntakeAndOuttake.Instructions == IntakeAndOuttake.Instructions.INTAKE){
+                            inOutTake.horizontalIntakeOffset -= 0.025;
+                        }
+                        else if(IntakeAndOuttake.Instructions == IntakeAndOuttake.Instructions.DEPOSIT){
+                            inOutTake.horizontalOuttakeOffset -= 0.025;
+                        }
                     }
+
                     if (currentGamepad2.dpad_right && !previousGamepad2.dpad_right) {
-                        inOutTake.horizontalIntakeOffset += 0.025;
+                        if (IntakeAndOuttake.Instructions == IntakeAndOuttake.Instructions.INTAKE) {
+                            inOutTake.horizontalIntakeOffset += 0.025;
+                        }
+                        else if (IntakeAndOuttake.Instructions == IntakeAndOuttake.Instructions.INTAKE) {
+                            inOutTake.horizontalOuttakeOffset += 0.025;
+                        }
                     }
 
                     if (currentGamepad2.x && !previousGamepad2.x) {
-                        inOutTake.turretIntakeOffset -= 8;
+                        if (IntakeAndOuttake.Instructions == IntakeAndOuttake.Instructions.INTAKE) {
+                            inOutTake.turretIntakeOffset -= 20;
+                        }
+                        else if (IntakeAndOuttake.Instructions == IntakeAndOuttake.Instructions.INTAKE) {
+                            inOutTake.turretOuttakeOffset -= 20;
+                        }
                     }
                     if (currentGamepad2.b && !previousGamepad2.b) {
                         inOutTake.turretIntakeOffset += 8;
@@ -133,7 +168,11 @@ public class newTeleOpMode extends LinearOpMode {
                         }
 
                         else if (cycleCheck == 1){
-                            inOutTake.setVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
+//                            inOutTake.setVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
+//                            inOutTake.setInstructions(IntakeAndOuttake.Instructions.DEPOSIT);
+//                            inOutTake.setSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
+
+                            inOutTake.setVerticalPos(IntakeAndOuttake.verticalPos.TOP);
                             inOutTake.setInstructions(IntakeAndOuttake.Instructions.DEPOSIT);
                             inOutTake.setSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
                             cycleCheck = 0;
@@ -150,6 +189,9 @@ public class newTeleOpMode extends LinearOpMode {
             telemetry.addData("VerticalTargetPos:", inOutTake.verticalTargetPos);
             telemetry.addData("VerticalCurrentPos:", verticalSlides.liftMotor1.getCurrentPosition());
             telemetry.addData("ServoPos:", clawAndV4B.v4b.getPosition());
+            telemetry.addData("currentVertPos", IntakeAndOuttake.verticalPos);
+            telemetry.addData("currentVertPos", IntakeAndOuttake.Instructions);
+            telemetry.addData("currentVertPos", IntakeAndOuttake.specificInstruction);
             telemetry.update();
         }
     }

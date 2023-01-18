@@ -61,7 +61,6 @@ public class newAutoMode extends LinearOpMode {
         inOutTake.setInstructions(IntakeAndOuttake.Instructions.CLOSED);
         inOutTake.setSpecificInstruction(IntakeAndOuttake.specificInstructions.INITIAL_CLOSE);
 
-        inOutTake.update();
 
         drive.setPoseEstimate(PoseStorage.currentPose);
 
@@ -82,6 +81,8 @@ public class newAutoMode extends LinearOpMode {
         });
 
         while (!isStarted() && !isStopRequested()) {
+            inOutTake.update();
+
             ArrayList<AprilTagDetection> currentDetections = aprilTagDetectionPipeline.getLatestDetections();
 
             if (currentDetections.size() != 0) {

@@ -15,6 +15,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.Range;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,8 +25,8 @@ import java.util.List;
 public class turretTest extends OpMode {
     private PIDController controller;
 
-    public static double p = 0, i = 0, d = 0;
-    public static double f = 0;
+    public static double p = 0.0041, i = 0.000002, d = 0.000179;
+    public static double f = 0.00001;
 
     public static double targetPosition = 0;
 
@@ -38,6 +39,10 @@ public class turretTest extends OpMode {
 
         turret = hardwareMap.get(DcMotorEx.class, "turretMotor");
 
+        turret.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        turret.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        turret.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
     }
 
     @Override
@@ -49,10 +54,13 @@ public class turretTest extends OpMode {
 
         double power = pid + f;
 
+        Range.clip(power, -0.4, 0.4);
+
         turret.setPower(power);
 
         telemetry.addData("targetPos", targetPosition);
         telemetry.addData("currentPos", slidePos);
+        telemetry.addData("power", power);
         telemetry.update();
     }
 }

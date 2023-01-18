@@ -13,7 +13,7 @@ public class newVerticalSlides {
     private static final double f = 0.01;
 
     public DcMotorEx liftMotor1;
-    private DcMotorEx liftMotor2;
+    public DcMotorEx liftMotor2;
 
     public double previousTargetPos;
 
