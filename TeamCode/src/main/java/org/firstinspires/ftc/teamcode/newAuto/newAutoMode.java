@@ -4,19 +4,15 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.exception.RobotCoreException;
-import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.PoseStorage;
-import org.firstinspires.ftc.teamcode.newAuto.Trajectories;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.newTeleOp.IntakeAndOuttake;
 import org.firstinspires.ftc.teamcode.newTeleOp.clawAndV4B;
 import org.firstinspires.ftc.teamcode.newTeleOp.newHorizontalSlides;
 import org.firstinspires.ftc.teamcode.newTeleOp.newTurret;
 import org.firstinspires.ftc.teamcode.newTeleOp.newVerticalSlides;
-import org.firstinspires.ftc.teamcode.teleop.TeleOpFieldCentric;
 import org.firstinspires.ftc.teamcode.vision.apriltags.AprilTagDetectionPipeline;
 import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -57,9 +53,9 @@ public class newAutoMode extends LinearOpMode {
 
         inOutTake = new IntakeAndOuttake(turret, clawAndV4B, verticalSlides, horizontalSlides, distance);
 
-        inOutTake.setVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
-        inOutTake.setInstructions(IntakeAndOuttake.Instructions.CLOSED);
-        inOutTake.setSpecificInstruction(IntakeAndOuttake.specificInstructions.INITIAL_CLOSE);
+        inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
+        inOutTake.setaInstructions(IntakeAndOuttake.Instructions.CLOSED);
+        inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.INITIAL_CLOSE);
 
 
         drive.setPoseEstimate(PoseStorage.currentPose);

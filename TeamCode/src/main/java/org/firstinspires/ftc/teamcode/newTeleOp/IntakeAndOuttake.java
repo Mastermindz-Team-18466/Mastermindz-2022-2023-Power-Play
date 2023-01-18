@@ -27,16 +27,16 @@ public class IntakeAndOuttake {
     public double v4bTargetPos;
     public double clawTargetPos;
 
-    public static verticalPos verticalPos;
-    public static Instructions Instructions;
-    public static specificInstructions specificInstruction;
+    public verticalPos aVerticalPos;
+    public Instructions aInstructions;
+    public specificInstructions aSpecificInstruction;
 
     private long prevAction = System.currentTimeMillis();
 
     public IntakeAndOuttake(newTurret turret, clawAndV4B clawAndV4B, newVerticalSlides verticalSlides, newHorizontalSlides horizontalSlides, RevColorSensorV3 distance) {
-        verticalPos = IntakeAndOuttake.verticalPos.GROUND;
-        Instructions = IntakeAndOuttake.Instructions.CLOSED;
-        specificInstruction = specificInstructions.INITIAL_CLOSE;
+        aVerticalPos = IntakeAndOuttake.verticalPos.GROUND;
+        aInstructions = IntakeAndOuttake.Instructions.CLOSED;
+        aSpecificInstruction = specificInstructions.INITIAL_CLOSE;
 
         this.clawAndV4B = clawAndV4B;
         this.turret = turret;
@@ -47,18 +47,18 @@ public class IntakeAndOuttake {
 
     public void update() {
 
-        switch (verticalPos) {
+        switch (aVerticalPos) {
             case GROUND:
-                switch (Instructions) {
+                switch (aInstructions) {
                     case CLOSED:
-                        switch (specificInstruction) {
+                        switch (aSpecificInstruction) {
                             case INITIAL_CLOSE:
                                 verticalTargetPos = 0;
                                 turretTargetPos = 0;
                                 horizontalTargetPos = 0.72;
                                 clawTargetPos = 0.9;
                                 prevAction = System.currentTimeMillis();
-                                specificInstruction = specificInstructions.V4B_DOWN_TO_UP;
+                                aSpecificInstruction = specificInstructions.V4B_DOWN_TO_UP;
                                 break;
                             case V4B_DOWN_TO_UP:
                                 if (System.currentTimeMillis() - prevAction > 250) {
@@ -69,30 +69,30 @@ public class IntakeAndOuttake {
                         }
                         break;
                     case INTAKE:
-                        switch (specificInstruction) {
+                        switch (aSpecificInstruction) {
                             case DEPOSIT_CONE:
                                 verticalTargetPos = verticalSlides.previousTargetPos - 40;
                                 prevAction = System.currentTimeMillis();
-                                specificInstruction = specificInstructions.INCREASE_DEPOSIT_ACCURACY;
+                                aSpecificInstruction = specificInstructions.INCREASE_DEPOSIT_ACCURACY;
                                 break;
                             case INCREASE_DEPOSIT_ACCURACY:
                                 if (System.currentTimeMillis() - prevAction > 250) {
                                     clawTargetPos = 0.5;
                                     verticalTargetPos = verticalSlides.previousTargetPos + 40;
                                     prevAction = System.currentTimeMillis();
-                                    specificInstruction = specificInstructions.DELAY_DEPOSIT_TO_NO_DEPOSIT;
+                                    aSpecificInstruction = specificInstructions.DELAY_DEPOSIT_TO_NO_DEPOSIT;
                                 }
                                 break;
                             case DELAY_DEPOSIT_TO_NO_DEPOSIT:
                                 if (System.currentTimeMillis() - prevAction > 250) {
                                     prevAction = System.currentTimeMillis();
-                                    specificInstruction = specificInstructions.NO_DEPOSIT_CONE;
+                                    aSpecificInstruction = specificInstructions.NO_DEPOSIT_CONE;
                                 }
                                 break;
                             case NO_DEPOSIT_CONE:
                                 turretTargetPos = -400 + turretIntakeOffset;
                                 prevAction = System.currentTimeMillis();
-                                specificInstruction = specificInstructions.TURRET_RESET_DELAY;
+                                aSpecificInstruction = specificInstructions.TURRET_RESET_DELAY;
                                 break;
                             case TURRET_RESET_DELAY:
                                 turretTargetPos = -400 + turretIntakeOffset;
@@ -106,7 +106,7 @@ public class IntakeAndOuttake {
                             case CLOSED_TO_INTAKE:
                                 turretTargetPos = -400 + turretIntakeOffset;
                                 prevAction = System.currentTimeMillis();
-                                specificInstruction = specificInstructions.TURRET_RESET_DELAY2;
+                                aSpecificInstruction = specificInstructions.TURRET_RESET_DELAY2;
                                 break;
                             case TURRET_RESET_DELAY2:
                                 turretTargetPos = -400 + turretIntakeOffset;
@@ -115,7 +115,7 @@ public class IntakeAndOuttake {
                                     verticalTargetPos = 0;
                                     v4bTargetPos = 0.55 + v4bIntakeOffset;
                                     prevAction = System.currentTimeMillis();
-                                    specificInstruction = specificInstructions.DELAY1;
+                                    aSpecificInstruction = specificInstructions.DELAY1;
                                 }
                                 break;
                             case DELAY1:
@@ -130,11 +130,11 @@ public class IntakeAndOuttake {
                         }
                         break;
                     case DEPOSIT:
-                        switch (specificInstruction) {
+                        switch (aSpecificInstruction) {
                             case CLOSE_CLAW:
                                 clawTargetPos = 0.9;
                                 prevAction = System.currentTimeMillis();
-                                specificInstruction = specificInstruction.RETRACT_HORIZONTAL_SLIDES;
+                                aSpecificInstruction = aSpecificInstruction.RETRACT_HORIZONTAL_SLIDES;
                                 break;
                             case RETRACT_HORIZONTAL_SLIDES:
                                 if (System.currentTimeMillis() - prevAction > 1000) {
@@ -147,37 +147,34 @@ public class IntakeAndOuttake {
                 }
                 break;
             case TOP:
-                switch (Instructions) {
+                switch (aInstructions) {
                     case DEPOSIT:
-                        switch (specificInstruction) {
+                        switch (aSpecificInstruction) {
                             case CLOSE_CLAW:
-                                clawTargetPos = 0.9;
+                                clawTargetPos = 0.8;
                                 prevAction = System.currentTimeMillis();
-                                specificInstruction = specificInstruction.RETRACT_HORIZONTAL_SLIDES;
+                                aSpecificInstruction = aSpecificInstruction.RETRACT_HORIZONTAL_SLIDES;
                                 break;
                             case RETRACT_HORIZONTAL_SLIDES:
-                                clawTargetPos = 0.9;
                                 if (System.currentTimeMillis() - prevAction > 1000) {
                                     v4bTargetPos = 0.62 + v4bOuttakeOffset;
                                     horizontalTargetPos = 0.61 + horizontalIntakeOffset;
                                     verticalTargetPos = 3200 + verticalTargetPos;
                                     prevAction = System.currentTimeMillis();
-                                    specificInstruction = specificInstruction.DELAY_TURRET_DEPOSIT;
+                                    aSpecificInstruction = aSpecificInstruction.DELAY_TURRET_DEPOSIT;
                                 }
                                 break;
                             case DELAY_TURRET_DEPOSIT:
-                                clawTargetPos = 0.9;
                                 v4bTargetPos = 0.62 + v4bOuttakeOffset;
                                 horizontalTargetPos = 0.61 + horizontalIntakeOffset;
                                 verticalTargetPos = 3200 + verticalTargetPos;
                                 if (System.currentTimeMillis() - prevAction > 1000) {
                                     turretTargetPos = 400 + turretOuttakeOffset;
                                     prevAction = System.currentTimeMillis();
-                                    specificInstruction = specificInstruction.EXTEND_HORIZONTAL_SLIDES;
+                                    aSpecificInstruction = aSpecificInstruction.EXTEND_HORIZONTAL_SLIDES;
                                 }
                                 break;
                             case EXTEND_HORIZONTAL_SLIDES:
-                                clawTargetPos = 0.9;
                                 v4bTargetPos = 0.62 + v4bOuttakeOffset;
                                 horizontalTargetPos = 0.61 + horizontalIntakeOffset;
                                 verticalTargetPos = 3200 + verticalOuttakeOffset;
@@ -233,15 +230,15 @@ public class IntakeAndOuttake {
         EXTEND_HORIZONTAL_SLIDES
     }
 
-    public void setVerticalPos(verticalPos pos) {
-        verticalPos = pos;
+    public void setaVerticalPos(verticalPos pos) {
+        aVerticalPos = pos;
     }
 
-    public void setInstructions(Instructions instruction) {
-        Instructions = instruction;
+    public void setaInstructions(Instructions instruction) {
+        aInstructions = instruction;
     }
 
-    public void setSpecificInstruction(specificInstructions specificInstructions) {
-        specificInstruction = specificInstructions;
+    public void setaSpecificInstruction(specificInstructions specificInstructions) {
+        aSpecificInstruction = specificInstructions;
     }
 }

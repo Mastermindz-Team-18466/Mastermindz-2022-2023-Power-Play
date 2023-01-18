@@ -4,7 +4,6 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.exception.RobotCoreException;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
@@ -62,9 +61,9 @@ public class newTeleOpMode extends LinearOpMode {
 
         inOutTake = new IntakeAndOuttake(turret, clawAndV4B, verticalSlides, horizontalSlides, distance);
 
-        inOutTake.setVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
-        inOutTake.setInstructions(IntakeAndOuttake.Instructions.CLOSED);
-        inOutTake.setSpecificInstruction(IntakeAndOuttake.specificInstructions.INITIAL_CLOSE);
+        inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
+        inOutTake.setaInstructions(IntakeAndOuttake.Instructions.CLOSED);
+        inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.INITIAL_CLOSE);
 
 
         driver.drive.setPoseEstimate(PoseStorage.currentPose);
@@ -103,28 +102,28 @@ public class newTeleOpMode extends LinearOpMode {
 //                    }
 
                     if (currentGamepad2.dpad_left && !previousGamepad2.dpad_left) {
-                        if (IntakeAndOuttake.Instructions == IntakeAndOuttake.Instructions.INTAKE){
+                        if (inOutTake.aInstructions == IntakeAndOuttake.Instructions.INTAKE){
                             inOutTake.horizontalIntakeOffset -= 0.025;
                         }
-                        else if(IntakeAndOuttake.Instructions == IntakeAndOuttake.Instructions.DEPOSIT){
+                        else if(inOutTake.aInstructions == IntakeAndOuttake.Instructions.DEPOSIT){
                             inOutTake.horizontalOuttakeOffset -= 0.025;
                         }
                     }
 
                     if (currentGamepad2.dpad_right && !previousGamepad2.dpad_right) {
-                        if (IntakeAndOuttake.Instructions == IntakeAndOuttake.Instructions.INTAKE) {
+                        if (inOutTake.aInstructions == IntakeAndOuttake.Instructions.INTAKE) {
                             inOutTake.horizontalIntakeOffset += 0.025;
                         }
-                        else if (IntakeAndOuttake.Instructions == IntakeAndOuttake.Instructions.INTAKE) {
+                        else if (inOutTake.aInstructions == IntakeAndOuttake.Instructions.DEPOSIT) {
                             inOutTake.horizontalOuttakeOffset += 0.025;
                         }
                     }
 
                     if (currentGamepad2.x && !previousGamepad2.x) {
-                        if (IntakeAndOuttake.Instructions == IntakeAndOuttake.Instructions.INTAKE) {
+                        if (inOutTake.aInstructions == IntakeAndOuttake.Instructions.INTAKE) {
                             inOutTake.turretIntakeOffset -= 20;
                         }
-                        else if (IntakeAndOuttake.Instructions == IntakeAndOuttake.Instructions.INTAKE) {
+                        else if (inOutTake.aInstructions == IntakeAndOuttake.Instructions.DEPOSIT) {
                             inOutTake.turretOuttakeOffset -= 20;
                         }
                     }
@@ -140,9 +139,9 @@ public class newTeleOpMode extends LinearOpMode {
                     }
 
                     if (currentGamepad2.y && !previousGamepad2.y) {
-                        inOutTake.setVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
-                        inOutTake.setInstructions(IntakeAndOuttake.Instructions.CLOSED);
-                        inOutTake.setSpecificInstruction(IntakeAndOuttake.specificInstructions.INITIAL_CLOSE);
+                        inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
+                        inOutTake.setaInstructions(IntakeAndOuttake.Instructions.CLOSED);
+                        inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.INITIAL_CLOSE);
                         cycleCheck = 0;
                         closedToIntakeCheck = 1;
 
@@ -154,15 +153,15 @@ public class newTeleOpMode extends LinearOpMode {
                         System.out.println("Inside Loop!");
                         if (cycleCheck == 0) {
                             if (closedToIntakeCheck == 1) {
-                                inOutTake.setVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
-                                inOutTake.setInstructions(IntakeAndOuttake.Instructions.INTAKE);
-                                inOutTake.setSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSED_TO_INTAKE);
+                                inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
+                                inOutTake.setaInstructions(IntakeAndOuttake.Instructions.INTAKE);
+                                inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSED_TO_INTAKE);
                                 closedToIntakeCheck = 0;
                                 cycleCheck = 1;
                             } else {
-                                inOutTake.setVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
-                                inOutTake.setInstructions(IntakeAndOuttake.Instructions.INTAKE);
-                                inOutTake.setSpecificInstruction(IntakeAndOuttake.specificInstructions.DEPOSIT_CONE);
+                                inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
+                                inOutTake.setaInstructions(IntakeAndOuttake.Instructions.INTAKE);
+                                inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.DEPOSIT_CONE);
                                 cycleCheck = 1;
                             }
                         }
@@ -172,9 +171,9 @@ public class newTeleOpMode extends LinearOpMode {
 //                            inOutTake.setInstructions(IntakeAndOuttake.Instructions.DEPOSIT);
 //                            inOutTake.setSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
 
-                            inOutTake.setVerticalPos(IntakeAndOuttake.verticalPos.TOP);
-                            inOutTake.setInstructions(IntakeAndOuttake.Instructions.DEPOSIT);
-                            inOutTake.setSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
+                            inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP);
+                            inOutTake.setaInstructions(IntakeAndOuttake.Instructions.DEPOSIT);
+                            inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
                             cycleCheck = 0;
                         }
                     }
@@ -189,9 +188,6 @@ public class newTeleOpMode extends LinearOpMode {
             telemetry.addData("VerticalTargetPos:", inOutTake.verticalTargetPos);
             telemetry.addData("VerticalCurrentPos:", verticalSlides.liftMotor1.getCurrentPosition());
             telemetry.addData("ServoPos:", clawAndV4B.v4b.getPosition());
-            telemetry.addData("currentVertPos", IntakeAndOuttake.verticalPos);
-            telemetry.addData("currentVertPos", IntakeAndOuttake.Instructions);
-            telemetry.addData("currentVertPos", IntakeAndOuttake.specificInstruction);
             telemetry.update();
         }
     }

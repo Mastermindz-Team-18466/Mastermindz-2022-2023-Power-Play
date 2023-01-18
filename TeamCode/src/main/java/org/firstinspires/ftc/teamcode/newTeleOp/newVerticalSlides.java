@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.Range;
 
 public class newVerticalSlides {
     private PIDController controller;
@@ -50,6 +51,11 @@ public class newVerticalSlides {
         double pid = controller.calculate(slidePos, targetPosition);
 
         double power = pid + f;
+
+        if (power > 0) {
+            Range.clip(power, 0, 0.2);
+        }
+
 
         liftMotor1.setPower(-power);
         liftMotor2.setPower(-power);
