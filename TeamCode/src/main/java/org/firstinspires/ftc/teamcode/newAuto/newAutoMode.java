@@ -132,16 +132,72 @@ public class newAutoMode extends LinearOpMode {
             telemetry.update();
         }
 
+        drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                .forward(2 * 23.5)
+                .build()
+        );
 
         waitForStart();
 
+        long startTime = System.currentTimeMillis();
         while (opModeIsActive()) {
+            long currentTime = System.currentTimeMillis();
             int position = tagOfInterest.id;
 
             drive.update();
             inOutTake.update();
 
             Pose2d poseEstimate = drive.getPoseEstimate();
+
+            if (currentTime - startTime >= 2600 && !drive.isBusy()) {
+                Pose2d currentPose = drive.getPoseEstimate();
+                drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                        .UNSTABLE_addTemporalMarkerOffset(1, () -> {
+                            turret.set(newTurret.ticks_in_degrees * 45);
+                        })
+                        .UNSTABLE_addTemporalMarkerOffset(3.5, () -> {
+                            horizontalSlides.set(0.72);
+                        })
+                        .UNSTABLE_addTemporalMarkerOffset(4.8, () -> {
+                            verticalSlides.set(3200);
+                        })
+                        .UNSTABLE_addTemporalMarkerOffset(6.8, () -> {
+                            clawAndV4B.clawControl(0.9);
+                        })
+                        .UNSTABLE_addTemporalMarkerOffset(1, () -> {
+                            verticalSlides.set(0);
+                        })
+                        .UNSTABLE_addTemporalMarkerOffset(3.5, () -> {
+                            horizontalSlides.set(0.27);
+                        })
+                        .UNSTABLE_addTemporalMarkerOffset(4.8, () -> {
+                            clawAndV4B.clawControl(0);
+                        })
+                        .build()
+                );
+            }
+
+
+            switch (position) {
+                case 0:
+                    drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                            .forward(1 * 23.5)
+                            .strafeLeft(1 * 23.5)
+                            .build()
+                    );
+                case 1:
+                    drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                            .forward(1 * 23.5)
+                            .build()
+                    );
+                case 2:
+                    drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                            .forward(1 * 23.5)
+                            .strafeRight(1 * 23.5)
+                            .build()
+                    );
+            }
+
 
         }
         telemetry.addData("VerticalTargetPos:", inOutTake.verticalTargetPos);
