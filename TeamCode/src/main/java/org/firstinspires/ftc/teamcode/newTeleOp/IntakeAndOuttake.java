@@ -134,7 +134,7 @@ public class IntakeAndOuttake {
                             case CLOSE_CLAW:
                                 clawTargetPos = 0.9;
                                 prevAction = System.currentTimeMillis();
-                                aSpecificInstruction = aSpecificInstruction.RETRACT_HORIZONTAL_SLIDES;
+                                aSpecificInstruction = specificInstructions.RETRACT_HORIZONTAL_SLIDES;
                                 break;
                             case RETRACT_HORIZONTAL_SLIDES:
                                 if (System.currentTimeMillis() - prevAction > 1000) {
@@ -153,7 +153,7 @@ public class IntakeAndOuttake {
                             case CLOSE_CLAW:
                                 clawTargetPos = 0.8;
                                 prevAction = System.currentTimeMillis();
-                                aSpecificInstruction = aSpecificInstruction.RETRACT_HORIZONTAL_SLIDES;
+                                aSpecificInstruction = specificInstructions.RETRACT_HORIZONTAL_SLIDES;
                                 break;
                             case RETRACT_HORIZONTAL_SLIDES:
                                 if (System.currentTimeMillis() - prevAction > 1000) {
@@ -161,7 +161,7 @@ public class IntakeAndOuttake {
                                     horizontalTargetPos = 0.61 + horizontalIntakeOffset;
                                     verticalTargetPos = 3200 + verticalTargetPos;
                                     prevAction = System.currentTimeMillis();
-                                    aSpecificInstruction = aSpecificInstruction.DELAY_TURRET_DEPOSIT;
+                                    aSpecificInstruction = specificInstructions.DELAY_TURRET_DEPOSIT;
                                 }
                                 break;
                             case DELAY_TURRET_DEPOSIT:
@@ -171,7 +171,7 @@ public class IntakeAndOuttake {
                                 if (System.currentTimeMillis() - prevAction > 1000) {
                                     turretTargetPos = 400 + turretOuttakeOffset;
                                     prevAction = System.currentTimeMillis();
-                                    aSpecificInstruction = aSpecificInstruction.EXTEND_HORIZONTAL_SLIDES;
+                                    aSpecificInstruction = specificInstructions.EXTEND_HORIZONTAL_SLIDES;
                                 }
                                 break;
                             case EXTEND_HORIZONTAL_SLIDES:
