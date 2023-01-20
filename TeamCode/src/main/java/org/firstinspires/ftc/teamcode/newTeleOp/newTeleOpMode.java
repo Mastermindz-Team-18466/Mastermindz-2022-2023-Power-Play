@@ -128,7 +128,12 @@ public class newTeleOpMode extends LinearOpMode {
                         }
                     }
                     if (currentGamepad2.b && !previousGamepad2.b) {
-                        inOutTake.turretIntakeOffset += 8;
+                        if (inOutTake.aInstructions == IntakeAndOuttake.Instructions.INTAKE) {
+                            inOutTake.turretIntakeOffset += 20;
+                        }
+                        else if (inOutTake.aInstructions == IntakeAndOuttake.Instructions.DEPOSIT) {
+                            inOutTake.turretOuttakeOffset += 20;
+                        }
                     }
 
                     if (gamepad1.dpad_left) {
