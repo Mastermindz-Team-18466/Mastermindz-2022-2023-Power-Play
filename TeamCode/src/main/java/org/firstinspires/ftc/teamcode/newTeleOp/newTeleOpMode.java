@@ -48,7 +48,6 @@ public class newTeleOpMode extends LinearOpMode {
         distance = hardwareMap.get(RevColorSensorV3.class, "Distance");
 
         turret.turretMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        turret.turretMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         turret.turretMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 //        verticalSlides.liftMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

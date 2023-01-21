@@ -7,6 +7,7 @@ import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.PoseStorage;
@@ -41,6 +42,8 @@ public class newAutoMode extends LinearOpMode {
     int MIDDLE = 2;
     int RIGHT = 3;
 
+    boolean cyclePos = true;
+
     Pose2d startPose = new Pose2d(-3 * 23.5, 1.5 * 23.5, Math.toRadians(0));
 
     AprilTagDetection tagOfInterest = null;
@@ -65,6 +68,10 @@ public class newAutoMode extends LinearOpMode {
         inOutTake.setaInstructions(IntakeAndOuttake.Instructions.CLOSED);
         inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.INITIAL_CLOSE);
 
+        turret.turretMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        turret.turretMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        turret.turretMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
@@ -81,6 +88,10 @@ public class newAutoMode extends LinearOpMode {
             }
         });
 
+
+        inOutTake.turretIntakeOffset -= 195;
+        inOutTake.horizontalIntakeOffset -= 0.05;
+        inOutTake.v4bIntakeOffset += 0.1;
 
 
         while (!isStarted() && !isStopRequested()) {
@@ -143,35 +154,48 @@ public class newAutoMode extends LinearOpMode {
 
         drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(startPose)
                 .UNSTABLE_addTemporalMarkerOffset(1, () -> {
-                    inOutTake.turretOuttakeOffset -= 90;
-                    inOutTake.horizontalOuttakeOffset += 0.045;
+                    inOutTake.turretOuttakeOffset -= 45;
+                    inOutTake.horizontalOuttakeOffset -= 0.03;
 
                     inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP);
                     inOutTake.setaInstructions(IntakeAndOuttake.Instructions.DEPOSIT);
                     inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
                 })
                 .forward(52)
+                .strafeLeft(5)
                 .build()
         );
 
         waitForStart();
 
         double cycles = 0;
+        double previousAction = 3000;
         long startTime = System.currentTimeMillis();
+
 
         while (opModeIsActive()) {
             long currentTime = System.currentTimeMillis();
 
-            if (currentTime - startTime >= 5000 && cycles < 5) {
-                inOutTake.turretIntakeOffset -= 200;
-                inOutTake.horizontalIntakeOffset -= 0.18;
-                inOutTake.v4bIntakeOffset += 0.1;
+            if (currentTime - startTime >= 5000 && cycles < 3) {
+                if (cyclePos && currentTime - previousAction >= 3000) {
 
-                inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
-                inOutTake.setaInstructions(IntakeAndOuttake.Instructions.INTAKE);
-                inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.DEPOSIT_CONE);
+                    inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
+                    inOutTake.setaInstructions(IntakeAndOuttake.Instructions.INTAKE);
+                    inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.DEPOSIT_CONE);
 
-                cycles = cycles + 5;
+                    previousAction = System.currentTimeMillis();
+
+                    cyclePos = false;
+                } else if (!cyclePos && currentTime - previousAction >= 3000){
+                    inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP);
+                    inOutTake.setaInstructions(IntakeAndOuttake.Instructions.LEFT_STACK_DEPOSIT);
+                    inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
+
+                    previousAction = System.currentTimeMillis();
+
+                    cyclePos = true;
+                    cycles ++;
+                }
             }
 
             drive.update();
