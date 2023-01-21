@@ -142,7 +142,15 @@ public class newAutoMode extends LinearOpMode {
         int position = tagOfInterest.id;
 
         drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(startPose)
-                .forward(47)
+                .UNSTABLE_addTemporalMarkerOffset(1, () -> {
+                    inOutTake.turretOuttakeOffset -= 90;
+                    inOutTake.horizontalOuttakeOffset += 0.045;
+
+                    inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP);
+                    inOutTake.setaInstructions(IntakeAndOuttake.Instructions.DEPOSIT);
+                    inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
+                })
+                .forward(52)
                 .build()
         );
 
@@ -154,16 +162,20 @@ public class newAutoMode extends LinearOpMode {
         while (opModeIsActive()) {
             long currentTime = System.currentTimeMillis();
 
-            if (currentTime - startTime >= 2400 && !drive.isBusy() && cycles < 5) {
-                Pose2d currentPose = drive.getPoseEstimate();
-                drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(currentPose)
-                        .forward(23.5)
-                        .build()
-                );
+            if (currentTime - startTime >= 5000 && cycles < 5) {
+                inOutTake.turretIntakeOffset -= 200;
+                inOutTake.horizontalIntakeOffset -= 0.18;
+                inOutTake.v4bIntakeOffset += 0.1;
+
+                inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
+                inOutTake.setaInstructions(IntakeAndOuttake.Instructions.INTAKE);
+                inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.DEPOSIT_CONE);
+
                 cycles = cycles + 5;
             }
 
             drive.update();
+            inOutTake.update();
         }
     }
 }

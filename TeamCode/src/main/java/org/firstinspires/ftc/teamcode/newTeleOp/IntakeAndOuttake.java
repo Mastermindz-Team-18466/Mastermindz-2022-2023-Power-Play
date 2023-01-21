@@ -56,7 +56,7 @@ public class IntakeAndOuttake {
                                 verticalTargetPos = 0;
                                 turretTargetPos = 0;
                                 horizontalTargetPos = 0.72;
-                                clawTargetPos = 0.02;
+                                clawTargetPos = 0.25;
                                 prevAction = System.currentTimeMillis();
                                 aSpecificInstruction = specificInstructions.V4B_DOWN_TO_UP;
                                 break;
@@ -78,7 +78,7 @@ public class IntakeAndOuttake {
                             case INCREASE_DEPOSIT_ACCURACY:
                                 v4bTargetPos = 0.4 + v4bIntakeOffset;
                                 if (System.currentTimeMillis() - prevAction > 250) {
-                                    clawTargetPos = 0.15;
+                                    clawTargetPos = 0.37;
                                     prevAction = System.currentTimeMillis();
                                     aSpecificInstruction = specificInstructions.DELAY_DEPOSIT_TO_NO_DEPOSIT;
                                 }
@@ -145,7 +145,7 @@ public class IntakeAndOuttake {
                                 v4bTargetPos = 0.55 + v4bIntakeOffset;
                                 horizontalTargetPos = 0.45 + horizontalIntakeOffset;
                                 if (System.currentTimeMillis() - prevAction > 250) {
-                                    clawTargetPos = 0.175
+                                    clawTargetPos = 0.4
                                     ;
                                     prevAction = System.currentTimeMillis();
                                 }
@@ -155,7 +155,7 @@ public class IntakeAndOuttake {
                     case DEPOSIT:
                         switch (aSpecificInstruction) {
                             case CLOSE_CLAW:
-                                clawTargetPos = 0.02;
+                                clawTargetPos = 0.25;
                                 prevAction = System.currentTimeMillis();
                                 aSpecificInstruction = specificInstructions.RETRACT_HORIZONTAL_SLIDES;
                                 break;
@@ -174,7 +174,7 @@ public class IntakeAndOuttake {
                     case DEPOSIT:
                         switch (aSpecificInstruction) {
                             case CLOSE_CLAW:
-                                clawTargetPos = 0.02;
+                                clawTargetPos = 0.25;
                                 prevAction = System.currentTimeMillis();
                                 aSpecificInstruction = specificInstructions.RETRACT_HORIZONTAL_SLIDES;
                                 break;
