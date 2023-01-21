@@ -80,7 +80,7 @@ public class newTeleOpMode extends LinearOpMode {
         }
 
 
-            waitForStart();
+        waitForStart();
 
         while (opModeIsActive()) {
             driver.drive.update();
@@ -102,36 +102,44 @@ public class newTeleOpMode extends LinearOpMode {
 //                    }
 
                     if (currentGamepad2.dpad_left && !previousGamepad2.dpad_left) {
-                        if (inOutTake.aInstructions == IntakeAndOuttake.Instructions.INTAKE){
-                            inOutTake.horizontalIntakeOffset -= 0.025;
-                        }
-                        else if(inOutTake.aInstructions == IntakeAndOuttake.Instructions.DEPOSIT){
-                            inOutTake.horizontalOuttakeOffset -= 0.025;
+                        if (inOutTake.aInstructions == IntakeAndOuttake.Instructions.INTAKE) {
+                            inOutTake.horizontalIntakeOffset += 0.02;
+                        } else if (inOutTake.aInstructions == IntakeAndOuttake.Instructions.DEPOSIT) {
+                            inOutTake.horizontalOuttakeOffset += 0.02;
                         }
                     }
 
                     if (currentGamepad2.dpad_right && !previousGamepad2.dpad_right) {
                         if (inOutTake.aInstructions == IntakeAndOuttake.Instructions.INTAKE) {
-                            inOutTake.horizontalIntakeOffset += 0.025;
+                            inOutTake.horizontalIntakeOffset -= 0.02;
+                        } else if (inOutTake.aInstructions == IntakeAndOuttake.Instructions.DEPOSIT) {
+                            inOutTake.horizontalOuttakeOffset -= 0.02;
                         }
-                        else if (inOutTake.aInstructions == IntakeAndOuttake.Instructions.DEPOSIT) {
-                            inOutTake.horizontalOuttakeOffset += 0.025;
+                    }
+
+                    if (currentGamepad2.dpad_up && !previousGamepad2.dpad_up) {
+                        if (inOutTake.aInstructions == IntakeAndOuttake.Instructions.DEPOSIT) {
+                            inOutTake.verticalOuttakeOffset += 35;
+                        }
+                    }
+
+                    if (currentGamepad2.dpad_down && !previousGamepad2.dpad_down) {
+                        if (inOutTake.aInstructions == IntakeAndOuttake.Instructions.DEPOSIT) {
+                            inOutTake.verticalOuttakeOffset += 35;
                         }
                     }
 
                     if (currentGamepad2.x && !previousGamepad2.x) {
                         if (inOutTake.aInstructions == IntakeAndOuttake.Instructions.INTAKE) {
                             inOutTake.turretIntakeOffset -= 20;
-                        }
-                        else if (inOutTake.aInstructions == IntakeAndOuttake.Instructions.DEPOSIT) {
+                        } else if (inOutTake.aInstructions == IntakeAndOuttake.Instructions.DEPOSIT) {
                             inOutTake.turretOuttakeOffset -= 20;
                         }
                     }
                     if (currentGamepad2.b && !previousGamepad2.b) {
                         if (inOutTake.aInstructions == IntakeAndOuttake.Instructions.INTAKE) {
                             inOutTake.turretIntakeOffset += 20;
-                        }
-                        else if (inOutTake.aInstructions == IntakeAndOuttake.Instructions.DEPOSIT) {
+                        } else if (inOutTake.aInstructions == IntakeAndOuttake.Instructions.DEPOSIT) {
                             inOutTake.turretOuttakeOffset += 20;
                         }
                     }
@@ -169,9 +177,7 @@ public class newTeleOpMode extends LinearOpMode {
                                 inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.DEPOSIT_CONE);
                                 cycleCheck = 1;
                             }
-                        }
-
-                        else if (cycleCheck == 1){
+                        } else if (cycleCheck == 1) {
 //                            inOutTake.setVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
 //                            inOutTake.setInstructions(IntakeAndOuttake.Instructions.DEPOSIT);
 //                            inOutTake.setSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
@@ -192,6 +198,7 @@ public class newTeleOpMode extends LinearOpMode {
             }
             telemetry.addData("VerticalTargetPos:", inOutTake.verticalTargetPos);
             telemetry.addData("VerticalCurrentPos:", verticalSlides.liftMotor1.getCurrentPosition());
+            telemetry.addData("Power", verticalSlides.publicPower);
             telemetry.addData("ServoPos:", clawAndV4B.v4b.getPosition());
             telemetry.update();
         }

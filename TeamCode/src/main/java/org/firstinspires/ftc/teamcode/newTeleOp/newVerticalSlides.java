@@ -18,6 +18,8 @@ public class newVerticalSlides {
 
     public double previousTargetPos;
 
+    public double publicPower;
+
     public newVerticalSlides(HardwareMap hardwareMap) {
         controller = new PIDController(p, i, d);
 
@@ -56,6 +58,7 @@ public class newVerticalSlides {
             Range.clip(power, 0, 0.2);
         }
 
+        publicPower = power;
 
         liftMotor1.setPower(-power);
         liftMotor2.setPower(-power);
