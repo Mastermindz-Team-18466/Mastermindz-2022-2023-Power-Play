@@ -41,7 +41,7 @@ public class newAutoMode extends LinearOpMode {
     int MIDDLE = 2;
     int RIGHT = 3;
 
-    Pose2d startPose = new Pose2d(-3 * 23.5, 1.5 * 23.5, Math.toRadians(90));
+    Pose2d startPose = new Pose2d(-3 * 23.5, 1.5 * 23.5, Math.toRadians(0));
 
     AprilTagDetection tagOfInterest = null;
 
@@ -142,7 +142,7 @@ public class newAutoMode extends LinearOpMode {
         int position = tagOfInterest.id;
 
         drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(startPose)
-                .lineTo(new Vector2d(23.5 * 2, 0))
+                .forward(47)
                 .build()
         );
 
@@ -157,10 +157,10 @@ public class newAutoMode extends LinearOpMode {
             if (currentTime - startTime >= 2400 && !drive.isBusy() && cycles < 5) {
                 Pose2d currentPose = drive.getPoseEstimate();
                 drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(currentPose)
-
+                        .forward(23.5)
                         .build()
                 );
-                cycles = cycles + 2;
+                cycles = cycles + 5;
             }
 
             drive.update();
