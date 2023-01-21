@@ -84,7 +84,7 @@ public class IntakeAndOuttake {
                                 }
                                 break;
                             case DELAY_DEPOSIT_TO_NO_DEPOSIT:
-                                if (System.currentTimeMillis() - prevAction > 250) {
+                                if (System.currentTimeMillis() - prevAction > 100) {
                                     v4bTargetPos = 0.65 + v4bIntakeOffset;
                                     prevAction = System.currentTimeMillis();
                                     aSpecificInstruction = specificInstructions.NO_DEPOSIT_CONE;
@@ -99,7 +99,7 @@ public class IntakeAndOuttake {
                             case TURRET_RESET_DELAY:
                                 v4bTargetPos = 0.65 + v4bIntakeOffset;
                                 horizontalTargetPos = 0.72 + horizontalIntakeOffset;
-                                if (System.currentTimeMillis() - prevAction > 1200) {
+                                if (System.currentTimeMillis() - prevAction > 400) {
                                     v4bTargetPos = 0.55 + v4bIntakeOffset;
                                     verticalTargetPos = 0;
                                     prevAction = System.currentTimeMillis();
@@ -110,7 +110,7 @@ public class IntakeAndOuttake {
                                 horizontalTargetPos = 0.72 + horizontalIntakeOffset;
                                 v4bTargetPos = 0.72 + v4bIntakeOffset;
                                 verticalTargetPos = 0;
-                                if (System.currentTimeMillis() - prevAction > 1200) {
+                                if (System.currentTimeMillis() - prevAction > 100) {
                                     turretTargetPos = -400 + turretIntakeOffset;
                                     prevAction = System.currentTimeMillis();
                                     aSpecificInstruction = specificInstructions.INTAKE_EXTENSION;
@@ -145,7 +145,8 @@ public class IntakeAndOuttake {
                                 v4bTargetPos = 0.55 + v4bIntakeOffset;
                                 horizontalTargetPos = 0.45 + horizontalIntakeOffset;
                                 if (System.currentTimeMillis() - prevAction > 250) {
-                                    clawTargetPos = 0.15;
+                                    clawTargetPos = 0.175
+                                    ;
                                     prevAction = System.currentTimeMillis();
                                 }
                                 break;
@@ -178,7 +179,7 @@ public class IntakeAndOuttake {
                                 aSpecificInstruction = specificInstructions.RETRACT_HORIZONTAL_SLIDES;
                                 break;
                             case RETRACT_HORIZONTAL_SLIDES:
-                                if (System.currentTimeMillis() - prevAction > 1000) {
+                                if (System.currentTimeMillis() - prevAction > 500) {
                                     v4bTargetPos = 0.72 + v4bOuttakeOffset;
                                     horizontalTargetPos = 0.72 + horizontalOuttakeOffset;
                                     prevAction = System.currentTimeMillis();
@@ -188,7 +189,7 @@ public class IntakeAndOuttake {
                             case DELAY_TURRET_DEPOSIT:
                                 v4bTargetPos = 0.72 + v4bOuttakeOffset;
                                 horizontalTargetPos = 0.72 + horizontalOuttakeOffset;
-                                if (System.currentTimeMillis() - prevAction > 1000) {
+                                if (System.currentTimeMillis() - prevAction > 300) {
                                     turretTargetPos = 400 + turretOuttakeOffset;
                                     prevAction = System.currentTimeMillis();
                                     aSpecificInstruction = specificInstructions.LOWER_VERTICAL;
@@ -198,7 +199,7 @@ public class IntakeAndOuttake {
                                 v4bTargetPos = 0.72 + v4bOuttakeOffset;
                                 horizontalTargetPos = 0.72 + horizontalOuttakeOffset;
                                 turretTargetPos = 400 + turretOuttakeOffset;
-                                if (System.currentTimeMillis() - prevAction > 1000) {
+                                if (System.currentTimeMillis() - prevAction > 100) {
                                     verticalTargetPos = 3200 + verticalTargetPos;
                                     prevAction = System.currentTimeMillis();
                                     aSpecificInstruction = specificInstructions.EXTEND_HORIZONTAL_SLIDES;
