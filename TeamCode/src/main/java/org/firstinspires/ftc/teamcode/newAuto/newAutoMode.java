@@ -141,29 +141,29 @@ public class newAutoMode extends LinearOpMode {
 
         int position = tagOfInterest.id;
 
+        drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(startPose)
+                .lineTo(new Vector2d(23.5 * 2, 0))
+                .build()
+        );
+
         waitForStart();
 
+        double cycles = 0;
         long startTime = System.currentTimeMillis();
+
         while (opModeIsActive()) {
             long currentTime = System.currentTimeMillis();
 
-            drive.update();
-            inOutTake.update();
+            if (currentTime - startTime >= 2400 && !drive.isBusy() && cycles < 5) {
+                Pose2d currentPose = drive.getPoseEstimate();
+                drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(currentPose)
 
-
-            if (currentTime - startTime >= 2400) {
-
-            } else {
-                drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                        .splineToConstantHeading(new Vector2d(-1 * 23.5, 1.5 * 23.5), Math.toRadians(90))
                         .build()
                 );
+                cycles = cycles + 2;
             }
 
-
+            drive.update();
         }
-        telemetry.addData("VerticalTargetPos:", inOutTake.verticalTargetPos);
-        telemetry.addData("VerticalCurrentPos:", verticalSlides.liftMotor1.getCurrentPosition());
-        telemetry.update();
     }
 }
