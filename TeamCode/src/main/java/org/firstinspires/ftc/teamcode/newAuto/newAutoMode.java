@@ -1,7 +1,10 @@
 package org.firstinspires.ftc.teamcode.newAuto;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -20,8 +23,9 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import java.util.ArrayList;
+import java.util.Vector;
 
-@TeleOp(name = "newAutoMode", group = "Concept")
+@Autonomous(name = "newAutoMode", group = "Concept")
 //@Disabled
 public class newAutoMode extends LinearOpMode {
 
@@ -37,11 +41,15 @@ public class newAutoMode extends LinearOpMode {
     int MIDDLE = 2;
     int RIGHT = 3;
 
+    Pose2d startPose = new Pose2d(-3 * 23.5, 1.5 * 23.5, Math.toRadians(90));
+
     AprilTagDetection tagOfInterest = null;
 
     @Override
     public void runOpMode() {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+
+        drive.setPoseEstimate(startPose);
 
         AprilTagDetectionPipeline aprilTagDetectionPipeline = new AprilTagDetectionPipeline(0.166, 587.272, 578.272, 402.145, 221.506);
 
@@ -57,17 +65,14 @@ public class newAutoMode extends LinearOpMode {
         inOutTake.setaInstructions(IntakeAndOuttake.Instructions.CLOSED);
         inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.INITIAL_CLOSE);
 
-
-        drive.setPoseEstimate(PoseStorage.currentPose);
-
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
-
+        webcam.setPipeline(aprilTagDetectionPipeline);
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
-                webcam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+                webcam.startStreaming(800, 448, OpenCvCameraRotation.UPRIGHT);
             }
 
             @Override
@@ -75,6 +80,8 @@ public class newAutoMode extends LinearOpMode {
 
             }
         });
+
+
 
         while (!isStarted() && !isStopRequested()) {
             inOutTake.update();
@@ -132,70 +139,25 @@ public class newAutoMode extends LinearOpMode {
             telemetry.update();
         }
 
-        drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                .forward(2 * 23.5)
-                .build()
-        );
+        int position = tagOfInterest.id;
 
         waitForStart();
 
         long startTime = System.currentTimeMillis();
         while (opModeIsActive()) {
             long currentTime = System.currentTimeMillis();
-            int position = tagOfInterest.id;
 
             drive.update();
             inOutTake.update();
 
-            Pose2d poseEstimate = drive.getPoseEstimate();
 
-            if (currentTime - startTime >= 2600 && !drive.isBusy()) {
-                Pose2d currentPose = drive.getPoseEstimate();
+            if (currentTime - startTime >= 2400) {
+
+            } else {
                 drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                        .UNSTABLE_addTemporalMarkerOffset(1, () -> {
-                            turret.set(newTurret.ticks_in_degrees * 45);
-                        })
-                        .UNSTABLE_addTemporalMarkerOffset(3.5, () -> {
-                            horizontalSlides.set(0.72);
-                        })
-                        .UNSTABLE_addTemporalMarkerOffset(4.8, () -> {
-                            verticalSlides.set(3200);
-                        })
-                        .UNSTABLE_addTemporalMarkerOffset(6.8, () -> {
-                            clawAndV4B.clawControl(0.9);
-                        })
-                        .UNSTABLE_addTemporalMarkerOffset(1, () -> {
-                            verticalSlides.set(0);
-                        })
-                        .UNSTABLE_addTemporalMarkerOffset(3.5, () -> {
-                            horizontalSlides.set(0.27);
-                        })
-                        .UNSTABLE_addTemporalMarkerOffset(4.8, () -> {
-                            clawAndV4B.clawControl(0);
-                        })
+                        .splineToConstantHeading(new Vector2d(-1 * 23.5, 1.5 * 23.5), Math.toRadians(90))
                         .build()
                 );
-            }
-
-
-            switch (position) {
-                case 0:
-                    drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                            .forward(1 * 23.5)
-                            .strafeLeft(1 * 23.5)
-                            .build()
-                    );
-                case 1:
-                    drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                            .forward(1 * 23.5)
-                            .build()
-                    );
-                case 2:
-                    drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                            .forward(1 * 23.5)
-                            .strafeRight(1 * 23.5)
-                            .build()
-                    );
             }
 
 
