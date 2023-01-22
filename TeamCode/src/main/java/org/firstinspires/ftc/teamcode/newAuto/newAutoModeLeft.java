@@ -203,6 +203,7 @@ public class newAutoModeLeft extends LinearOpMode {
                 inOutTake.setaInstructions(IntakeAndOuttake.Instructions.CLOSED);
                 inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.INITIAL_CLOSE);
 
+                //maybe you can write an if (position ==0) else if (position ==1) here
                 drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                         .back(3)
                         .build()
