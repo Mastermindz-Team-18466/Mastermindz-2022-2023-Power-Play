@@ -1,16 +1,13 @@
 package org.firstinspires.ftc.teamcode.newAuto;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.PoseStorage;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.newTeleOp.IntakeAndOuttake;
 import org.firstinspires.ftc.teamcode.newTeleOp.clawAndV4B;
@@ -24,11 +21,10 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import java.util.ArrayList;
-import java.util.Vector;
 
-@Autonomous(name = "newAutoMode", group = "Concept")
+@Autonomous(name = "newAutoModeRight", group = "Concept")
 //@Disabled
-public class newAutoMode extends LinearOpMode {
+public class newAutoModeRight extends LinearOpMode {
 
     OpenCvCamera webcam;
     IntakeAndOuttake inOutTake;
@@ -42,9 +38,13 @@ public class newAutoMode extends LinearOpMode {
     int MIDDLE = 2;
     int RIGHT = 3;
 
+    int v4bHeightCheck = 0;
+
     boolean cyclePos = true;
 
     Pose2d startPose = new Pose2d(-3 * 23.5, 1.5 * 23.5, Math.toRadians(0));
+
+    Trajectory park;
 
     AprilTagDetection tagOfInterest = null;
 
@@ -111,14 +111,14 @@ public class newAutoMode extends LinearOpMode {
                 }
 
                 if (tagFound) {
-                    telemetry.addLine("Tag of interest is in sight!\n\nLocation data:");
+                    telemetry.addLine("Tag of interest is in sight!\n\nLocation data:"+tagOfInterest.id);
                 } else {
                     telemetry.addLine("Don't see tag of interest :(");
 
                     if (tagOfInterest == null) {
                         telemetry.addLine("(The tag has never been seen)");
                     } else {
-                        telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
+                        telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:"+tagOfInterest.id);
                     }
                 }
 
@@ -128,7 +128,7 @@ public class newAutoMode extends LinearOpMode {
                 if (tagOfInterest == null) {
                     telemetry.addLine("(The tag has never been seen)");
                 } else {
-                    telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
+                    telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:"+tagOfInterest.id);
                 }
 
             }
@@ -143,7 +143,7 @@ public class newAutoMode extends LinearOpMode {
 
         /* Update the telemetry */
         if (tagOfInterest != null) {
-            telemetry.addLine("Tag snapshot:\n");
+            telemetry.addLine("Tag snapshot:\n"+tagOfInterest.id);
             telemetry.update();
         } else {
             telemetry.addLine("No tag snapshot available, it was never sighted during the init loop :(");
@@ -153,12 +153,12 @@ public class newAutoMode extends LinearOpMode {
         int position = tagOfInterest.id;
 
         drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(startPose)
-                .UNSTABLE_addTemporalMarkerOffset(1, () -> {
-                    inOutTake.turretOuttakeOffset -= 45;
-                    inOutTake.horizontalOuttakeOffset -= 0.03;
+                .UNSTABLE_addTemporalMarkerOffset(0.1, () -> {
+                    inOutTake.turretOuttakeOffset -= 42;
+                    inOutTake.horizontalOuttakeOffset -= 0.01;
 
                     inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP);
-                    inOutTake.setaInstructions(IntakeAndOuttake.Instructions.DEPOSIT);
+                    inOutTake.setaInstructions(IntakeAndOuttake.Instructions.LEFT_DEPOSIT);
                     inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
                 })
                 .forward(52)
@@ -169,15 +169,15 @@ public class newAutoMode extends LinearOpMode {
         waitForStart();
 
         double cycles = 0;
-        double previousAction = 3000;
+        double previousAction = 3500;
         long startTime = System.currentTimeMillis();
 
 
         while (opModeIsActive()) {
             long currentTime = System.currentTimeMillis();
 
-            if (currentTime - startTime >= 5000 && cycles < 3) {
-                if (cyclePos && currentTime - previousAction >= 3000) {
+            if (currentTime - startTime >= 3500 && cycles < 5 && currentTime - startTime < 27250) {
+                if (cyclePos && currentTime - previousAction >= 2750) {
 
                     inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
                     inOutTake.setaInstructions(IntakeAndOuttake.Instructions.INTAKE);
@@ -186,20 +186,51 @@ public class newAutoMode extends LinearOpMode {
                     previousAction = System.currentTimeMillis();
 
                     cyclePos = false;
-                } else if (!cyclePos && currentTime - previousAction >= 3000){
+                } else if (!cyclePos && currentTime - previousAction >= 2750) {
                     inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP);
-                    inOutTake.setaInstructions(IntakeAndOuttake.Instructions.LEFT_STACK_DEPOSIT);
+                    inOutTake.setaInstructions(IntakeAndOuttake.Instructions.RIGHT_STACK_DEPOSIT);
                     inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
 
                     previousAction = System.currentTimeMillis();
 
                     cyclePos = true;
-                    cycles ++;
+                    cycles++;
                 }
+            } else if (currentTime - startTime >= 27250) {
+                inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
+                inOutTake.setaInstructions(IntakeAndOuttake.Instructions.CLOSED);
+                inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.INITIAL_CLOSE);
+
+                switch (position) {
+                    case 1:
+                        park = drive.trajectoryBuilder(drive.getPoseEstimate())
+                                .strafeLeft(23.5)
+                                .build();
+                    case 2:
+                        park = drive.trajectoryBuilder(drive.getPoseEstimate())
+                                .strafeLeft(3)
+                                .build();
+                    case 3:
+                        park = drive.trajectoryBuilder(drive.getPoseEstimate())
+                                .strafeRight(26.5)
+                                .build();
+                    default:
+                        park = drive.trajectoryBuilder(drive.getPoseEstimate())
+                                .strafeLeft(3)
+                                .build();
+                }
+
+                drive.followTrajectory(park);
+            }
+
+            if (cycles == 3 && v4bHeightCheck == 0) {
+                inOutTake.v4bIntakeOffset -= 0.1;
+                v4bHeightCheck++;
             }
 
             drive.update();
             inOutTake.update();
+
         }
     }
 }

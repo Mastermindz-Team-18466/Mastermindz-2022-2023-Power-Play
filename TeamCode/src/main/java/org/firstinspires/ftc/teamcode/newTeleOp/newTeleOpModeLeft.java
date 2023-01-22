@@ -8,13 +8,13 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.PoseStorage;
-import org.firstinspires.ftc.teamcode.newAuto.Trajectories;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.newAuto.Trajectories;
 import org.firstinspires.ftc.teamcode.teleop.TeleOpFieldCentric;
 
-@TeleOp(name = "newTeleOpMode", group = "Conceplt")
+@TeleOp(name = "newTeleOpModeLeft", group = "Conceplt")
 //@Disabled
-public class newTeleOpMode extends LinearOpMode {
+public class newTeleOpModeLeft extends LinearOpMode {
 
     enum Mode {
         DRIVER_CONTROL,
@@ -182,7 +182,7 @@ public class newTeleOpMode extends LinearOpMode {
 //                            inOutTake.setSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
 
                             inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP);
-                            inOutTake.setaInstructions(IntakeAndOuttake.Instructions.DEPOSIT);
+                            inOutTake.setaInstructions(IntakeAndOuttake.Instructions.LEFT_DEPOSIT);
                             inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
                             cycleCheck = 0;
                         }
