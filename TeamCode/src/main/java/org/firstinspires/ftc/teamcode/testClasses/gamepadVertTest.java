@@ -17,8 +17,8 @@ public class gamepadVertTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        liftMotor1 = hardwareMap.get(DcMotorEx.class, "liftMotor1");
-        liftMotor2 = hardwareMap.get(DcMotorEx.class, "liftMotor2");
+        liftMotor1 = hardwareMap.get(DcMotorEx.class, "leftLinear_slide");
+        liftMotor2 = hardwareMap.get(DcMotorEx.class, "rightLinear_slide");
 
         liftMotor2.setDirection(DcMotorSimple.Direction.REVERSE);
 

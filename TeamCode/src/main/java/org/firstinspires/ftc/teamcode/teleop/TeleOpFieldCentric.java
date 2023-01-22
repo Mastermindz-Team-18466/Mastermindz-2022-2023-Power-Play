@@ -59,7 +59,7 @@ public class TeleOpFieldCentric {
                 )
         );
 
-        if (gamepad.a) {
+        if (gamepad.left_bumper) {
             drive.setPoseEstimate(new Pose2d(poseEstimate.getX(), poseEstimate.getY(), 0));
         }
 
