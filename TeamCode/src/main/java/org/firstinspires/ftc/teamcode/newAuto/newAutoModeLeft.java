@@ -205,7 +205,7 @@ public class newAutoModeLeft extends LinearOpMode {
                 switch (position) {
                     case 1:
                         drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                                .strafeRight(16.5)
+                                .strafeLeft(16.5)
                                 .build()
                         );
                     case 2:
@@ -215,7 +215,7 @@ public class newAutoModeLeft extends LinearOpMode {
                         );
                     case 3:
                         drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                                .strafeLeft(26.5)
+                                .strafeRight(26.5)
                                 .build()
                         );
                 }

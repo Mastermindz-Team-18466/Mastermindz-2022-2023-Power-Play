@@ -154,7 +154,7 @@ public class newAutoModeRightreal extends LinearOpMode {
         drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(startPose)
                 .UNSTABLE_addTemporalMarkerOffset(0.1, () -> {
                     inOutTake.turretOuttakeOffset -= 42;
-                    inOutTake.horizontalOuttakeOffset -= 0.04;
+                    inOutTake.horizontalOuttakeOffset -= 0.02;
 
                     inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP);
                     inOutTake.setaInstructions(IntakeAndOuttake.Instructions.LEFT_DEPOSIT);
