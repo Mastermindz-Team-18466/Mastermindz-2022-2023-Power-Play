@@ -155,13 +155,13 @@ public class newAutoModeLeft extends LinearOpMode {
         drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(startPose)
                 .UNSTABLE_addTemporalMarkerOffset(0.1, () -> {
                     inOutTake.turretOuttakeOffset -= 42;
-                    inOutTake.horizontalOuttakeOffset -= 0.01;
+                    inOutTake.horizontalOuttakeOffset -= 0.02;
 
                     inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP);
                     inOutTake.setaInstructions(IntakeAndOuttake.Instructions.DEPOSIT);
                     inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
                 })
-                .forward(52)
+                .forward(50)
                 .strafeLeft(5)
                 .build()
         );
@@ -210,7 +210,7 @@ public class newAutoModeLeft extends LinearOpMode {
                         );
                     case 2:
                         drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                                .strafeLeft(3)
+                                .strafeRight(3)
                                 .build()
                         );
                     case 3:

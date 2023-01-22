@@ -88,9 +88,8 @@ public class newAutoModeRight extends LinearOpMode {
             }
         });
 
-
         inOutTake.turretIntakeOffset -= 195;
-        inOutTake.horizontalIntakeOffset -= 0.0;
+        inOutTake.horizontalIntakeOffset -= 0.05;
         inOutTake.v4bIntakeOffset += 0.1;
 
 
@@ -155,13 +154,13 @@ public class newAutoModeRight extends LinearOpMode {
         drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(startPose)
                 .UNSTABLE_addTemporalMarkerOffset(0.1, () -> {
                     inOutTake.turretOuttakeOffset -= 42;
-                    inOutTake.horizontalOuttakeOffset -= 0.01;
+                    inOutTake.horizontalOuttakeOffset -= 0.02;
 
                     inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP);
                     inOutTake.setaInstructions(IntakeAndOuttake.Instructions.LEFT_DEPOSIT);
                     inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
                 })
-                .forward(52)
+                .forward(49)
                 .strafeRight(5)
                 .build()
         );
@@ -224,7 +223,7 @@ public class newAutoModeRight extends LinearOpMode {
             }
 
             if (cycles == 3 && v4bHeightCheck == 0) {
-                inOutTake.v4bIntakeOffset -= 0.1;
+                inOutTake.v4bIntakeOffset -= 0.11;
                 v4bHeightCheck++;
             }
 
