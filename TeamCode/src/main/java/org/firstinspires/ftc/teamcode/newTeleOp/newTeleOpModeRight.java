@@ -124,7 +124,7 @@ public class newTeleOpModeRight extends LinearOpMode {
 
                     if (currentGamepad2.dpad_down && !previousGamepad2.dpad_down) {
                         if (inOutTake.aInstructions == IntakeAndOuttake.Instructions.DEPOSIT) {
-                            inOutTake.verticalOuttakeOffset += 35;
+                            inOutTake.verticalOuttakeOffset -= 35;
                         }
                     }
 
@@ -159,10 +159,14 @@ public class newTeleOpModeRight extends LinearOpMode {
 
                     }
 
+                    if (currentGamepad1.dpad_down && !previousGamepad1.dpad_down) {
+
+                    }
+
+
                     //cycle
                     if (currentGamepad2.a && !previousGamepad2.a) {
                         //intake
-                        System.out.println("Inside Loop!");
                         if (cycleCheck == 0) {
                             if (closedToIntakeCheck == 1) {
                                 inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
@@ -177,10 +181,6 @@ public class newTeleOpModeRight extends LinearOpMode {
                                 cycleCheck = 1;
                             }
                         } else if (cycleCheck == 1) {
-//                            inOutTake.setVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
-//                            inOutTake.setInstructions(IntakeAndOuttake.Instructions.DEPOSIT);
-//                            inOutTake.setSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
-
                             inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP);
                             inOutTake.setaInstructions(IntakeAndOuttake.Instructions.DEPOSIT);
                             inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
