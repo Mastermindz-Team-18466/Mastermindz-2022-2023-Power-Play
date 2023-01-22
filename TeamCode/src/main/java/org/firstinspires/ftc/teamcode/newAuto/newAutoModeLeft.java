@@ -166,6 +166,7 @@ public class newAutoModeLeft extends LinearOpMode {
                 .build()
         );
 
+        //this is unnecessary 
         waitForStart();
 
         double cycles = 0;
@@ -196,7 +197,8 @@ public class newAutoModeLeft extends LinearOpMode {
                     cyclePos = true;
                     cycles++;
                 }
-            } else if (currentTime - startTime >= 27250 && park) {
+            } //wait okay, can you tell me if this part works?
+            else if (currentTime - startTime >= 27250 && park) {
                 inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
                 inOutTake.setaInstructions(IntakeAndOuttake.Instructions.CLOSED);
                 inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.INITIAL_CLOSE);
