@@ -44,7 +44,7 @@ public class newAutoModeLeft extends LinearOpMode {
 
     Pose2d startPose = new Pose2d(-3 * 23.5, 1.5 * 23.5, Math.toRadians(0));
 
-    boolean park;
+    boolean park = true;
 
     AprilTagDetection tagOfInterest = null;
 
@@ -197,14 +197,28 @@ public class newAutoModeLeft extends LinearOpMode {
                     cycles++;
                 }
             } else if (currentTime - startTime >= 27250 && park) {
+                System.out.println("Entered");
                 inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
                 inOutTake.setaInstructions(IntakeAndOuttake.Instructions.CLOSED);
                 inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.INITIAL_CLOSE);
 
-                drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                        .back(3)
-                        .build()
-                );
+                switch (position) {
+                    case 1:
+                        drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                                .strafeRight(16.5)
+                                .build()
+                        );
+                    case 2:
+                        drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                                .strafeLeft(3)
+                                .build()
+                        );
+                    case 3:
+                        drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                                .strafeLeft(26.5)
+                                .build()
+                        );
+                }
 
                 park = false;
             }

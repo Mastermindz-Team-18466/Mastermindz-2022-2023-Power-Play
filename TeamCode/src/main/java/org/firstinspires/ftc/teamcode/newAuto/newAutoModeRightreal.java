@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.newAuto;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -22,9 +21,9 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import java.util.ArrayList;
 
-@Autonomous(name = "newAutoModeRight", group = "Concept")
+@Autonomous(name = "newAutoModeRightReal", group = "Concept")
 //@Disabled
-public class newAutoModeRight extends LinearOpMode {
+public class newAutoModeRightreal extends LinearOpMode {
 
     OpenCvCamera webcam;
     IntakeAndOuttake inOutTake;
@@ -155,7 +154,7 @@ public class newAutoModeRight extends LinearOpMode {
         drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(startPose)
                 .UNSTABLE_addTemporalMarkerOffset(0.1, () -> {
                     inOutTake.turretOuttakeOffset -= 42;
-                    inOutTake.horizontalOuttakeOffset -= 0.01;
+                    inOutTake.horizontalOuttakeOffset -= 0.04;
 
                     inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP);
                     inOutTake.setaInstructions(IntakeAndOuttake.Instructions.LEFT_DEPOSIT);
@@ -223,7 +222,7 @@ public class newAutoModeRight extends LinearOpMode {
                 park = false;
             }
 
-            if (cycles == 3 && v4bHeightCheck == 0) {
+            if (cycles == 2 && v4bHeightCheck == 0) {
                 inOutTake.v4bIntakeOffset -= 0.1;
                 v4bHeightCheck++;
             }
