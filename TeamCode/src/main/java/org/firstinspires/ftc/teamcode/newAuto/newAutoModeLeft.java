@@ -90,7 +90,7 @@ public class newAutoModeLeft extends LinearOpMode {
 
 
         inOutTake.turretIntakeOffset -= 195;
-        inOutTake.horizontalIntakeOffset -= 0.05;
+        inOutTake.horizontalIntakeOffset -= 0.07;
         inOutTake.v4bIntakeOffset += 0.1;
 
 
@@ -208,16 +208,19 @@ public class newAutoModeLeft extends LinearOpMode {
                                 .strafeLeft(16.5)
                                 .build()
                         );
+                        break;
                     case 2:
                         drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                                 .strafeRight(3)
                                 .build()
                         );
+                        break;
                     case 3:
                         drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                                 .strafeRight(26.5)
                                 .build()
                         );
+                        break;
                 }
 
                 park = false;

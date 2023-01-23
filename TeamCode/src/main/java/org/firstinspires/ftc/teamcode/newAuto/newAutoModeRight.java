@@ -88,8 +88,8 @@ public class newAutoModeRight extends LinearOpMode {
             }
         });
 
-        inOutTake.turretIntakeOffset -= 195;
-        inOutTake.horizontalIntakeOffset -= 0.05;
+        inOutTake.turretIntakeOffset -= 180;
+        inOutTake.horizontalIntakeOffset -= 0.03;
         inOutTake.v4bIntakeOffset += 0.1;
 
 
@@ -153,8 +153,8 @@ public class newAutoModeRight extends LinearOpMode {
 
         drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(startPose)
                 .UNSTABLE_addTemporalMarkerOffset(0.1, () -> {
-                    inOutTake.turretOuttakeOffset -= 42;
-                    inOutTake.horizontalOuttakeOffset -= 0.02;
+                    inOutTake.turretOuttakeOffset -= 38;
+                    inOutTake.horizontalOuttakeOffset -= 0.07;
 
                     inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP);
                     inOutTake.setaInstructions(IntakeAndOuttake.Instructions.LEFT_DEPOSIT);
@@ -207,23 +207,26 @@ public class newAutoModeRight extends LinearOpMode {
                                 .strafeLeft(26.5)
                                 .build()
                         );
+                        break;
                     case 2:
                         drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                                 .strafeLeft(3)
                                 .build()
                         );
+                        break;
                     case 3:
                         drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                                 .strafeRight(16.5)
                                 .build()
                         );
+                        break;
                 }
 
                 park = false;
             }
 
-            if (cycles == 3 && v4bHeightCheck == 0) {
-                inOutTake.v4bIntakeOffset -= 0.11;
+            if (cycles == 2 && v4bHeightCheck == 0) {
+                inOutTake.v4bIntakeOffset -= 0.04;
                 v4bHeightCheck++;
             }
 
