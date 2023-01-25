@@ -145,7 +145,7 @@ public class IntakeAndOuttake {
                                 v4bTargetPos = 0.55 + v4bIntakeOffset;
                                 horizontalTargetPos = 0.45 + horizontalIntakeOffset;
                                 if (System.currentTimeMillis() - prevAction > 250) {
-                                    clawTargetPos = 0.43                                    ;
+                                    clawTargetPos = 0.5                                    ;
                                     prevAction = System.currentTimeMillis();
                                 }
                                 break;
@@ -229,7 +229,7 @@ public class IntakeAndOuttake {
                                 v4bTargetPos = 0.55 + v4bIntakeOffset;
                                 horizontalTargetPos = 0.45 + horizontalIntakeOffset;
                                 if (System.currentTimeMillis() - prevAction > 250) {
-                                    clawTargetPos = 0.46                                    ;
+                                    clawTargetPos = 0.5                                    ;
                                     prevAction = System.currentTimeMillis();
                                 }
                                 break;

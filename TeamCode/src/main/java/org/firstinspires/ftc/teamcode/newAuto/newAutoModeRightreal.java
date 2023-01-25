@@ -88,8 +88,8 @@ public class newAutoModeRightreal extends LinearOpMode {
         });
 
 
-        inOutTake.turretIntakeOffset -= 201;
-        inOutTake.horizontalIntakeOffset -= 0.05;
+        inOutTake.turretIntakeOffset -= 217;
+        inOutTake.horizontalIntakeOffset -= 0.01;
         inOutTake.v4bIntakeOffset += 0.1;
 
 
@@ -153,8 +153,8 @@ public class newAutoModeRightreal extends LinearOpMode {
 
         drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(startPose)
                 .UNSTABLE_addTemporalMarkerOffset(0.1, () -> {
-                    inOutTake.turretOuttakeOffset += 2 ;
-                    inOutTake.horizontalOuttakeOffset -= 0.0;
+                    inOutTake.turretOuttakeOffset += -20 ;
+                    inOutTake.horizontalOuttakeOffset -= 0.025;
 
                     inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP);
                     inOutTake.setaInstructions(IntakeAndOuttake.Instructions.LEFT_DEPOSIT);
