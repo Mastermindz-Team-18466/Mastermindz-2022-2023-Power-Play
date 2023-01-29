@@ -152,6 +152,36 @@ public class newTeleOpModeRight extends LinearOpMode {
 
                     }
 
+                    if (gamepad1.right_bumper){
+                        driver.drive.slowMode = 2.5;
+                    } else{
+                        driver.drive.slowMode = 1;
+                    }
+
+//                    if (currentGamepad1.back && !previousGamepad1.back){
+//                        inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
+//                        inOutTake.setaInstructions(IntakeAndOuttake.Instructions.STRAIGHT_INTAKE);
+//                        inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSED_TO_INTAKE);
+//                    }
+
+                    if (currentGamepad2.dpad_right && !previousGamepad2.dpad_right){
+                        inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.MID);
+                        inOutTake.setaInstructions(IntakeAndOuttake.Instructions.DEPOSIT);
+                        inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
+                    }
+
+//                    if (currentGamepad2.dpad_up && !previousGamepad2.dpad_up){
+//                        inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP_STRAIGHT);
+//                        inOutTake.setaInstructions(IntakeAndOuttake.Instructions.DEPOSIT);
+//                        inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
+//                    }
+
+                    if (currentGamepad2.dpad_down && !previousGamepad2.dpad_down){
+                        inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.BOTTOM);
+                        inOutTake.setaInstructions(IntakeAndOuttake.Instructions.DEPOSIT);
+                        inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
+                    }
+
                     //cycle
                     if (currentGamepad1.a && !previousGamepad1.a) {
                         //intake

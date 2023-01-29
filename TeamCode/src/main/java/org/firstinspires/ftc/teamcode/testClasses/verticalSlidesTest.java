@@ -37,8 +37,8 @@ public class verticalSlidesTest extends OpMode {
         controller = new PIDController(p, i, d);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        liftMotor1 = hardwareMap.get(DcMotorEx.class, "liftMotor1");
-        liftMotor2 = hardwareMap.get(DcMotorEx.class, "liftMotor2");
+        liftMotor1 = hardwareMap.get(DcMotorEx.class, "leftLinear_slide");
+        liftMotor2 = hardwareMap.get(DcMotorEx.class, "rightLinear_slide");
 
 //        liftMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 

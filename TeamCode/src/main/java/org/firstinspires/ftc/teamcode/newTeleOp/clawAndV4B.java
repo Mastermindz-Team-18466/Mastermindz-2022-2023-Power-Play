@@ -23,12 +23,12 @@ public class clawAndV4B {
 
         aTargetPos = targetPos;
 
-        if (aTargetPos > 0.72) {
-            aTargetPos = 0.72;
-        }
-        if (aTargetPos < 0.27) {
-            aTargetPos = 0.27;
-        }
+//        if (aTargetPos > 0.72) {
+//            aTargetPos = 0.72;
+//        }
+//        if (aTargetPos < 0.27) {
+//            aTargetPos = 0.27;
+//        }
 
         v4b.setPosition(aTargetPos);
     }

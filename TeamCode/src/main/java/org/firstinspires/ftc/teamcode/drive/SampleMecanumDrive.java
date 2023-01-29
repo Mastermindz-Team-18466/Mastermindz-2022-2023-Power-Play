@@ -64,6 +64,8 @@ public class SampleMecanumDrive extends MecanumDrive {
     private final TrajectorySequenceRunner trajectorySequenceRunner;
     private final TrajectoryFollower follower;
 
+    public double slowMode = 1;
+
     private final DcMotorEx leftFront;
     private final DcMotorEx leftRear;
     private final DcMotorEx rightRear;
@@ -302,10 +304,10 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     @Override
     public void setMotorPowers(double v, double v1, double v2, double v3) {
-        leftFront.setPower(v);
-        leftRear.setPower(v1);
-        rightRear.setPower(v2);
-        rightFront.setPower(v3);
+        leftFront.setPower(v / slowMode);
+        leftRear.setPower(v1 / slowMode);
+        rightRear.setPower(v2 / slowMode);
+        rightFront.setPower(v3 / slowMode);
     }
 
     @Override
