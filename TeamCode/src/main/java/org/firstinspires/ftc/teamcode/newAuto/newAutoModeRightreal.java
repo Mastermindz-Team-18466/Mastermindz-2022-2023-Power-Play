@@ -90,7 +90,7 @@ public class newAutoModeRightreal extends LinearOpMode {
         //increase value to overshoot
         inOutTake.turretIntakeOffset -= 228;
 
-        inOutTake.horizontalIntakeOffset -= 0.01;
+        inOutTake.horizontalIntakeOffset -= 0.025;
         inOutTake.v4bIntakeOffset += 0.1;
 
 
