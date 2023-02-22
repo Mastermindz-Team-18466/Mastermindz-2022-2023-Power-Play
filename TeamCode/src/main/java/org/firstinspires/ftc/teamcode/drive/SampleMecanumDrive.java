@@ -13,6 +13,7 @@ import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kStatic;
 import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
@@ -46,7 +47,11 @@ import org.firstinspires.ftc.teamcode.util.LynxModuleUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 /*
  * Simple mecanum drive hardware implementation for REV hardware.`
@@ -64,12 +69,12 @@ public class SampleMecanumDrive extends MecanumDrive {
     private final TrajectorySequenceRunner trajectorySequenceRunner;
     private final TrajectoryFollower follower;
 
-    public double slowMode = 1;
+    public double slowMode = 2.5 / 2;
 
-    private final DcMotorEx leftFront;
-    private final DcMotorEx leftRear;
-    private final DcMotorEx rightRear;
-    private final DcMotorEx rightFront;
+    public final DcMotorEx leftFront;
+    public final DcMotorEx leftRear;
+    public final DcMotorEx rightRear;
+    public final DcMotorEx rightFront;
     public final List<DcMotorEx> motors;
 
     private BNO055IMU imu;
@@ -304,10 +309,28 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     @Override
     public void setMotorPowers(double v, double v1, double v2, double v3) {
-        leftFront.setPower(v / slowMode);
-        leftRear.setPower(v1 / slowMode);
-        rightRear.setPower(v2 / slowMode);
-        rightFront.setPower(v3 / slowMode);
+        ArrayList<Double> powers = new ArrayList<Double>();
+        powers.add(leftFront.getPower());
+        powers.add(leftRear.getPower());
+        powers.add(rightFront.getPower());
+        powers.add(rightRear.getPower());
+
+        System.out.println(leftFront.getPower() + " " + leftRear.getPower() + " " + rightFront.getPower() + " " + rightRear.getPower());
+
+        int occurences = 0;
+
+        for (int i = 0; i < 4; i++) {
+            if (powers.get(i) > Math.ulp(1.0)) {
+                occurences++;
+            }
+        }
+
+        double multiplier = (-1 * Math.pow(occurences, 2)) / 4 + occurences + 1;
+
+        leftFront.setPower(v / (slowMode * multiplier));
+        leftRear.setPower(v1 / (slowMode * multiplier));
+        rightRear.setPower(v2 / (slowMode * multiplier));
+        rightFront.setPower(v3 / (slowMode * multiplier));
     }
 
     @Override

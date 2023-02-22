@@ -15,6 +15,7 @@ public class newVerticalSlides {
 
     public DcMotorEx liftMotor1;
     public DcMotorEx liftMotor2;
+    public DcMotorEx liftMotorTop;
 
     public double previousTargetPos;
 
@@ -25,14 +26,10 @@ public class newVerticalSlides {
 
         liftMotor1 = hardwareMap.get(DcMotorEx.class, "leftLinear_slide");
         liftMotor2 = hardwareMap.get(DcMotorEx.class, "rightLinear_slide");
+        liftMotorTop = hardwareMap.get(DcMotorEx.class, "topLinear_slide");
 
 
-        liftMotor2.setDirection(DcMotorSimple.Direction.REVERSE);
-
-//        liftMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//
-//        liftMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        liftMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        liftMotorTop.setDirection(DcMotorSimple.Direction.REVERSE);
 
     }
 
@@ -62,5 +59,6 @@ public class newVerticalSlides {
 
         liftMotor1.setPower(-power);
         liftMotor2.setPower(-power);
+        liftMotorTop.setPower(-power);
     }
 }

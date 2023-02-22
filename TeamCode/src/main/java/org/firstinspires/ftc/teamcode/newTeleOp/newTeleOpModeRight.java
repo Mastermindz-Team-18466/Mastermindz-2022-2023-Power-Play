@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.newAuto.Trajectories;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.teleop.TeleOpFieldCentric;
 
-@TeleOp(name = "newTeleOpModeRight", group = "Concept")
+@TeleOp(name = "*newTeleOpModeRight", group = "Concept")
 //@Disabled
 public class newTeleOpModeRight extends LinearOpMode {
 
@@ -152,10 +152,12 @@ public class newTeleOpModeRight extends LinearOpMode {
 
                     }
 
-                    if (gamepad1.right_bumper){
-                        driver.drive.slowMode = 2.5;
-                    } else{
+                    if (gamepad1.right_trigger > 0.5) {
                         driver.drive.slowMode = 1;
+                    } else if (gamepad1.left_trigger > 0.5) {
+                        driver.drive.slowMode = 2.5;
+                    } else {
+                        driver.drive.slowMode = 2.5 / 2;
                     }
 
 //                    if (currentGamepad1.back && !previousGamepad1.back){

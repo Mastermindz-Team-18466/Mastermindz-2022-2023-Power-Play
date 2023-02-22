@@ -27,6 +27,10 @@ public class TeleOpFieldCentric {
         this.gamepad = gamepad;
 
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        drive.leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        drive.leftRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        drive.rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        drive.rightRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // Retrieve our pose from the PoseStorage.currentPose static field
         drive.setPoseEstimate(PoseStorage.currentPose);
@@ -44,25 +48,13 @@ public class TeleOpFieldCentric {
 
 
     public void move() {
-        Pose2d poseEstimate = drive.getPoseEstimate();
-
-        Vector2d input = new Vector2d(
-                -gamepad.left_stick_y,
-                -gamepad.left_stick_x
-        ).rotated(-poseEstimate.getHeading());
-
         drive.setWeightedDrivePower(
                 new Pose2d(
-                        input.getX(),
-                        input.getY(),
+                        -gamepad.left_stick_y,
+                        -gamepad.left_stick_x,
                         -gamepad.right_stick_x
                 )
         );
-
-        if (gamepad.left_bumper) {
-            drive.setPoseEstimate(new Pose2d(poseEstimate.getX(), poseEstimate.getY(), 0));
-        }
-
 
         drive.update();
     }

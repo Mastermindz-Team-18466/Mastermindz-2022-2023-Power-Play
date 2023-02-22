@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.newAuto.Trajectories;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.teleop.TeleOpFieldCentric;
 
-@TeleOp(name = "newTeleOpModeLeft", group = "Concept")
+@TeleOp(name = "*newTeleOpModeLeft", group = "Concept")
 //@Disabled
 public class newTeleOpModeLeft extends LinearOpMode {
 

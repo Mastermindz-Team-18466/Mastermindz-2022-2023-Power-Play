@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.newAuto;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -88,8 +87,10 @@ public class newAutoModeRight extends LinearOpMode {
             }
         });
 
-        inOutTake.turretIntakeOffset -= 180;
-        inOutTake.horizontalIntakeOffset -= 0.03;
+        //increase value to overshoot
+        inOutTake.turretIntakeOffset -= 228;
+
+        inOutTake.horizontalIntakeOffset -= 0.025;
         inOutTake.v4bIntakeOffset += 0.1;
 
 
@@ -153,14 +154,15 @@ public class newAutoModeRight extends LinearOpMode {
 
         drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(startPose)
                 .UNSTABLE_addTemporalMarkerOffset(0.1, () -> {
-                    inOutTake.turretOuttakeOffset -= 38;
-                    inOutTake.horizontalOuttakeOffset -= 0.07;
+                    //make more negative to make turret undershoot
+                    inOutTake.turretOuttakeOffset += -35;
+                    inOutTake.horizontalOuttakeOffset -= 0.035;
 
                     inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP);
                     inOutTake.setaInstructions(IntakeAndOuttake.Instructions.LEFT_DEPOSIT);
                     inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
                 })
-                .forward(49)
+                .forward(52)
                 .strafeRight(5)
                 .build()
         );
@@ -176,10 +178,10 @@ public class newAutoModeRight extends LinearOpMode {
             long currentTime = System.currentTimeMillis();
 
             if (currentTime - startTime >= 3500 && cycles < 5 && currentTime - startTime < 27250) {
-                if (cyclePos && currentTime - previousAction >= 2750) {
+                if (cyclePos && currentTime - previousAction >= 2850) {
 
                     inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
-                    inOutTake.setaInstructions(IntakeAndOuttake.Instructions.LEFT_INTAKE);
+                    inOutTake.setaInstructions(IntakeAndOuttake.Instructions.AUTO_RIGHT_INTAKE);
                     inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.DEPOSIT_CONE);
 
                     previousAction = System.currentTimeMillis();
@@ -226,7 +228,7 @@ public class newAutoModeRight extends LinearOpMode {
             }
 
             if (cycles == 2 && v4bHeightCheck == 0) {
-                inOutTake.v4bIntakeOffset -= 0.04;
+                inOutTake.v4bIntakeOffset -= 0.065;
                 v4bHeightCheck++;
             }
 

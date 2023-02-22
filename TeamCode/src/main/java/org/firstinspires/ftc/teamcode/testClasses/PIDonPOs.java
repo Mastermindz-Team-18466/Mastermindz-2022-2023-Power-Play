@@ -1,63 +1,78 @@
 package org.firstinspires.ftc.teamcode.testClasses;
 
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
-import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.teleop.TeleOpFieldCentric;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Config
 @TeleOp(name = "pidonposition", group = "Test")
-public class PIDonPOs extends LinearOpMode {
-    public static double kpx = 0;
-    public static double kix = 0;
-    public static double kdx = 0;
-    public static double kpy = 0;
-    public static double kiy = 0;
-    public static double kdy = 0;
-    public static double kpt = 0;
-    public static double kit = 0;
-    public static double kdt = 0;
-    public static double xTargetPosition = 0;
-    public static double yTargetPosition = 0;
-    public static double tTargetPosition = 0;
+public class PIDonPOs extends LinearOpMode{
+    private DcMotor frontLeft;
+    private DcMotor rearLeft;
+    private DcMotor frontRight;
+    private DcMotor rearRight;
+
+    public static double kP = 0.1;
+    public static double kD = 0.1;
+    public static double kI = 0.05;
+
+    private double error;
+    private double prevError;
+    private double integral;
+
+    public static double TOLERANCE = 1;
+    public static double TARGET_POSITION = 1000;
+
+    private ElapsedTime timer = new ElapsedTime();
 
     @Override
     public void runOpMode() throws InterruptedException {
-        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-        Pose2d poseEstimate = drive.getPoseEstimate();
-        TeleOpFieldCentric driver = new TeleOpFieldCentric(hardwareMap, new SampleMecanumDrive(hardwareMap), gamepad1);
-        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+        frontLeft = hardwareMap.get(DcMotor.class, "leftFront");
+        frontRight = hardwareMap.get(DcMotor.class, "rightFront");
+        rearLeft = hardwareMap.get(DcMotor.class, "leftRear");
+        rearRight = hardwareMap.get(DcMotor.class, "rightRear");
+
+        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rearLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rearLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rearRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rearRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         waitForStart();
+
         while (opModeIsActive()) {
-            PIDController xControl = new PIDController(kpx, kix, kdx);
-            PIDController yControl = new PIDController(kpy, kiy, kdy);
-            PIDController tControl = new PIDController(kpt, kit, kdt);
+            error = TARGET_POSITION - frontLeft.getCurrentPosition();
 
-            double x = xControl.calculate(driver.drive.getPoseEstimate().getX(), xTargetPosition);
-            double y = yControl.calculate(driver.drive.getPoseEstimate().getY(), yTargetPosition);
-            double t = tControl.calculate(driver.drive.getPoseEstimate().getHeading(), tTargetPosition);
-            double x_rotated = x * Math.cos(driver.drive.getPoseEstimate().getHeading()) - y * Math.sin(driver.drive.getPoseEstimate().getHeading());
-            double y_rotated = x * Math.sin(driver.drive.getPoseEstimate().getHeading()) + y * Math.cos(driver.drive.getPoseEstimate().getHeading());
+            telemetry.addData("error", error);
+            telemetry.addData("pos", frontLeft.getCurrentPosition());
+            /*The error is calculated as the difference between the target position and the current position
+            of the front left wheel because it is assumed that the front left wheel is the one that will be used
+            for control purposes. The purpose of the PID control is to bring the front left wheel to a specific position,
+             and the error term represents how far away the wheel is from the desired position.
+             By subtracting the target position from the current position of the front left wheel,
+             the error term gives an indication of how much correction is needed to bring the wheel to the desired position
 
-            driver.drive.motors.get(0).setPower(x_rotated + y_rotated + t);
-            driver.drive.motors.get(1).setPower(x_rotated - y_rotated + t);
-            driver.drive.motors.get(2).setPower(x_rotated - y_rotated - t);
-            driver.drive.motors.get(3).setPower(x_rotated + y_rotated - t);
+             aadi asked why
+             */
 
-            telemetry.addData("X: ", poseEstimate.getX());
-            telemetry.addData("Y: ", poseEstimate.getY());
-            telemetry.addData("Robot Heading: ", poseEstimate.getHeading());
-            telemetry.addData("Running: ", telemetry);
+            double power = kP * error;
+
+            telemetry.addData("p", power);
+
+            frontLeft.setPower(power);
+            frontRight.setPower(power);
+            rearLeft.setPower(power);
+            rearRight.setPower(power);
+
+            prevError = error;
+            timer.reset();
 
             telemetry.update();
         }
     }
-
 }
