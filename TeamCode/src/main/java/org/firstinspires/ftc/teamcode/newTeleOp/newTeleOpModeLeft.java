@@ -28,7 +28,7 @@ public class newTeleOpModeLeft extends LinearOpMode {
 
     IntakeAndOuttake inOutTake;
     newTurret turret;
-    clawAndV4B clawAndV4B;
+    clawAndArm clawAndArm;
     newVerticalSlides verticalSlides;
     newHorizontalSlides horizontalSlides;
     RevColorSensorV3 distance;
@@ -42,7 +42,7 @@ public class newTeleOpModeLeft extends LinearOpMode {
         TeleOpFieldCentric driver = new TeleOpFieldCentric(hardwareMap, new SampleMecanumDrive(hardwareMap), gamepad1);
 
         turret = new newTurret(hardwareMap);
-        clawAndV4B = new clawAndV4B(hardwareMap);
+        clawAndArm = new clawAndArm(hardwareMap);
         verticalSlides = new newVerticalSlides(hardwareMap);
         horizontalSlides = new newHorizontalSlides(hardwareMap);
         distance = hardwareMap.get(RevColorSensorV3.class, "Distance");
@@ -58,7 +58,7 @@ public class newTeleOpModeLeft extends LinearOpMode {
 //        verticalSlides.liftMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 //        verticalSlides.liftMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        inOutTake = new IntakeAndOuttake(turret, clawAndV4B, verticalSlides, horizontalSlides, distance);
+        inOutTake = new IntakeAndOuttake(turret, clawAndArm, verticalSlides, horizontalSlides, distance);
 
         inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
         inOutTake.setaInstructions(IntakeAndOuttake.Instructions.CLOSED);
@@ -183,7 +183,7 @@ public class newTeleOpModeLeft extends LinearOpMode {
             telemetry.addData("VerticalTargetPos:", inOutTake.verticalTargetPos);
             telemetry.addData("VerticalCurrentPos:", verticalSlides.liftMotor1.getCurrentPosition());
             telemetry.addData("Power", verticalSlides.publicPower);
-            telemetry.addData("ServoPos:", clawAndV4B.v4b.getPosition());
+            telemetry.addData("ServoPos:", clawAndArm.armRight.getPosition());
             telemetry.update();
         }
     }

@@ -21,13 +21,13 @@ public class gamepadVertTest extends LinearOpMode {
         liftMotor2 = hardwareMap.get(DcMotorEx.class, "rightLinear_slide");
         liftMotorTop = hardwareMap.get(DcMotorEx.class, "topLinear_slide");
 
-        liftMotor2.setDirection(DcMotorSimple.Direction.REVERSE);
+        liftMotorTop.setDirection(DcMotorSimple.Direction.REVERSE);
 
         waitForStart();
         while (opModeIsActive()) {
             liftMotor1.setPower(gamepad1.left_stick_y);
             liftMotor2.setPower(gamepad1.left_stick_y);
-            liftMotorTop.setPower(-gamepad1.left_stick_y);
+            liftMotorTop.setPower(gamepad1.left_stick_y);
         }
     }
 }

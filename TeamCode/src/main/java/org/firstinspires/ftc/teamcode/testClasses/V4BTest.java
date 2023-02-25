@@ -5,22 +5,21 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.newTeleOp.clawAndV4B;
+import org.firstinspires.ftc.teamcode.newTeleOp.clawAndArm;
 
 @Config
 @TeleOp(name = "V4BTest", group = "Test")
 public class V4BTest extends LinearOpMode {
 
-    clawAndV4B v4b;
+    clawAndArm v4b;
 
     public double endPos1 = 0;
 
     @Override
     public void runOpMode() throws InterruptedException {
 
-        v4b = new clawAndV4B(hardwareMap);
+        v4b = new clawAndArm(hardwareMap);
 
         waitForStart();
         while (opModeIsActive()) {
@@ -31,7 +30,7 @@ public class V4BTest extends LinearOpMode {
                 endPos1 -= 0.01;
             }
 
-            v4b.v4bTargetPos(endPos1);
+            v4b.armTargetPos(endPos1);
 
             telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
             telemetry.addData("endPos", endPos1);

@@ -45,7 +45,7 @@ public class newVerticalSlides {
         previousTargetPos = targetPosition;
 
         controller.setPID(p, i, d);
-        double slidePos = liftMotor1.getCurrentPosition();
+        double slidePos = liftMotorTop.getCurrentPosition();
 
         double pid = controller.calculate(slidePos, targetPosition);
 

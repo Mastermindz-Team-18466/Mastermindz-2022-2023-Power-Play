@@ -3,23 +3,29 @@ package org.firstinspires.ftc.teamcode.newTeleOp;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-public class clawAndV4B {
+public class clawAndArm {
     //    RevColorSensorV3 distance;
     Servo claw;
-    Servo v4b;
+    Servo clawSpin;
+    Servo armRight;
+    Servo armLeft;
 
     double aTargetPos;
 
-    public clawAndV4B(HardwareMap hardwareMap) {
+    public clawAndArm(HardwareMap hardwareMap) {
         claw = hardwareMap.get(Servo.class, "claw");
-        v4b = hardwareMap.servo.get("v4b_left");
+        clawSpin = hardwareMap.get(Servo.class, "clawSpin");
+        armLeft = hardwareMap.servo.get("armLeft");
+        armRight = hardwareMap.servo.get("armRight");
+
+        armRight.setDirection(Servo.Direction.REVERSE);
     }
 
     public void clawControl(double clawTargetPos) {
             claw.setPosition(clawTargetPos);
     }
 
-    public void v4bTargetPos(double targetPos) {
+    public void armTargetPos(double targetPos) {
 
         aTargetPos = targetPos;
 
@@ -30,6 +36,11 @@ public class clawAndV4B {
 //            aTargetPos = 0.27;
 //        }
 
-        v4b.setPosition(aTargetPos);
+        armLeft.setPosition(aTargetPos);
+        armRight.setPosition(aTargetPos);
+    }
+
+    public void clawSpin(double clawSpinPos){
+        clawSpin.setPosition(clawSpinPos);
     }
 }

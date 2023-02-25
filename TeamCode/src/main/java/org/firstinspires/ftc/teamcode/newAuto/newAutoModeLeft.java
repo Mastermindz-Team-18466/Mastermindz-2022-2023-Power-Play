@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.newAuto;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -10,7 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.newTeleOp.IntakeAndOuttake;
-import org.firstinspires.ftc.teamcode.newTeleOp.clawAndV4B;
+import org.firstinspires.ftc.teamcode.newTeleOp.clawAndArm;
 import org.firstinspires.ftc.teamcode.newTeleOp.newHorizontalSlides;
 import org.firstinspires.ftc.teamcode.newTeleOp.newTurret;
 import org.firstinspires.ftc.teamcode.newTeleOp.newVerticalSlides;
@@ -29,7 +28,7 @@ public class newAutoModeLeft extends LinearOpMode {
     OpenCvCamera webcam;
     IntakeAndOuttake inOutTake;
     newTurret turret;
-    org.firstinspires.ftc.teamcode.newTeleOp.clawAndV4B clawAndV4B;
+    clawAndArm clawAndArm;
     newVerticalSlides verticalSlides;
     newHorizontalSlides horizontalSlides;
     RevColorSensorV3 distance;
@@ -57,12 +56,12 @@ public class newAutoModeLeft extends LinearOpMode {
         AprilTagDetectionPipeline aprilTagDetectionPipeline = new AprilTagDetectionPipeline(0.166, 587.272, 578.272, 402.145, 221.506);
 
         turret = new newTurret(hardwareMap);
-        clawAndV4B = new clawAndV4B(hardwareMap);
+        clawAndArm = new clawAndArm(hardwareMap);
         verticalSlides = new newVerticalSlides(hardwareMap);
         horizontalSlides = new newHorizontalSlides(hardwareMap);
         distance = hardwareMap.get(RevColorSensorV3.class, "Distance");
 
-        inOutTake = new IntakeAndOuttake(turret, clawAndV4B, verticalSlides, horizontalSlides, distance);
+        inOutTake = new IntakeAndOuttake(turret, clawAndArm, verticalSlides, horizontalSlides, distance);
 
         inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
         inOutTake.setaInstructions(IntakeAndOuttake.Instructions.CLOSED);
@@ -91,7 +90,7 @@ public class newAutoModeLeft extends LinearOpMode {
 
         inOutTake.turretIntakeOffset -= 195;
         inOutTake.horizontalIntakeOffset -= 0.07;
-        inOutTake.v4bIntakeOffset += 0.1;
+        inOutTake.armIntakeOffset += 0.1;
 
 
         while (!isStarted() && !isStopRequested()) {
@@ -227,7 +226,7 @@ public class newAutoModeLeft extends LinearOpMode {
             }
 
             if (cycles == 3 && v4bHeightCheck == 0) {
-                inOutTake.v4bIntakeOffset -= 0.1;
+                inOutTake.armIntakeOffset -= 0.1;
                 v4bHeightCheck++;
             }
 
