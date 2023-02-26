@@ -30,7 +30,7 @@ public class verticalSlidesTest extends OpMode {
     public static double targetPosition = 0;
 
     private DcMotorEx liftMotor1;
-    private DcMotorEx liftMotor2;
+    private DcMotorEx liftMotor2, liftMotorTop;
 
     @Override
     public void init() {
@@ -39,10 +39,9 @@ public class verticalSlidesTest extends OpMode {
 
         liftMotor1 = hardwareMap.get(DcMotorEx.class, "leftLinear_slide");
         liftMotor2 = hardwareMap.get(DcMotorEx.class, "rightLinear_slide");
+        liftMotorTop = hardwareMap.get(DcMotorEx.class, "topLinear_slide");
 
-//        liftMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        liftMotor2.setDirection(DcMotorSimple.Direction.REVERSE);
+        liftMotorTop.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     @Override
@@ -56,6 +55,7 @@ public class verticalSlidesTest extends OpMode {
 
         liftMotor1.setPower(-power);
         liftMotor2.setPower(-power);
+        liftMotorTop.setPower(-power);
 
         telemetry.addData("targetPos", targetPosition);
         telemetry.addData("currentPos", slidePos);

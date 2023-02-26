@@ -11,8 +11,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 @TeleOp(name = "Horiz_Test", group = "Test")
 public class HorizontalExtension extends LinearOpMode {
 
-    public static double endPos1 = 0.72; //21.5 in
-    public static double endPos2 = 0.27;
+    public static double endPos1 = 0.5; //21.5 in
+    public static double endPos2 = 0;
     public static double offset = 0.1;
     private Servo rightServo;
     private Servo leftServo;
