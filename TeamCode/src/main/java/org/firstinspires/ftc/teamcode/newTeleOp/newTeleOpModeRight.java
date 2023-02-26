@@ -100,7 +100,7 @@ public class newTeleOpModeRight extends LinearOpMode {
 //                        currentMode = Mode.AUTONOMOUS_CONTROL;
 //                    }
 
-                    if (currentGamepad1.dpad_left && !previousGamepad1.dpad_left) {
+                    if (currentGamepad2.dpad_left && !previousGamepad2.dpad_left) {
                         if (inOutTake.aInstructions == IntakeAndOuttake.Instructions.INTAKE) {
                             inOutTake.horizontalIntakeOffset += 0.02;
                         } else if (inOutTake.aInstructions == IntakeAndOuttake.Instructions.DEPOSIT) {
@@ -108,7 +108,7 @@ public class newTeleOpModeRight extends LinearOpMode {
                         }
                     }
 
-                    if (currentGamepad1.dpad_right && !previousGamepad1.dpad_right) {
+                    if (currentGamepad2.dpad_right && !previousGamepad2.dpad_right) {
                         if (inOutTake.aInstructions == IntakeAndOuttake.Instructions.INTAKE) {
                             inOutTake.horizontalIntakeOffset -= 0.02;
                         } else if (inOutTake.aInstructions == IntakeAndOuttake.Instructions.DEPOSIT) {
@@ -116,26 +116,26 @@ public class newTeleOpModeRight extends LinearOpMode {
                         }
                     }
 
-                    if (currentGamepad1.dpad_up && !previousGamepad1.dpad_up) {
+                    if (currentGamepad2.dpad_up && !previousGamepad2.dpad_up) {
                         if (inOutTake.aInstructions == IntakeAndOuttake.Instructions.DEPOSIT) {
                             inOutTake.verticalOuttakeOffset += 35;
                         }
                     }
 
-                    if (currentGamepad1.dpad_down && !previousGamepad1.dpad_down) {
+                    if (currentGamepad2.dpad_down && !previousGamepad2.dpad_down) {
                         if (inOutTake.aInstructions == IntakeAndOuttake.Instructions.DEPOSIT) {
                             inOutTake.verticalOuttakeOffset -= 35;
                         }
                     }
 
-                    if (currentGamepad1.x && !previousGamepad1.x) {
+                    if (currentGamepad2.x && !previousGamepad2.x) {
                         if (inOutTake.aInstructions == IntakeAndOuttake.Instructions.INTAKE) {
                             inOutTake.turretIntakeOffset -= 20;
                         } else if (inOutTake.aInstructions == IntakeAndOuttake.Instructions.DEPOSIT) {
                             inOutTake.turretOuttakeOffset -= 20;
                         }
                     }
-                    if (currentGamepad1.b && !previousGamepad1.b) {
+                    if (currentGamepad2.b && !previousGamepad2.b) {
                         if (inOutTake.aInstructions == IntakeAndOuttake.Instructions.INTAKE) {
                             inOutTake.turretIntakeOffset += 20;
                         } else if (inOutTake.aInstructions == IntakeAndOuttake.Instructions.DEPOSIT) {
@@ -149,7 +149,6 @@ public class newTeleOpModeRight extends LinearOpMode {
                         inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.INITIAL_CLOSE);
                         cycleCheck = 0;
                         closedToIntakeCheck = 1;
-
                     }
 
                     if (gamepad1.right_trigger > 0.5) {
@@ -160,27 +159,21 @@ public class newTeleOpModeRight extends LinearOpMode {
                         driver.drive.slowMode = 2.5 / 2;
                     }
 
-//                    if (currentGamepad1.back && !previousGamepad1.back){
-//                        inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
-//                        inOutTake.setaInstructions(IntakeAndOuttake.Instructions.STRAIGHT_INTAKE);
-//                        inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSED_TO_INTAKE);
-//                    }
+                    if (currentGamepad2.left_bumper && !previousGamepad2.left_bumper){
+                        inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.BOTTOM);
+                        inOutTake.setaInstructions(IntakeAndOuttake.Instructions.DEPOSIT);
+                        inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
+                    }
 
-                    if (currentGamepad2.dpad_right && !previousGamepad2.dpad_right){
+                    if (currentGamepad2.right_bumper && !previousGamepad2.right_bumper){
                         inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.MID);
                         inOutTake.setaInstructions(IntakeAndOuttake.Instructions.DEPOSIT);
                         inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
                     }
 
-//                    if (currentGamepad2.dpad_up && !previousGamepad2.dpad_up){
-//                        inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP_STRAIGHT);
-//                        inOutTake.setaInstructions(IntakeAndOuttake.Instructions.DEPOSIT);
-//                        inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
-//                    }
-
-                    if (currentGamepad2.dpad_down && !previousGamepad2.dpad_down){
-                        inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.BOTTOM);
-                        inOutTake.setaInstructions(IntakeAndOuttake.Instructions.DEPOSIT);
+                    if (currentGamepad2.right_trigger > .75){
+                        inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP);
+                        inOutTake.setaInstructions(IntakeAndOuttake.Instructions.STRAIGHT_DEPOSIT);
                         inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
                     }
 

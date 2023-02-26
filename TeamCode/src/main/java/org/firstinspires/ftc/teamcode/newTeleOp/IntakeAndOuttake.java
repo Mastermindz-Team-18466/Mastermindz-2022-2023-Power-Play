@@ -373,6 +373,41 @@ public class IntakeAndOuttake {
                         }
                         break;
 
+                    case STRAIGHT_DEPOSIT:
+                        switch (aSpecificInstruction) {
+                            case CLOSE_CLAW:
+                                clawTargetPos = 0.15;
+                                prevAction = System.currentTimeMillis();
+                                aSpecificInstruction = specificInstructions.RETRACT_HORIZONTAL_SLIDES;
+                                break;
+                            case RETRACT_HORIZONTAL_SLIDES:
+                                if (System.currentTimeMillis() - prevAction > 300) {
+                                    clawSpin = 1;
+                                    armTargetPos = 0.4 + armOuttakeOffset;
+                                    horizontalTargetPos = 0 + horizontalOuttakeOffset;
+                                    prevAction = System.currentTimeMillis();
+                                    aSpecificInstruction = specificInstructions.DELAY_TURRET_DEPOSIT;
+                                }
+                                break;
+                            case DELAY_TURRET_DEPOSIT:
+                                armTargetPos = 0.4 + armOuttakeOffset;
+                                horizontalTargetPos = 0 + horizontalOuttakeOffset;
+                                if (System.currentTimeMillis() - prevAction > 100) {
+                                    turretTargetPos = 0 + turretOuttakeOffset;
+                                    verticalTargetPos = 3200 + verticalTargetPos;
+                                    prevAction = System.currentTimeMillis();
+                                    aSpecificInstruction = specificInstructions.LOWER_VERTICAL;
+                                }
+                                break;
+                            case LOWER_VERTICAL:
+                                horizontalTargetPos = 0 + horizontalOuttakeOffset;
+                                verticalTargetPos = 3200 + verticalTargetPos;
+                                turretTargetPos = 0 + turretOuttakeOffset;
+                                armTargetPos = 0.4 + armOuttakeOffset;
+                                break;
+                        }
+                        break;
+
                     case LEFT_DEPOSIT:
                         switch (aSpecificInstruction) {
                             case CLOSE_CLAW:
@@ -626,40 +661,29 @@ public class IntakeAndOuttake {
                                 aSpecificInstruction = specificInstructions.RETRACT_HORIZONTAL_SLIDES;
                                 break;
                             case RETRACT_HORIZONTAL_SLIDES:
-                                if (System.currentTimeMillis() - prevAction > 500) {
-                                    armTargetPos = 0.72 + armOuttakeOffset;
-                                    horizontalTargetPos = 0.72 + horizontalOuttakeOffset;
+                                if (System.currentTimeMillis() - prevAction > 300) {
+                                    clawSpin = 1;
+                                    armTargetPos = 0.4 + armOuttakeOffset;
+                                    horizontalTargetPos = 0 + horizontalOuttakeOffset;
                                     prevAction = System.currentTimeMillis();
                                     aSpecificInstruction = specificInstructions.DELAY_TURRET_DEPOSIT;
                                 }
                                 break;
                             case DELAY_TURRET_DEPOSIT:
-                                armTargetPos = 0.72 + armOuttakeOffset;
-                                horizontalTargetPos = 0.72 + horizontalOuttakeOffset;
-                                if (System.currentTimeMillis() - prevAction > 300) {
-                                    turretTargetPos = 400 + turretOuttakeOffset;
+                                armTargetPos = 0.4 + armOuttakeOffset;
+                                horizontalTargetPos = 0 + horizontalOuttakeOffset;
+                                if (System.currentTimeMillis() - prevAction > 100) {
+                                    turretTargetPos = 0 + turretOuttakeOffset;
                                     verticalTargetPos = 1060 + verticalTargetPos;
                                     prevAction = System.currentTimeMillis();
                                     aSpecificInstruction = specificInstructions.LOWER_VERTICAL;
                                 }
                                 break;
                             case LOWER_VERTICAL:
-                                armTargetPos = 0.72 + armOuttakeOffset;
-                                horizontalTargetPos = 0.72 + horizontalOuttakeOffset;
+                                horizontalTargetPos = 0 + horizontalOuttakeOffset;
+                                turretTargetPos = 0 + turretOuttakeOffset;
                                 verticalTargetPos = 1060 + verticalTargetPos;
-                                turretTargetPos = 400 + turretOuttakeOffset;
-                                if (System.currentTimeMillis() - prevAction > 100) {
-                                    prevAction = System.currentTimeMillis();
-                                    aSpecificInstruction = specificInstructions.EXTEND_HORIZONTAL_SLIDES;
-                                }
-                                break;
-                            case EXTEND_HORIZONTAL_SLIDES:
-                                armTargetPos = 0.72 + armOuttakeOffset;
-                                verticalTargetPos = 1060 + verticalOuttakeOffset;
-                                turretTargetPos = 400 + turretOuttakeOffset;
-                                if (System.currentTimeMillis() - prevAction > 1000) {
-                                    horizontalTargetPos = 0.55 + horizontalOuttakeOffset;
-                                }
+                                armTargetPos = 0.4 + armOuttakeOffset;
                                 break;
                         }
                         break;
@@ -774,6 +798,7 @@ public class IntakeAndOuttake {
         RIGHT_STACK_DEPOSIT,
         DEPOSIT,
         LEFT_DEPOSIT,
+        STRAIGHT_DEPOSIT,
         PARK
     }
 
