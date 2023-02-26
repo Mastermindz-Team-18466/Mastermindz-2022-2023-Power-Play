@@ -36,7 +36,6 @@ public class newAutoModeRight extends LinearOpMode {
     int MIDDLE = 2;
     int RIGHT = 3;
 
-    int v4bHeightCheck = 0;
 
     boolean cyclePos = true;
 
@@ -85,14 +84,13 @@ public class newAutoModeRight extends LinearOpMode {
             }
         });
 
-        //increase value to overshoot
-        inOutTake.turretIntakeOffset -= 228;
-
-        inOutTake.horizontalIntakeOffset -= 0.025;
-        inOutTake.armIntakeOffset += 0.1;
-
+        inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
+        inOutTake.setaInstructions(IntakeAndOuttake.Instructions.AUTO_CLOSE);
+        inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.INITIAL_CLOSE);
 
         while (!isStarted() && !isStopRequested()) {
+
+
             inOutTake.update();
 
             ArrayList<AprilTagDetection> currentDetections = aprilTagDetectionPipeline.getLatestDetections();
@@ -150,14 +148,11 @@ public class newAutoModeRight extends LinearOpMode {
 
         int position = tagOfInterest.id;
 
+
         drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(startPose)
                 .UNSTABLE_addTemporalMarkerOffset(0.1, () -> {
-                    //make more negative to make turret undershoot
-                    inOutTake.turretOuttakeOffset += -35;
-                    inOutTake.horizontalOuttakeOffset -= 0.035;
-
-                    inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP);
-                    inOutTake.setaInstructions(IntakeAndOuttake.Instructions.LEFT_DEPOSIT);
+                    inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
+                    inOutTake.setaInstructions(IntakeAndOuttake.Instructions.RIGHT_STACK_DEPOSIT);
                     inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
                 })
                 .forward(52)
@@ -225,10 +220,6 @@ public class newAutoModeRight extends LinearOpMode {
                 park = false;
             }
 
-            if (cycles == 2 && v4bHeightCheck == 0) {
-                inOutTake.armIntakeOffset -= 0.065;
-                v4bHeightCheck++;
-            }
 
             drive.update();
             inOutTake.update();
