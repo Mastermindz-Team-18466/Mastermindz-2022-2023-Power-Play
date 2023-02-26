@@ -51,10 +51,6 @@ public class newVerticalSlides {
 
         double power = pid + f;
 
-        if (power > 0) {
-            Range.clip(power, 0, 0.2);
-        }
-
         publicPower = power;
 
         liftMotor1.setPower(-power);

@@ -15,7 +15,8 @@ public class ClawDistance extends LinearOpMode {
     clawAndArm clawAndArm;
 
     public static double endPos = 0.75;
-    public static double v4bEndPos = 0.45;
+    public static double startPos = 0.4;
+    public static double armPos = 0.18;
 
     @Override
     public void runOpMode() {
@@ -24,12 +25,12 @@ public class ClawDistance extends LinearOpMode {
 
         waitForStart();
         while (opModeIsActive()) {
-            clawAndArm.armTargetPos(v4bEndPos);
             telemetry.update();
+            clawAndArm.armTargetPos(armPos);
             if (gamepad1.a) {
                 clawAndArm.clawControl(endPos);
             } else if (gamepad1.b) {  // Otherwise, stop the motor
-                clawAndArm.clawControl(0.4);
+                clawAndArm.clawControl(startPos);
             }
         }
     }
