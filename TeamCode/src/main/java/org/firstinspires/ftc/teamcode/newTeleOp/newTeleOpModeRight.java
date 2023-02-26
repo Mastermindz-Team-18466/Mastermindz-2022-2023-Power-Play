@@ -140,7 +140,7 @@ public class newTeleOpModeRight extends LinearOpMode {
                         }
                     }
 
-                    if (currentGamepad1.y && !previousGamepad1.y) {
+                    if (currentGamepad2.y && !previousGamepad2.y){
                         inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
                         inOutTake.setaInstructions(IntakeAndOuttake.Instructions.CLOSED);
                         inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.INITIAL_CLOSE);
@@ -175,7 +175,7 @@ public class newTeleOpModeRight extends LinearOpMode {
                     }
 
                     //cycle
-                    if (currentGamepad1.a && !previousGamepad1.a) {
+                    if (currentGamepad2.a && !previousGamepad2.a) {
                         //intake
                         if (cycleCheck == 0) {
                             if (closedToIntakeCheck == 1) {
