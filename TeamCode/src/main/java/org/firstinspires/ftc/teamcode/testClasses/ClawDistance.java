@@ -14,9 +14,9 @@ public class ClawDistance extends LinearOpMode {
 
     clawAndArm clawAndArm;
 
-    public static double endPos = 0.75;
-    public static double startPos = 0.4;
-    public static double armPos = 0.18;
+    public static double endPos = 0.45;
+    public static double startPos = 0.22;
+    public static double armPos = 0.25;
 
     @Override
     public void runOpMode() {

@@ -16,11 +16,11 @@ public class newHorizontalSlides {
 
     public void set(double targetPosition) {
 
-        if (targetPosition >= 0.72) {
-            targetPosition = 0.72;
+        if (targetPosition >= 0.51) {
+            targetPosition = 0.51;
         }
-        if (targetPosition <= 0.27) {
-            targetPosition = 0.27;
+        if (targetPosition <= 0) {
+            targetPosition = 0;
         }
 
         rightServo.setPosition(targetPosition);

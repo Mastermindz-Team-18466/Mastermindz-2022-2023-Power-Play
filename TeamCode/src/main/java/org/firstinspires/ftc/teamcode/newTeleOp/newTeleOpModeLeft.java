@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import org.firstinspires.ftc.teamcode.PoseStorage;
 import org.firstinspires.ftc.teamcode.newAuto.Trajectories;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.teleop.TeleOpFieldCentric;
+import org.firstinspires.ftc.teamcode.newTeleOp.TeleOpFieldCentric;
 
 @TeleOp(name = "*newTeleOpModeLeft", group = "Concept")
 //@Disabled
@@ -31,7 +31,6 @@ public class newTeleOpModeLeft extends LinearOpMode {
     clawAndArm clawAndArm;
     newVerticalSlides verticalSlides;
     newHorizontalSlides horizontalSlides;
-    RevColorSensorV3 distance;
 
 
     int closedToIntakeCheck = 1;
@@ -45,8 +44,6 @@ public class newTeleOpModeLeft extends LinearOpMode {
         clawAndArm = new clawAndArm(hardwareMap);
         verticalSlides = new newVerticalSlides(hardwareMap);
         horizontalSlides = new newHorizontalSlides(hardwareMap);
-        distance = hardwareMap.get(RevColorSensorV3.class, "Distance");
-
         turret.turretMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         turret.turretMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
@@ -58,7 +55,7 @@ public class newTeleOpModeLeft extends LinearOpMode {
 //        verticalSlides.liftMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 //        verticalSlides.liftMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        inOutTake = new IntakeAndOuttake(turret, clawAndArm, verticalSlides, horizontalSlides, distance);
+        inOutTake = new IntakeAndOuttake(turret, clawAndArm, verticalSlides, horizontalSlides);
 
         inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
         inOutTake.setaInstructions(IntakeAndOuttake.Instructions.CLOSED);

@@ -31,7 +31,6 @@ public class newAutoModeLeft extends LinearOpMode {
     clawAndArm clawAndArm;
     newVerticalSlides verticalSlides;
     newHorizontalSlides horizontalSlides;
-    RevColorSensorV3 distance;
 
     int LEFT = 1;
     int MIDDLE = 2;
@@ -59,9 +58,8 @@ public class newAutoModeLeft extends LinearOpMode {
         clawAndArm = new clawAndArm(hardwareMap);
         verticalSlides = new newVerticalSlides(hardwareMap);
         horizontalSlides = new newHorizontalSlides(hardwareMap);
-        distance = hardwareMap.get(RevColorSensorV3.class, "Distance");
 
-        inOutTake = new IntakeAndOuttake(turret, clawAndArm, verticalSlides, horizontalSlides, distance);
+        inOutTake = new IntakeAndOuttake(turret, clawAndArm, verticalSlides, horizontalSlides);
 
         inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
         inOutTake.setaInstructions(IntakeAndOuttake.Instructions.CLOSED);

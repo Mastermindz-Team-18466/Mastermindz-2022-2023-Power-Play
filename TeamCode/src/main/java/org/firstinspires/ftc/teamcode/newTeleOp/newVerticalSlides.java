@@ -35,8 +35,8 @@ public class newVerticalSlides {
 
     public void set(double targetPosition) {
 
-        if (targetPosition >= 3200) {
-            targetPosition = 3200;
+        if (targetPosition >= 2500) {
+            targetPosition = 2500;
         }
         if (targetPosition <= 0) {
             targetPosition = 0;
@@ -45,7 +45,7 @@ public class newVerticalSlides {
         previousTargetPos = targetPosition;
 
         controller.setPID(p, i, d);
-        double slidePos = liftMotorTop.getCurrentPosition();
+        double slidePos = liftMotor1.getCurrentPosition();
 
         double pid = controller.calculate(slidePos, targetPosition);
 
