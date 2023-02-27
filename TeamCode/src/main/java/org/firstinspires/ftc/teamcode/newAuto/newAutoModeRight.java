@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.newAuto;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -32,6 +33,8 @@ public class newAutoModeRight extends LinearOpMode {
     newVerticalSlides verticalSlides;
     newHorizontalSlides horizontalSlides;
 
+    private double verticalOffset = 100;
+
     int LEFT = 1;
     int MIDDLE = 2;
     int RIGHT = 3;
@@ -39,7 +42,7 @@ public class newAutoModeRight extends LinearOpMode {
 
     boolean cyclePos = true;
 
-    Pose2d startPose = new Pose2d(-3 * 23.5, 1.5 * 23.5, Math.toRadians(0));
+    Pose2d startPose = new Pose2d(1.5 * 23.5, -3 * 23.5, Math.PI / 2);
 
     boolean park = true;
 
@@ -151,12 +154,12 @@ public class newAutoModeRight extends LinearOpMode {
 
         drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(startPose)
                 .UNSTABLE_addTemporalMarkerOffset(0.1, () -> {
-                    inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
+                    inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP);
                     inOutTake.setaInstructions(IntakeAndOuttake.Instructions.RIGHT_STACK_DEPOSIT);
                     inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
                 })
-                .forward(52)
-                .strafeRight(5)
+                .splineTo(new Vector2d(1.5 * 23.5 - 5, -3 * 23 + 2 * 23.5 + 14), Math.PI / 2)
+                .turn(Math.PI / 4)
                 .build()
         );
 
@@ -169,6 +172,8 @@ public class newAutoModeRight extends LinearOpMode {
 
         while (opModeIsActive()) {
             long currentTime = System.currentTimeMillis();
+
+            inOutTake.verticalIntakeOffset = verticalOffset;
 
             if (currentTime - startTime >= 3500 && cycles < 5 && currentTime - startTime < 27250) {
                 if (cyclePos && currentTime - previousAction >= 2850) {
@@ -189,6 +194,7 @@ public class newAutoModeRight extends LinearOpMode {
 
                     cyclePos = true;
                     cycles++;
+                    verticalOffset -= 20;
                 }
             } else if (currentTime - startTime >= 27250 && park) {
                 System.out.println("Entered");
