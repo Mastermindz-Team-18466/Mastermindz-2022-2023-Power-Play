@@ -32,7 +32,7 @@ public class newAutoModeRight extends LinearOpMode {
     newVerticalSlides verticalSlides;
     newHorizontalSlides horizontalSlides;
 
-    private double verticalOffset = 100;
+    private double verticalOffset = 300;
 
     int LEFT = 1;
     int MIDDLE = 2;
@@ -157,8 +157,9 @@ public class newAutoModeRight extends LinearOpMode {
                     inOutTake.setaInstructions(IntakeAndOuttake.Instructions.RIGHT_STACK_DEPOSIT);
                     inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
                 })
-                .splineTo(new Vector2d(1.5 * 23.5 - 5, -3 * 23.5 + 52), Math.PI / 2)
-                .turn(Math.PI / 4)
+                .lineToSplineHeading(new Pose2d(1.5 * 23.5 - 2, -3 * 23.5 + 60, Math.PI / 2 + Math.toRadians(30)))
+                .lineToSplineHeading(new Pose2d(1.5 * 23.5 - 2, -3 * 23.5 + 50, Math.PI / 2 + Math.toRadians(30)))
+                .lineToConstantHeading(new Vector2d(1.5 * 23.5 - Math.sqrt(40.5) - 5, -3 * 23.5 + 50 + Math.sqrt(40.5)))
                 .build()
         );
 
@@ -174,8 +175,8 @@ public class newAutoModeRight extends LinearOpMode {
 
             inOutTake.verticalIntakeOffset = verticalOffset;
 
-            if (currentTime - startTime >= 3500 && cycles < 5 && currentTime - startTime < 27250) {
-                if (cyclePos && currentTime - previousAction >= 2850) {
+            if (currentTime - startTime >= 5000 && cycles < 5 && currentTime - startTime < 27250) {
+                if (cyclePos && currentTime - previousAction >= 2000) {
 
                     inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
                     inOutTake.setaInstructions(IntakeAndOuttake.Instructions.AUTO_RIGHT_INTAKE);
@@ -193,7 +194,7 @@ public class newAutoModeRight extends LinearOpMode {
 
                     cyclePos = true;
                     cycles++;
-                    verticalOffset -= 20;
+                    verticalOffset -= 30;
                 }
             } else if (currentTime - startTime >= 27250 && park) {
                 System.out.println("Entered");
