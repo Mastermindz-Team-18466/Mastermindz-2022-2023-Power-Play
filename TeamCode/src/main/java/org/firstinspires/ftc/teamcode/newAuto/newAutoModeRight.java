@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.newAuto;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -158,7 +157,7 @@ public class newAutoModeRight extends LinearOpMode {
                     inOutTake.setaInstructions(IntakeAndOuttake.Instructions.RIGHT_STACK_DEPOSIT);
                     inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
                 })
-                .splineTo(new Vector2d(1.5 * 23.5 - 5, -3 * 23 + 2 * 23.5 + 14), Math.PI / 2)
+                .splineTo(new Vector2d(1.5 * 23.5 - 5, -3 * 23.5 + 52), Math.PI / 2)
                 .turn(Math.PI / 4)
                 .build()
         );
