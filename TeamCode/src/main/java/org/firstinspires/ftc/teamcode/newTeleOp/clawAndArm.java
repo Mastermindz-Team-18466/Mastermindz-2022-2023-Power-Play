@@ -37,7 +37,7 @@ public class clawAndArm {
 //        }
 
         armLeft.setPosition(aTargetPos);
-        armRight.setPosition(aTargetPos);
+//        armRight.setPosition(aTargetPos);
     }
 
     public void clawSpin(double clawSpinPos){

@@ -54,7 +54,7 @@ public class IntakeAndOuttake {
                             case INITIAL_CLOSE:
                                 verticalTargetPos = 0;
                                 turretTargetPos = 0;
-                                horizontalTargetPos = 0.14;
+                                horizontalTargetPos = 0.05;
                                 clawTargetPos = 0.075;
                                 clawSpin = 1;
                                 prevAction = System.currentTimeMillis();
@@ -62,7 +62,7 @@ public class IntakeAndOuttake {
                                 break;
                             case ARM_DELAY:
                                 if (System.currentTimeMillis() - prevAction > 200) {
-                                    armTargetPos = 0.76;
+                                    armTargetPos = 0.78;
                                     prevAction = System.currentTimeMillis();
                                 }
                                 break;
