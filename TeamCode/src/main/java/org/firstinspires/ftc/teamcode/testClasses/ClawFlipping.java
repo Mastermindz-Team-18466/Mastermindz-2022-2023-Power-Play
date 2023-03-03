@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class ClawFlipping extends LinearOpMode {
 
     public static double startPos = 0; //21.5 in
-    public static double endPos = 0;
+    public static double endPos = 1;
     private Servo flipServo;
 
     @Override

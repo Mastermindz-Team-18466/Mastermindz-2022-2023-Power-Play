@@ -11,7 +11,7 @@ public class clawAndArm {
     Servo armLeft;
 
     double aTargetPos;
-    double aClawSpinPos;
+    double aClawTargetPos;
 
     public clawAndArm(HardwareMap hardwareMap) {
         claw = hardwareMap.get(Servo.class, "claw");
@@ -23,7 +23,18 @@ public class clawAndArm {
     }
 
     public void clawControl(double clawTargetPos) {
-            claw.setPosition(clawTargetPos);
+
+        aClawTargetPos = clawTargetPos;
+
+
+        if (aClawTargetPos > 0.7) {
+            aClawTargetPos = 0.7;
+        }
+        if (aClawTargetPos < 0.42) {
+            aClawTargetPos = 0.42;
+        }
+
+        claw.setPosition(aClawTargetPos);
     }
 
     public void armTargetPos(double targetPos) {
@@ -41,17 +52,7 @@ public class clawAndArm {
         armRight.setPosition(aTargetPos);
     }
 
-    public void clawSpin(double clawSpinPos){
-
-        aClawSpinPos = clawSpinPos;
-
-        if (aClawSpinPos > 0.7) {
-            aClawSpinPos = 0.7;
-        }
-        if (aClawSpinPos < 0.42) {
-            aClawSpinPos = 0.42;
-        }
-
-        clawSpin.setPosition(aClawSpinPos);
+    public void clawSpin(double clawSpinPos) {
+        clawSpin.setPosition(clawSpinPos);
     }
 }
