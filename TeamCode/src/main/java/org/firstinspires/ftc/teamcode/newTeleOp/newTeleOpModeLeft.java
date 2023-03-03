@@ -180,7 +180,7 @@ public class newTeleOpModeLeft extends LinearOpMode {
             telemetry.addData("VerticalTargetPos:", inOutTake.verticalTargetPos);
             telemetry.addData("VerticalCurrentPos:", verticalSlides.liftMotor1.getCurrentPosition());
             telemetry.addData("Power", verticalSlides.publicPower);
-            telemetry.addData("ServoPos:", clawAndArm.armRight.getPosition());
+//            telemetry.addData("ServoPos:", clawAndArm.armRight.getPosition());
             telemetry.update();
         }
     }

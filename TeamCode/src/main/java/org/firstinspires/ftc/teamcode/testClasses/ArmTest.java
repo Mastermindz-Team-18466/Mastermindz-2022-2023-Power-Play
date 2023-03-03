@@ -10,12 +10,12 @@ import org.firstinspires.ftc.teamcode.newTeleOp.clawAndArm;
 
 @Config
 @TeleOp
-public class ClawDistance extends LinearOpMode {
+public class ArmTest extends LinearOpMode {
 
     clawAndArm clawAndArm;
 
-//    public static double endPos = 0.45;
-    public static double startPos = 0.5;
+    public static double endPos = 0;
+//    public static double startPos = 1;
 
     @Override
     public void runOpMode() {
@@ -23,7 +23,7 @@ public class ClawDistance extends LinearOpMode {
 
         waitForStart();
         while (opModeIsActive()) {
-            clawAndArm.clawControl(startPos);
+            clawAndArm.armTargetPos(endPos);
         }
     }
 }

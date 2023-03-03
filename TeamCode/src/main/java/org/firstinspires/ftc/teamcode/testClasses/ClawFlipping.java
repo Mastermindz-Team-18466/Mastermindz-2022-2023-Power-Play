@@ -28,7 +28,6 @@ public class ClawFlipping extends LinearOpMode {
                 flipServo.setPosition(endPos);
             }
         }
-        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         telemetry.addData("Running:", telemetry);
         telemetry.addData("endPos:", endPos);
         telemetry.addData("startPos:", startPos);

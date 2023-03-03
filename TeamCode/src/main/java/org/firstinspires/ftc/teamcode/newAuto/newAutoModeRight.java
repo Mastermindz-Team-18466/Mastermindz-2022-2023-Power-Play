@@ -38,6 +38,7 @@ public class newAutoModeRight extends LinearOpMode {
     int MIDDLE = 2;
     int RIGHT = 3;
 
+    double posCount = 0;
 
     boolean cyclePos = true;
 
@@ -109,14 +110,14 @@ public class newAutoModeRight extends LinearOpMode {
                 }
 
                 if (tagFound) {
-                    telemetry.addLine("Tag of interest is in sight!\n\nLocation data:"+tagOfInterest.id);
+                    telemetry.addLine("Tag of interest is in sight!\n\nLocation data:" + tagOfInterest.id);
                 } else {
                     telemetry.addLine("Don't see tag of interest :(");
 
                     if (tagOfInterest == null) {
                         telemetry.addLine("(The tag has never been seen)");
                     } else {
-                        telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:"+tagOfInterest.id);
+                        telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:" + tagOfInterest.id);
                     }
                 }
 
@@ -126,7 +127,7 @@ public class newAutoModeRight extends LinearOpMode {
                 if (tagOfInterest == null) {
                     telemetry.addLine("(The tag has never been seen)");
                 } else {
-                    telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:"+tagOfInterest.id);
+                    telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:" + tagOfInterest.id);
                 }
 
             }
@@ -141,7 +142,7 @@ public class newAutoModeRight extends LinearOpMode {
 
         /* Update the telemetry */
         if (tagOfInterest != null) {
-            telemetry.addLine("Tag snapshot:\n"+tagOfInterest.id);
+            telemetry.addLine("Tag snapshot:\n" + tagOfInterest.id);
             telemetry.update();
         } else {
             telemetry.addLine("No tag snapshot available, it was never sighted during the init loop :(");
@@ -173,9 +174,25 @@ public class newAutoModeRight extends LinearOpMode {
         while (opModeIsActive()) {
             long currentTime = System.currentTimeMillis();
 
+            Pose2d currentPose = drive.getPoseEstimate();
+
             inOutTake.verticalIntakeOffset = verticalOffset;
 
+
             if (currentTime - startTime >= 5000 && cycles < 5 && currentTime - startTime < 27250) {
+
+                if (!drive.isBusy() && posCount == 0) {
+                    drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(currentPose)
+                            .lineToConstantHeading(new Vector2d(1.5001 * 23.5 - Math.sqrt(40.5) - 5, -3 * 23.5 + 50 + Math.sqrt(40.5)))
+                            .build()
+                    );
+                } else if (!drive.isBusy() && posCount == 1) {
+                    drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(currentPose)
+                            .lineToConstantHeading(new Vector2d(1.5 * 23.5 - Math.sqrt(40.5) - 5, -3 * 23.5 + 50 + Math.sqrt(40.5)))
+                            .build()
+                    );
+                }
+
                 if (cyclePos && currentTime - previousAction >= 2000) {
 
                     inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);

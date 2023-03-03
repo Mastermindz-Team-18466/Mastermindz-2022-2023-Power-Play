@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.PoseStorage;
+import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.newAuto.Trajectories;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
@@ -29,6 +30,8 @@ public class newTeleOpModeRight extends LinearOpMode {
     clawAndArm clawAndArm;
     newVerticalSlides verticalSlides;
     newHorizontalSlides horizontalSlides;
+
+    DriveConstants driveConstants;
 
 
     int closedToIntakeCheck = 1;
@@ -78,6 +81,7 @@ public class newTeleOpModeRight extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
+
             driver.drive.update();
             inOutTake.update();
 
@@ -115,12 +119,16 @@ public class newTeleOpModeRight extends LinearOpMode {
                     if (currentGamepad2.dpad_up && !previousGamepad2.dpad_up) {
                         if (inOutTake.aInstructions == IntakeAndOuttake.Instructions.DEPOSIT) {
                             inOutTake.verticalOuttakeOffset += 35;
+                        } else if (inOutTake.aInstructions == IntakeAndOuttake.Instructions.TELE_STACK_INTAKE) {
+                            inOutTake.teleStackOffset += 25;
                         }
                     }
 
                     if (currentGamepad2.dpad_down && !previousGamepad2.dpad_down) {
                         if (inOutTake.aInstructions == IntakeAndOuttake.Instructions.DEPOSIT) {
                             inOutTake.verticalOuttakeOffset -= 35;
+                        } else if (inOutTake.aInstructions == IntakeAndOuttake.Instructions.TELE_STACK_INTAKE) {
+                            inOutTake.teleStackOffset -= 25;
                         }
                     }
 
@@ -139,7 +147,7 @@ public class newTeleOpModeRight extends LinearOpMode {
                         }
                     }
 
-                    if (currentGamepad2.y && !previousGamepad2.y){
+                    if (currentGamepad2.y && !previousGamepad2.y) {
                         inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
                         inOutTake.setaInstructions(IntakeAndOuttake.Instructions.CLOSED);
                         inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.INITIAL_CLOSE);
@@ -155,12 +163,12 @@ public class newTeleOpModeRight extends LinearOpMode {
                         driver.drive.slowMode = 2.5 / 2;
                     }
 
-                    if (currentGamepad2.back && !previousGamepad2.back){
+                    if (currentGamepad2.back && !previousGamepad2.back) {
                         inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.BOTTOM);
                         inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.RETRACT_HORIZONTAL_SLIDES);
                     }
 
-                    if (currentGamepad2.right_bumper && !previousGamepad2.right_bumper){
+                    if (currentGamepad2.right_bumper && !previousGamepad2.right_bumper) {
                         inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.MID);
                         inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.RETRACT_HORIZONTAL_SLIDES);
                     }
@@ -189,27 +197,36 @@ public class newTeleOpModeRight extends LinearOpMode {
                         inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.INTAKE_EXTENSION);
                     }
 
-                    if(currentGamepad1.b && !previousGamepad1.b){
+                    if (currentGamepad1.b && !previousGamepad1.b) {
                         inOutTake.turretOuttakeOffset = 585;
                     }
 
-                    if(currentGamepad1.x && !previousGamepad1.x){
+                    if (currentGamepad1.x && !previousGamepad1.x) {
                         inOutTake.turretOuttakeOffset = -585;
                     }
 
-                    if(currentGamepad1.a && !previousGamepad1.a){
+                    if (currentGamepad1.a && !previousGamepad1.a) {
                         inOutTake.turretOuttakeOffset = 0;
                     }
 
-                    if(currentGamepad1.dpad_up && !previousGamepad1.dpad_up){
+                    if (currentGamepad1.dpad_up && !previousGamepad1.dpad_up) {
                         inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP);
                         inOutTake.setaInstructions(IntakeAndOuttake.Instructions.GROUND_DEPOSIT);
-                        inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);                    }
+                        inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
+                    }
 
-                    if(currentGamepad1.dpad_down && !previousGamepad1.dpad_down){
+                    if (currentGamepad1.dpad_down && !previousGamepad1.dpad_down) {
                         inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP);
                         inOutTake.setaInstructions(IntakeAndOuttake.Instructions.GROUND_INTAKE);
-                        inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);                    }
+                        inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
+                    }
+
+                    if (currentGamepad1.y && !previousGamepad1.y) {
+                        inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
+                        inOutTake.setaInstructions(IntakeAndOuttake.Instructions.TELE_STACK_INTAKE);
+                        inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.INTAKE_EXTENSION);
+                    }
+
 
                     //cycle
                     if (currentGamepad2.a && !previousGamepad2.a) {
@@ -242,7 +259,7 @@ public class newTeleOpModeRight extends LinearOpMode {
             telemetry.addData("VerticalTargetPos:", inOutTake.verticalTargetPos);
             telemetry.addData("VerticalCurrentPos:", verticalSlides.liftMotor1.getCurrentPosition());
             telemetry.addData("Power", verticalSlides.publicPower);
-            telemetry.addData("ServoPos:", clawAndArm.armRight.getPosition());
+//            telemetry.addData("ServoPos:", clawAndArm.armRight.getPosition());
             telemetry.update();
         }
     }
