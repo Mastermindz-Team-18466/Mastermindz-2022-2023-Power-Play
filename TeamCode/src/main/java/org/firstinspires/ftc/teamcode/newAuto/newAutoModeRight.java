@@ -32,7 +32,7 @@ public class newAutoModeRight extends LinearOpMode {
     newVerticalSlides verticalSlides;
     newHorizontalSlides horizontalSlides;
 
-    private double verticalOffset = 300;
+    private double verticalOffset = 100;
 
     int LEFT = 1;
     int MIDDLE = 2;
@@ -176,7 +176,7 @@ public class newAutoModeRight extends LinearOpMode {
             inOutTake.verticalIntakeOffset = verticalOffset;
 
             if (currentTime - startTime >= 5000 && cycles < 5 && currentTime - startTime < 27250) {
-                if (cyclePos && currentTime - previousAction >= 2000) {
+                if (cyclePos && currentTime - previousAction >= 2850) {
 
                     inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
                     inOutTake.setaInstructions(IntakeAndOuttake.Instructions.AUTO_RIGHT_INTAKE);
@@ -194,7 +194,7 @@ public class newAutoModeRight extends LinearOpMode {
 
                     cyclePos = true;
                     cycles++;
-                    verticalOffset -= 30;
+                    verticalOffset -= 20;
                 }
             } else if (currentTime - startTime >= 27250 && park) {
                 System.out.println("Entered");
