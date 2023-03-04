@@ -222,19 +222,21 @@ public class newAutoModeRight extends LinearOpMode {
                 switch (position) {
                     case 1:
                         drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                                .strafeLeft(26.5)
+                                .lineToConstantHeading(new Vector2d(1.5 * 23.5 - 2, -3 * 23.5 + 50))
+                                .lineToSplineHeading(new Pose2d(1.5 * 23.5 - 25.5, -3 * 23.5 + 50, Math.PI / 2))
                                 .build()
                         );
                         break;
                     case 2:
                         drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                                .strafeLeft(3)
+                                .lineToSplineHeading(new Pose2d(1.5 * 23.5 - 2, -3 * 23.5 + 50, Math.PI / 2))
                                 .build()
                         );
                         break;
                     case 3:
                         drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                                .strafeRight(16.5)
+                                .lineToConstantHeading(new Vector2d(1.5 * 23.5 - 2, -3 * 23.5 + 50))
+                                .lineToSplineHeading(new Pose2d(1.5 * 23.5 + 21.5, -3 * 23.5 + 50, Math.PI / 2))
                                 .build()
                         );
                         break;
