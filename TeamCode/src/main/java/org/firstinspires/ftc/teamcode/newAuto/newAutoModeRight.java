@@ -209,6 +209,10 @@ public class newAutoModeRight extends LinearOpMode {
                     cycles++;
                     verticalOffset -= 100;
                 }
+            } else if (currentTime - startTime >= 26750 && currentTime - startTime < 27250) {
+                inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP);
+                inOutTake.setaInstructions(IntakeAndOuttake.Instructions.STRAIGHT_DEPOSIT);
+                inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.DEPOSIT_CONE);
             } else if (currentTime - startTime >= 27250 && park) {
                 System.out.println("Entered");
                 inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
