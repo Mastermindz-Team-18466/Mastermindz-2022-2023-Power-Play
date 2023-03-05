@@ -90,7 +90,7 @@ public class newAutoModeLeft extends LinearOpMode {
         });
 
         inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
-        inOutTake.setaInstructions(IntakeAndOuttake.Instructions.AUTO_CLOSE);
+        inOutTake.setaInstructions(IntakeAndOuttake.Instructions.LEFT_AUTO_CLOSE);
         inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.INITIAL_CLOSE);
 
         while (!isStarted() && !isStopRequested()) {
@@ -140,6 +140,7 @@ public class newAutoModeLeft extends LinearOpMode {
         /*
          * The START command just came in: now work off the latest snapshot acquired
          * during the init loop.
+         *
          */
 
         /* Update the telemetry */
@@ -154,15 +155,20 @@ public class newAutoModeLeft extends LinearOpMode {
         int position = tagOfInterest.id;
 
 
-        Vector2d endPosition = new Vector2d(-(1.5 * 23.5 - Math.sqrt(37.5) - 0), -3 * 23.5 + 49 + Math.sqrt(37.5));
+        Vector2d endPosition = new Vector2d(-(1.5 * 23.5 - Math.sqrt(37.5) + 2), -3 * 23.5 + 49 + Math.sqrt(37.5));
         drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(startPose)
-                .UNSTABLE_addTemporalMarkerOffset(2.6, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(0.1, () -> {
+                    inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
+                    inOutTake.setaInstructions(IntakeAndOuttake.Instructions.AUTO_TURRET_POS);
+                    inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.INITIAL_CLOSE);
+                })
+                .UNSTABLE_addTemporalMarkerOffset(2.7, () -> {
                     inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP);
                     inOutTake.setaInstructions(IntakeAndOuttake.Instructions.RIGHT_STACK_DEPOSIT);
                     inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
                 })
-                .lineToSplineHeading(new Pose2d(-(1.5 * 23.5 - 3), -3 * 23.5 + 60, Math.PI / 2 - Math.toRadians(40)))
-                .lineToSplineHeading(new Pose2d(-(1.5 * 23.5 - 3), -3 * 23.5 + 49, Math.PI / 2 - Math.toRadians(40)))
+                .lineToSplineHeading(new Pose2d(-(1.5 * 23.5 - 4), -3 * 23.5 + 60, Math.PI / 2 - Math.toRadians(40)))
+                .lineToSplineHeading(new Pose2d(-(1.5 * 23.5 - 4), -3 * 23.5 + 49, Math.PI / 2 - Math.toRadians(40)))
                 .lineToConstantHeading(endPosition)
                 .build()
         );
