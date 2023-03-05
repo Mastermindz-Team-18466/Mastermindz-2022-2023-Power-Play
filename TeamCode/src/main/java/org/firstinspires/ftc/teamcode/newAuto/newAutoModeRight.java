@@ -180,7 +180,7 @@ public class newAutoModeRight extends LinearOpMode {
             inOutTake.verticalIntakeOffset = verticalOffset;
 
 
-            if (currentTime - startTime >= 5000 && cycles < 5 && currentTime - startTime < 27250) {
+            if (currentTime - startTime >= 5000 && cycles < 5 && currentTime - startTime < 25400) {
 
                 if (!drive.isBusy()) {
                     drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(currentPose)
@@ -209,15 +209,12 @@ public class newAutoModeRight extends LinearOpMode {
                     cycles++;
                     verticalOffset -= 100;
                 }
-            } else if (currentTime - startTime >= 26750 && currentTime - startTime < 27250) {
+            } else if (currentTime - startTime >= 25400 && currentTime - startTime < 27200) {
                 inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP);
                 inOutTake.setaInstructions(IntakeAndOuttake.Instructions.STRAIGHT_DEPOSIT);
                 inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.DEPOSIT_CONE);
-            } else if (currentTime - startTime >= 27250 && park) {
+            } else if (currentTime - startTime >= 27200 && park) {
                 System.out.println("Entered");
-                inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
-                inOutTake.setaInstructions(IntakeAndOuttake.Instructions.CLOSED);
-                inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.INITIAL_CLOSE);
 
                 switch (position) {
                     case 1:

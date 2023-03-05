@@ -120,7 +120,7 @@ public class newTeleOpModeRight extends LinearOpMode {
                         if (inOutTake.aInstructions == IntakeAndOuttake.Instructions.DEPOSIT) {
                             inOutTake.verticalOuttakeOffset += 35;
                         } else if (inOutTake.aInstructions == IntakeAndOuttake.Instructions.TELE_STACK_INTAKE) {
-                            inOutTake.teleStackOffset += 25;
+                            inOutTake.teleStackOffset += 100;
                         }
                     }
 
@@ -128,7 +128,7 @@ public class newTeleOpModeRight extends LinearOpMode {
                         if (inOutTake.aInstructions == IntakeAndOuttake.Instructions.DEPOSIT) {
                             inOutTake.verticalOuttakeOffset -= 35;
                         } else if (inOutTake.aInstructions == IntakeAndOuttake.Instructions.TELE_STACK_INTAKE) {
-                            inOutTake.teleStackOffset -= 25;
+                            inOutTake.teleStackOffset -= 100;
                         }
                     }
 
@@ -225,6 +225,12 @@ public class newTeleOpModeRight extends LinearOpMode {
                         inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
                         inOutTake.setaInstructions(IntakeAndOuttake.Instructions.TELE_STACK_INTAKE);
                         inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.INTAKE_EXTENSION);
+                    }
+
+                    if (currentGamepad1.right_bumper && !previousGamepad1.right_bumper){
+                        inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
+                        inOutTake.setaInstructions(IntakeAndOuttake.Instructions.TELE_STACK_DEPOSIT);
+                        inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
                     }
 
 

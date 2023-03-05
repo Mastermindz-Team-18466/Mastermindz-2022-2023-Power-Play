@@ -20,8 +20,8 @@ public class MeepMeepTesting {
                                 //.lineToConstantHeading(new Vector2d(1.5 * 23.5 - Math.sqrt(37.5) - 0, -3 * 23.5 + 49 + Math.sqrt(37.5)))
                                 //.waitSeconds(2)
 
-//                                .lineToConstantHeading(new Vector2d(1.5 * 23.5 - 2, -3 * 23.5 + 50))
-//                                .lineToSplineHeading(new Pose2d(1.5 * 23.5 - 25.5, -3 * 23.5 + 50, Math.PI / 2))
+                                .lineToConstantHeading(new Vector2d(1.5 * 23.5 - 2, -3 * 23.5 + 50))
+                                .lineToSplineHeading(new Pose2d(1.5 * 23.5 - 25.5, -3 * 23.5 + 50, Math.PI / 2))
 //
 //
 //                                .lineToConstantHeading(new Vector2d(1.5 * 23.5 - 2, -3 * 23.5 + 50))

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.testClasses;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -24,6 +25,8 @@ public class ClawDistance extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()) {
             clawAndArm.clawControl(startPos);
+            clawAndArm.armTargetPos(0.7);
+            clawAndArm.clawSpin(1);
         }
     }
 }
