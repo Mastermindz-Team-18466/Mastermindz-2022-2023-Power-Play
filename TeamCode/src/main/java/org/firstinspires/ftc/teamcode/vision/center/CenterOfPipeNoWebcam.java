@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.vision.center;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.controller.PIDController;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.AnalogInput;
@@ -9,6 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 @Config
 @TeleOp
+@Disabled
 public class CenterOfPipeNoWebcam extends LinearOpMode {
 
     private PIDController controller;

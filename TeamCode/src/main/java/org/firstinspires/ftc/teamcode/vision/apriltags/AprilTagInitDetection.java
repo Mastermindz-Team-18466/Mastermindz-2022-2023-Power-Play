@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.vision.apriltags;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 // turret_rotation = tan((x2 - x1) / (y2 - y1)) * 180 / pi - current_heading
 
 @TeleOp
+@Disabled
 public class AprilTagInitDetection extends LinearOpMode
 {
     OpenCvCamera camera;

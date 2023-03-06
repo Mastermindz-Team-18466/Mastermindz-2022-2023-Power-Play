@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.vision.center;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -10,6 +11,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
 @TeleOp
+@Disabled
 public class CenterOfConeRedInitDetection extends LinearOpMode {
     OpenCvCamera camera;
     CenterOfConeRedPipeline centerOfConePipeline;
