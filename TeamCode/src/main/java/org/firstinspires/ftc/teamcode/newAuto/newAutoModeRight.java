@@ -9,7 +9,6 @@ import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityCons
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
@@ -38,23 +37,15 @@ public class newAutoModeRight extends LinearOpMode {
     newHorizontalSlides horizontalSlides;
 
     boolean otherSideCheck = true;
-
-    private double verticalOffset = 580;
-
-
     int LEFT = 1;
     int MIDDLE = 2;
     int RIGHT = 3;
-
     double posCount = 0;
-
     boolean cyclePos = true;
-
     Pose2d startPose = new Pose2d(1.5 * 23.5, -3 * 23.5, Math.PI / 2);
-
     boolean park = true;
-
     AprilTagDetection tagOfInterest = null;
+    private double verticalOffset = 580;
 
     @Override
     public void runOpMode() {
@@ -162,7 +153,7 @@ public class newAutoModeRight extends LinearOpMode {
 
         Vector2d endPosition = new Vector2d(1.5 * 23.5 - Math.sqrt(37.5) - 0, -3 * 23.5 + 49 + Math.sqrt(37.5));
         drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(startPose)
-                .UNSTABLE_addTemporalMarkerOffset(2.6, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(1.7, () -> {
                     inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP);
                     inOutTake.setaInstructions(IntakeAndOuttake.Instructions.RIGHT_STACK_DEPOSIT);
                     inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
@@ -197,7 +188,7 @@ public class newAutoModeRight extends LinearOpMode {
 
             inOutTake.verticalIntakeOffset = verticalOffset;
 
-            if (currentTime - startTime >= 3600 && cycles <= 4) {
+            if (currentTime - startTime >= 3000 && cycles <= 4) {
 
                 if (!drive.isBusy()) {
                     drive.followTrajectorySequenceAsync(
@@ -228,7 +219,7 @@ public class newAutoModeRight extends LinearOpMode {
                     previousAction = System.currentTimeMillis();
 
                     cyclePos = false;
-                } else if (!cyclePos && currentTime - previousAction >= 1800) {
+                } else if (!cyclePos && currentTime - previousAction >= 1720) {
                     inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP);
                     inOutTake.setaInstructions(IntakeAndOuttake.Instructions.RIGHT_STACK_DEPOSIT);
                     inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
@@ -247,7 +238,7 @@ public class newAutoModeRight extends LinearOpMode {
                             inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.INITIAL_CLOSE);
                         })
                         .resetConstraints()
-                        .waitSeconds(1)
+                        .waitSeconds(0.5)
                         .lineToLinearHeading(new Pose2d(1.5 * 23.5 - 3, -3 * 23.5 + 45, Math.PI / 2 + Math.toRadians(90)))
                         .lineToLinearHeading(new Pose2d(-(1.5 * 23.5 + 5), -3 * 23.5 + 45, Math.PI / 2 + Math.toRadians(90)))
                         .setConstraints(new TrajectoryVelocityConstraint() {
@@ -265,13 +256,15 @@ public class newAutoModeRight extends LinearOpMode {
                             inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP);
                             inOutTake.setaInstructions(IntakeAndOuttake.Instructions.LEFT_STACK_DEPOSIT);
                             inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
-                            cyclePos = true;
                         })
                         .lineToLinearHeading(new Pose2d(-(1.5 * 23.5 - Math.sqrt(85) + 2.5 + 2), -3 * 23.5 + 50 + Math.sqrt(85), Math.PI / 2 + Math.toRadians(130)))
+                        .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                            otherSideCheck = false;
+                            cyclePos = true;
+                        })
                         .build()
                 );
-            }
-            else if (currentTime - startTime > 25000 && currentTime - startTime < 28000 && otherSideCheck == false) {
+            } else if (currentTime - startTime > 23000 && currentTime - startTime < 28000 && otherSideCheck == false) {
                 verticalOffset = 580;
 
                 if (cyclePos && currentTime - previousAction >= 1900) {
