@@ -153,7 +153,7 @@ public class newAutoModeRight extends LinearOpMode {
 
         Vector2d endPosition = new Vector2d(1.5 * 23.5 - Math.sqrt(37.5) - 0, -3 * 23.5 + 49 + Math.sqrt(37.5));
         drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(startPose)
-                .UNSTABLE_addTemporalMarkerOffset(1.7, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(1, () -> {
                     inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP);
                     inOutTake.setaInstructions(IntakeAndOuttake.Instructions.RIGHT_STACK_DEPOSIT);
                     inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
@@ -238,7 +238,6 @@ public class newAutoModeRight extends LinearOpMode {
                             inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.INITIAL_CLOSE);
                         })
                         .resetConstraints()
-                        .waitSeconds(0.5)
                         .lineToLinearHeading(new Pose2d(1.5 * 23.5 - 3, -3 * 23.5 + 45, Math.PI / 2 + Math.toRadians(90)))
                         .lineToLinearHeading(new Pose2d(-(1.5 * 23.5 + 5), -3 * 23.5 + 45, Math.PI / 2 + Math.toRadians(90)))
                         .setConstraints(new TrajectoryVelocityConstraint() {
@@ -252,7 +251,7 @@ public class newAutoModeRight extends LinearOpMode {
                                 return 50;
                             }
                         })
-                        .UNSTABLE_addTemporalMarkerOffset(1, () -> {
+                        .UNSTABLE_addTemporalMarkerOffset(0.2, () -> {
                             inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP);
                             inOutTake.setaInstructions(IntakeAndOuttake.Instructions.LEFT_STACK_DEPOSIT);
                             inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
@@ -261,11 +260,11 @@ public class newAutoModeRight extends LinearOpMode {
                         .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                             otherSideCheck = false;
                             cyclePos = true;
+                            verticalOffset = 580;
                         })
                         .build()
                 );
             } else if (currentTime - startTime > 23000 && currentTime - startTime < 28000 && otherSideCheck == false) {
-                verticalOffset = 580;
 
                 if (cyclePos && currentTime - previousAction >= 1900) {
 

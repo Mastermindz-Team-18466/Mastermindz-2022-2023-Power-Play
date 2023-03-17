@@ -82,17 +82,23 @@ public class IntakeAndOuttake {
                                     clawSpin = 1;
                                     verticalTargetPos = 300;
                                     horizontalTargetPos = 0.05;
+                                    turretTargetPos = 1300;
+                                    armTargetPos = 0.4;
                                     aSpecificInstruction = specificInstructions.ARM_DELAY;
-                                }
-                                break;
-                            case ARM_DELAY:
-                                if (System.currentTimeMillis() - prevAction > 500) {
-                                    armTargetPos = 0.7;
-                                    verticalTargetPos = 10;
-                                    turretTargetPos = 0;
                                     prevAction = System.currentTimeMillis();
                                 }
                                 break;
+                            case ARM_DELAY:
+                                if (System.currentTimeMillis() - prevAction > 300) {
+                                    armTargetPos = 0.7;
+                                    verticalTargetPos = 10;
+                                    turretTargetPos = 1500;
+                                    prevAction = System.currentTimeMillis();
+                                    aSpecificInstruction = specificInstructions.DELAY1;
+                                }
+                                break;
+                            case DELAY1:
+                                
                         }
                         break;
 
