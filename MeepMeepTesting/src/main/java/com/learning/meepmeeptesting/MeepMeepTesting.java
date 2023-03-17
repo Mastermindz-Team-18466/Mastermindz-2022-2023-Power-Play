@@ -21,12 +21,10 @@ public class MeepMeepTesting {
                                 .lineToSplineHeading(new Pose2d(1.5 * 23.5 - 3, -3 * 23.5 + 63, Math.PI / 2 + Math.toRadians(40)))
                                 .lineToSplineHeading(new Pose2d(1.5 * 23.5 - 3, -3 * 23.5 + 49, Math.PI / 2 + Math.toRadians(40)))
                                 .lineToConstantHeading(endPosition)
-                                .lineToLinearHeading(new Pose2d(1.5 * 23.5 - 3, -3 * 23.5 + 46.5,Math.PI / 2 + Math.toRadians(90)))
-                                .lineToLinearHeading(new Pose2d(-(1.5 * 23.5 + 5), -3 * 23.5 + 46.5, Math.PI / 2 + Math.toRadians(90)))
-                                .lineToLinearHeading(new Pose2d(-(1.5 * 23.5 + 2.5) + Math.sqrt(75), -3 * 23.5 + 51 + Math.sqrt(75), Math.PI / 2 + Math.toRadians(130)))
-                                .waitSeconds(5)
-                                .lineToSplineHeading(new Pose2d(-(1.5 * 23.5 + 2.5) + Math.sqrt(45), -3 * 23.5 + 47.5 + Math.sqrt(45), Math.PI / 2 + Math.toRadians(90)))
-                                .lineToSplineHeading(new Pose2d(-(1.5 * 23.5 + 26.5), -3 * 23.5 + 47.5 + Math.sqrt(45), Math.PI / 2 + Math.toRadians(90)))
+                                .lineToLinearHeading(new Pose2d(1.5 * 23.5 - 3, -3 * 23.5 + 45, Math.PI / 2 + Math.toRadians(90)))
+                                .lineToLinearHeading(new Pose2d(-(1.5 * 23.5 + 5), -3 * 23.5 + 45, Math.PI / 2 + Math.toRadians(90)))
+                                .lineToLinearHeading(new Pose2d(-(1.5 * 23.5 - Math.sqrt(70) + 3), -3 * 23.5 + 51 + Math.sqrt(70), Math.PI / 2 + Math.toRadians(130)))
+
                                 .build()
                 );
 
