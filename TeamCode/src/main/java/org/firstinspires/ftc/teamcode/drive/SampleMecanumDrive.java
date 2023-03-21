@@ -69,7 +69,7 @@ public class SampleMecanumDrive extends MecanumDrive {
     private final TrajectorySequenceRunner trajectorySequenceRunner;
     private final TrajectoryFollower follower;
 
-    public double slowMode = 2.5 / 2;
+    public double slowMode = 1;
 
     public final DcMotorEx leftFront;
     public final DcMotorEx leftRear;

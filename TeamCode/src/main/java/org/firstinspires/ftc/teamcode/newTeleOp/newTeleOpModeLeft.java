@@ -155,17 +155,21 @@ public class newTeleOpModeLeft extends LinearOpMode {
                         closedToIntakeCheck = 1;
                     }
 
-                    if (gamepad1.right_trigger > 0.5) {
-                        driver.drive.slowMode = 1;
-                    } else if (gamepad1.left_trigger > 0.5) {
+                    if (gamepad1.left_trigger > 0.5) {
                         driver.drive.slowMode = 2.5;
                     } else {
-                        driver.drive.slowMode = 2.5 / 2;
+                        driver.drive.slowMode = 1;
                     }
 
                     if (currentGamepad2.back && !previousGamepad2.back) {
                         inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.BOTTOM);
                         inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.RETRACT_HORIZONTAL_SLIDES);
+                    }
+
+                    if (currentGamepad1.left_bumper && !previousGamepad1.left_bumper){
+                        inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
+                        inOutTake.setaInstructions(IntakeAndOuttake.Instructions.PARK);
+                        inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.INTAKE_EXTENSION);
                     }
 
                     if (currentGamepad2.right_bumper && !previousGamepad2.right_bumper) {
@@ -231,6 +235,13 @@ public class newTeleOpModeLeft extends LinearOpMode {
                         inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
                         inOutTake.setaInstructions(IntakeAndOuttake.Instructions.TELE_STACK_DEPOSIT);
                         inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
+                        inOutTake.teleStackOffset -= 100;
+                    }
+
+                    if (currentGamepad2.right_stick_button && !previousGamepad2.right_stick_button){
+                        inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
+                        inOutTake.setaInstructions(IntakeAndOuttake.Instructions.NO_EXTEND_INTAKE);
+                        inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.INTAKE_EXTENSION);
                     }
 
 
