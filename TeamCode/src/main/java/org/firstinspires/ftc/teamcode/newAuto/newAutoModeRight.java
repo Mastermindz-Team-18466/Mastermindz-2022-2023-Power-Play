@@ -210,7 +210,7 @@ public class newAutoModeRight extends LinearOpMode {
                     );
                 }
 
-                if (cyclePos && currentTime - previousAction >= 1800) {
+                if (cyclePos && currentTime - previousAction >= 1920) {
 
                     inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
                     inOutTake.setaInstructions(IntakeAndOuttake.Instructions.AUTO_RIGHT_INTAKE);
@@ -219,7 +219,7 @@ public class newAutoModeRight extends LinearOpMode {
                     previousAction = System.currentTimeMillis();
 
                     cyclePos = false;
-                } else if (!cyclePos && currentTime - previousAction >= 1800) {
+                } else if (!cyclePos && currentTime - previousAction >= 1680) {
                     inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP);
                     inOutTake.setaInstructions(IntakeAndOuttake.Instructions.RIGHT_STACK_DEPOSIT);
                     inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
@@ -257,7 +257,7 @@ public class newAutoModeRight extends LinearOpMode {
                                 return 50;
                             }
                         })
-                        .lineToLinearHeading(new Pose2d(-(1.5 * 23.5 - Math.sqrt(85) + 2.5 + 7.5), -3 * 23.5 + 49.5 + Math.sqrt(85), Math.PI / 2 + Math.toRadians(130)))
+                        .lineToLinearHeading(new Pose2d(-(1.5 * 23.5 - Math.sqrt(85) + 2.5 + 4.5), -3 * 23.5 + 50.5 + Math.sqrt(85), Math.PI / 2 + Math.toRadians(130)))
                         .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                             otherSideCheck = false;
                             cyclePos = true;
@@ -267,7 +267,7 @@ public class newAutoModeRight extends LinearOpMode {
                 );
             } else if (currentTime - startTime > 20900 && currentTime - startTime < 28849 && otherSideCheck == false) {
 
-                if (cyclePos && currentTime - previousAction >= 1800) {
+                if (cyclePos && currentTime - previousAction >= 1920) {
 
                     inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
                     inOutTake.setaInstructions(IntakeAndOuttake.Instructions.AUTO_LEFT_INTAKE);
@@ -276,7 +276,7 @@ public class newAutoModeRight extends LinearOpMode {
                     previousAction = System.currentTimeMillis();
 
                     cyclePos = false;
-                } else if (!cyclePos && currentTime - previousAction >= 1800) {
+                } else if (!cyclePos && currentTime - previousAction >= 1680) {
                     inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP);
                     inOutTake.setaInstructions(IntakeAndOuttake.Instructions.LEFT_STACK_DEPOSIT);
                     inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
@@ -287,17 +287,15 @@ public class newAutoModeRight extends LinearOpMode {
                     cycles++;
                     verticalOffset -= 100;
                 }
-            }
-            else if (currentTime - startTime >= 28900 && currentTime - startTime < 29300) {
+            } else if (currentTime - startTime >= 28900 && currentTime - startTime < 29300) {
                 inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP);
                 inOutTake.setaInstructions(IntakeAndOuttake.Instructions.LAST_CONE);
                 inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.DEPOSIT_CONE);
-            }
-            else if (currentTime - startTime >= 29300 && park) {
+            } else if (currentTime - startTime >= 29400 && park) {
                 System.out.println("Entered");
 
                 inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
-                inOutTake.setaInstructions(IntakeAndOuttake.Instructions.DRIVING);
+                inOutTake.setaInstructions(IntakeAndOuttake.Instructions.AUTO_TO_TELE);
                 inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.INTAKE_EXTENSION);
 
                 Pose2d endPose = new Pose2d(-(1.5 * 23.5 + 1.5) + Math.sqrt(45), -3 * 23.5 + 53 + Math.sqrt(45), Math.PI / 2 + Math.toRadians(90));

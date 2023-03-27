@@ -27,11 +27,11 @@ public class clawAndArm {
         aClawTargetPos = clawTargetPos;
 
 
-        if (aClawTargetPos > 0.5) {
-            aClawTargetPos = 0.5;
+        if (aClawTargetPos >= 0.5) {
+            aClawTargetPos = 0.54;
         }
         if (aClawTargetPos < 0.2) {
-            aClawTargetPos = 0.2;
+            aClawTargetPos = 0.21;
         }
 
         claw.setPosition(aClawTargetPos);

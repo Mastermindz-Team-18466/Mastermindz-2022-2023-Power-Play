@@ -166,7 +166,7 @@ public class newTeleOpModeLeft extends LinearOpMode {
                         inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.RETRACT_HORIZONTAL_SLIDES);
                     }
 
-                    if (currentGamepad1.left_bumper && !previousGamepad1.left_bumper){
+                    if (currentGamepad1.back && !previousGamepad1.back){
                         inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
                         inOutTake.setaInstructions(IntakeAndOuttake.Instructions.PARK);
                         inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.INTAKE_EXTENSION);
