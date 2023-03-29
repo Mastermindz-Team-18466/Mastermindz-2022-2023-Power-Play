@@ -45,7 +45,7 @@ public class newAutoModeRight extends LinearOpMode {
     Pose2d startPose = new Pose2d(1.5 * 23.5, -3 * 23.5, Math.PI / 2);
     boolean park = true;
     AprilTagDetection tagOfInterest = null;
-    private double verticalOffset = 660;
+    private double verticalOffset = 620;
 
     @Override
     public void runOpMode() {

@@ -28,7 +28,7 @@ public class clawAndArm {
 
 
         if (aClawTargetPos >= 0.5) {
-            aClawTargetPos = 0.54;
+            aClawTargetPos = 0.555;
         }
         if (aClawTargetPos < 0.2) {
             aClawTargetPos = 0.21;
