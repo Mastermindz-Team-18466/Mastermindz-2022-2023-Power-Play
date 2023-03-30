@@ -41,6 +41,8 @@ public class newTeleOpModeLeft extends LinearOpMode {
     public void runOpMode() {
         TeleOpFieldCentric driver = new TeleOpFieldCentric(hardwareMap, new SampleMecanumDrive(hardwareMap), gamepad1);
 
+        driver.drive.autoCheck = false;
+
         turret = new newTurret(hardwareMap);
         clawAndArm = new clawAndArm(hardwareMap);
         verticalSlides = new newVerticalSlides(hardwareMap);

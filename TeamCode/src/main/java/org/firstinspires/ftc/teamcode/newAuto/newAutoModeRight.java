@@ -51,6 +51,8 @@ public class newAutoModeRight extends LinearOpMode {
     public void runOpMode() {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
+        drive.autoCheck = true;
+
         drive.setPoseEstimate(startPose);
 
         AprilTagDetectionPipeline aprilTagDetectionPipeline = new AprilTagDetectionPipeline(0.166, 587.272, 578.272, 402.145, 221.506);
