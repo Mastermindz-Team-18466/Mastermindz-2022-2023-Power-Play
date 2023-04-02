@@ -45,7 +45,7 @@ public class newAutoModeRight extends LinearOpMode {
     Pose2d startPose = new Pose2d(1.5 * 23.5, -3 * 23.5, Math.PI / 2);
     boolean park = true;
     AprilTagDetection tagOfInterest = null;
-    private double verticalOffset = 620;
+    private double verticalOffset = 635;
 
     @Override
     public void runOpMode() {
@@ -259,11 +259,11 @@ public class newAutoModeRight extends LinearOpMode {
                                 return 50;
                             }
                         })
-                        .lineToLinearHeading(new Pose2d(-(1.5 * 23.5 - Math.sqrt(85) + 2.5 + 4.5), -3 * 23.5 + 50.5 + Math.sqrt(85), Math.PI / 2 + Math.toRadians(130)))
+                        .lineToLinearHeading(new Pose2d(-(1.5 * 23.5 - Math.sqrt(85) + 2.5 + 6), -3 * 23.5 + 50 + Math.sqrt(85), Math.PI / 2 + Math.toRadians(130)))
                         .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                             otherSideCheck = false;
                             cyclePos = true;
-                            verticalOffset = 650;
+                            verticalOffset = 690;
                         })
                         .build()
                 );

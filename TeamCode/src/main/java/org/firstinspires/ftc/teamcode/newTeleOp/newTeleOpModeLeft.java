@@ -157,9 +157,15 @@ public class newTeleOpModeLeft extends LinearOpMode {
                         closedToIntakeCheck = 1;
                     }
 
-                    if (gamepad1.left_trigger > 0.5) {
-                        driver.drive.slowMode = 2.5;
-                    } else {
+                    if (gamepad1.left_trigger > 0.2 || inOutTake.horizontalTargetPos > 0.2) {
+                        driver.drive.slowMode = 4.8;
+                    }
+
+                    else if ((gamepad1.right_stick_x > 0.05 || gamepad1.right_stick_x < -0.05) && !(gamepad1.right_trigger > 0.5) && !(gamepad1.left_trigger > 0.2)){
+                        driver.drive.slowMode = 2;
+                    }
+
+                    else {
                         driver.drive.slowMode = 1;
                     }
 
@@ -243,6 +249,12 @@ public class newTeleOpModeLeft extends LinearOpMode {
                     if (currentGamepad2.right_stick_button && !previousGamepad2.right_stick_button){
                         inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
                         inOutTake.setaInstructions(IntakeAndOuttake.Instructions.NO_EXTEND_INTAKE);
+                        inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.INTAKE_EXTENSION);
+                    }
+
+                    if (currentGamepad2.left_stick_button && !previousGamepad2.left_stick_button){
+                        inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
+                        inOutTake.setaInstructions(IntakeAndOuttake.Instructions.EXTEND_INTAKE);
                         inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.INTAKE_EXTENSION);
                     }
 
