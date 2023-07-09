@@ -23,7 +23,7 @@ import java.util.List;
 
 @TeleOp
 @Config
-@Disabled
+//@Disabled
 public class turretTest extends OpMode {
     private PIDController controller;
 

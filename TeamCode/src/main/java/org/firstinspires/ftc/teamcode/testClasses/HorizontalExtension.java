@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @Config
+//@Disabled
 @TeleOp(name = "Horiz_Test", group = "Test")
 public class HorizontalExtension extends LinearOpMode {
 
