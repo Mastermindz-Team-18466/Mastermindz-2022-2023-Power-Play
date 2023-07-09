@@ -3,29 +3,72 @@ package org.firstinspires.ftc.teamcode.testClasses;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
-import org.firstinspires.ftc.teamcode.newTeleOp.clawAndArm;
+import com.qualcomm.robotcore.hardware.Servo;
 
 @Config
-@TeleOp
-@Disabled
+@TeleOp(name = "ArmTest", group = "Test")
 public class ArmTest extends LinearOpMode {
+    private Servo rightServo, leftServo;
 
-    clawAndArm clawAndArm;
+    //open: 0.07 / 0.0
+    //close: 0.07/0.03
 
-    public static double endPos = 0;
-//    public static double startPos = 1;
+    static final double INCREMENT = 0.01;     // amount to slew servo each CYCLE_MS cycle
+    static final int CYCLE_MS = 50 / 6;     // period of each cycle
+    public static double MAX_POS = 0.7;     // Maximum rotational position
+    public static double MIN_POS = 0.05;
+
+    double positionLeft = (MAX_POS - MIN_POS) / 2;
+    double positionRight = (MAX_POS - MIN_POS) / 2;
 
     @Override
-    public void runOpMode() {
-        clawAndArm = new clawAndArm(hardwareMap);
+    public void runOpMode() throws InterruptedException {
+        rightServo = hardwareMap.servo.get("armRight");
+        leftServo = hardwareMap.servo.get("armLeft");
 
         waitForStart();
         while (opModeIsActive()) {
-            clawAndArm.armTargetPos(endPos);
+            if (gamepad1.a) {
+                while (positionLeft != MAX_POS && positionRight != MIN_POS) {
+                    positionLeft += INCREMENT;
+                    positionRight -= INCREMENT;
+
+                    if (positionLeft >= MAX_POS) {
+                        positionLeft = MAX_POS;
+                    }
+
+                    if (positionRight <= MIN_POS) {
+                        positionRight = MIN_POS;
+                    }
+
+                    rightServo.setPosition(positionRight);
+                    leftServo.setPosition(positionLeft);
+                    sleep(CYCLE_MS);
+                }
+
+            } else if (gamepad1.b) {
+                while (positionLeft != MIN_POS && positionRight != MAX_POS) {
+                    positionLeft -= INCREMENT;
+                    positionRight += INCREMENT;
+
+                    if (positionLeft <= MIN_POS) {
+                        positionLeft = MIN_POS;
+                    }
+
+                    if (positionRight >= MAX_POS) {
+                        positionRight = MAX_POS;
+                    }
+
+                    rightServo.setPosition(positionRight);
+                    leftServo.setPosition(positionLeft);
+                    sleep(CYCLE_MS);
+                }
+                telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+                telemetry.addData("Running:", telemetry);
+                telemetry.update();
+            }
         }
     }
 }

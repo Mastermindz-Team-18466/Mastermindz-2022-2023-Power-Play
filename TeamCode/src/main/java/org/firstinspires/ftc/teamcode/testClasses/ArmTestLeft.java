@@ -8,23 +8,23 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @Config
-@TeleOp(name = "ClawTest", group = "Test")
-public class ClawDistance extends LinearOpMode {
-
-    public static double endPos1 = 1; //21.5 in
-    public static double endPos2 = 0.1;
-    private Servo claw;
+@TeleOp(name = "AxonLeft", group = "Test")
+public class ArmTestLeft extends LinearOpMode {
+    public static double endPos1 = 0.5; //21.5 in
+    public static double endPos2 = 0.4;
+    private Servo rightServo, leftServo;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        claw = hardwareMap.servo.get("claw");
+        rightServo = hardwareMap.servo.get("armRight");
+        leftServo = hardwareMap.servo.get("armLeft");
 
         waitForStart();
         while (opModeIsActive()) {
             if (gamepad1.a) {
-                claw.setPosition(endPos1);
+                leftServo.setPosition(endPos1);
             } else if (gamepad1.b) {
-                claw.setPosition(endPos2);
+                leftServo.setPosition(endPos2);
             }
         }
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());

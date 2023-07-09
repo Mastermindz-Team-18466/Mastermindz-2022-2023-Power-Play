@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class newHorizontalSlides {
-    public static double offset = 0.1;
+    public static double offset = 0;
     private Servo rightServo;
     private Servo leftServo;
 
@@ -23,7 +23,9 @@ public class newHorizontalSlides {
             targetPosition = 0;
         }
 
+        targetPosition = 0.6 + ((targetPosition - 0.05) * (0.4)) / (0.46);
+
         rightServo.setPosition(targetPosition);
-        leftServo.setPosition(targetPosition + offset);
+        leftServo.setPosition(targetPosition);
     }
 }
