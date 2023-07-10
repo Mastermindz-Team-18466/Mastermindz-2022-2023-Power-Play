@@ -43,7 +43,7 @@ public class clawAndArm {
             aClawTargetPos = 0.2;
         }
 
-        aClawTargetPos = 0.1 + ((aClawTargetPos - 0.2) * (0.7)) / (0.3);
+        aClawTargetPos = 0.1 + ((aClawTargetPos - 0.2) * (0.5)) / (0.3);
 
         claw.setPosition(aClawTargetPos);
     }

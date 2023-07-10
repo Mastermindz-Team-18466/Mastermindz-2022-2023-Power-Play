@@ -66,13 +66,20 @@ public class IntakeAndOuttake {
                         break;
                     case DESCORE_UP:
                         switch (aSpecificInstruction) {
-                            case DESCORE_POSE:
-                                verticalTargetPos = 2000;
+                            case CLOSE_CLAW:
+                                clawTargetPos = 0.5;
                                 prevAction = System.currentTimeMillis();
-                                aSpecificInstruction = specificInstructions.ARM_DOWN_TO_UP;
+                                aSpecificInstruction = specificInstructions.DESCORE_POSE;
+                                break;
+                            case DESCORE_POSE:
+                                if (System.currentTimeMillis() - prevAction > 200) {
+                                    verticalTargetPos = 2000;
+                                    prevAction = System.currentTimeMillis();
+                                    aSpecificInstruction = specificInstructions.ARM_DOWN_TO_UP;
+                                }
                                 break;
                             case ARM_DOWN_TO_UP:
-                                if (System.currentTimeMillis() - prevAction > 2000) {
+                                if (System.currentTimeMillis() - prevAction > 1333) {
                                     armTargetPos = 0.5;
                                 }
                                 break;
@@ -334,12 +341,13 @@ public class IntakeAndOuttake {
                                 clawSpin = 0;
                                 if (System.currentTimeMillis() - prevAction > 250) {
                                     clawTargetPos = 0.25;
+                                    armTargetPos = 0.17;
                                     prevAction = System.currentTimeMillis();
                                     aSpecificInstruction = specificInstructions.CLOSE_CLAW;
                                 }
                                 break;
                             case CLOSE_CLAW:
-                                if (System.currentTimeMillis() - prevAction > 250) {
+                                if (System.currentTimeMillis() - prevAction > 500) {
                                     armTargetPos = 0.12 + armIntakeOffset;
                                     prevAction = System.currentTimeMillis();
                                     aSpecificInstruction = specificInstructions.CLOSE_CLAW;
@@ -375,12 +383,13 @@ public class IntakeAndOuttake {
                         switch (aSpecificInstruction) {
                             case INTAKE_EXTENSION:
                                 horizontalTargetPos = 0.2;
-                                armTargetPos = 0.145 + armIntakeOffset;
+                                armTargetPos = 0.17 + armIntakeOffset;
                                 turretTargetPos = 0 + turretIntakeOffset;
                                 verticalTargetPos = 10;
                                 clawSpin = 0;
-                                if (System.currentTimeMillis() - prevAction > 250) {
+                                if (System.currentTimeMillis() - prevAction > 1000) {
                                     clawTargetPos = 0.25;
+                                    armTargetPos = 0.13;
                                     prevAction = System.currentTimeMillis();
                                     aSpecificInstruction = specificInstructions.CLOSE_CLAW;
                                 }
@@ -1198,7 +1207,7 @@ public class IntakeAndOuttake {
                                 armTargetPos = 0.66 + armOuttakeOffset;
                                 horizontalTargetPos = 0.05;
                                 turretTargetPos = 0 + turretOuttakeOffset;
-                                verticalTargetPos = 1690;
+                                verticalTargetPos = 1690 + verticalOuttakeOffset;
                                 prevAction = System.currentTimeMillis();
                                 break;
                         }
@@ -1481,7 +1490,7 @@ public class IntakeAndOuttake {
                         armTargetPos = 0.66 + armOuttakeOffset;
                         horizontalTargetPos = 0.05;
                         turretTargetPos = 0 + turretOuttakeOffset;
-                        verticalTargetPos = 850;
+                        verticalTargetPos = 850 + verticalOuttakeOffset;
                         prevAction = System.currentTimeMillis();
                         break;
                 }
@@ -1494,7 +1503,7 @@ public class IntakeAndOuttake {
                         armTargetPos = 0.66 + armOuttakeOffset;
                         horizontalTargetPos = 0.05;
                         turretTargetPos = 0 + turretOuttakeOffset;
-                        verticalTargetPos = 10;
+                        verticalTargetPos = 10 + verticalOuttakeOffset;
                         prevAction = System.currentTimeMillis();
                         break;
                 }
