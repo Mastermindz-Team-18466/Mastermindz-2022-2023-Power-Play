@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.newTeleOp;
 
-import static android.os.SystemClock.sleep;
-
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -33,18 +31,7 @@ public class newHorizontalSlides {
 
         targetPosition = 0.6 + ((targetPosition - 0.05) * (0.4)) / (0.46);
 
-        position = TURNING_POINT;
-        while (position < targetPosition) {
-            position += INCREMENT;
-            if (position > targetPosition) {
-                position = targetPosition;
-            }
-            leftServo.setPosition(position);
-            rightServo.setPosition(position);
-            sleep(CYCLE_MS);
-
-            rightServo.setPosition(targetPosition);
-            leftServo.setPosition(targetPosition);
-        }
+        rightServo.setPosition(targetPosition);
+        leftServo.setPosition(targetPosition);
     }
 }

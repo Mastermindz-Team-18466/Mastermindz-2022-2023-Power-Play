@@ -16,7 +16,6 @@ public class ClawFlipping extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         flipServo = hardwareMap.servo.get("clawSpin");
-        flipServo.setDirection(Servo.Direction.REVERSE);
 
         waitForStart();
         while (opModeIsActive()) {

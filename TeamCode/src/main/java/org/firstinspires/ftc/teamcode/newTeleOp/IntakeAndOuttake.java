@@ -15,6 +15,8 @@ public class IntakeAndOuttake {
     public double armIntakeOffset = 0;
     public double verticalIntakeOffset = 0;
 
+    public double verticalDescoreOffset = 0;
+
     public double turretOuttakeOffset = 0;
     public double horizontalOuttakeOffset = 0;
     public double armOuttakeOffset = 0;
@@ -51,10 +53,80 @@ public class IntakeAndOuttake {
         switch (aVerticalPos) {
             case GROUND:
                 switch (aInstructions) {
+                    case DESCORE:
+                        switch (aSpecificInstruction) {
+                            case DESCORE_POSE:
+                                verticalTargetPos = 100 + verticalDescoreOffset;
+                                armTargetPos = 0.12;
+                                clawSpin = 0;
+                                prevAction = System.currentTimeMillis();
+                                aSpecificInstruction = specificInstructions.OPEN_CLAW;
+                                break;
+                        }
+                        break;
+                    case DESCORE_UP:
+                        switch (aSpecificInstruction) {
+                            case DESCORE_POSE:
+                                verticalTargetPos = 2000;
+                                prevAction = System.currentTimeMillis();
+                                aSpecificInstruction = specificInstructions.ARM_DOWN_TO_UP;
+                                break;
+                            case ARM_DOWN_TO_UP:
+                                if (System.currentTimeMillis() - prevAction > 2000) {
+                                    armTargetPos = 0.5;
+                                }
+                                break;
+                        }
+                        break;
+                    case FALLEN_CONE:
+                        switch (aSpecificInstruction) {
+                            case SET_TO_POS:
+                                verticalTargetPos = 690;
+                                horizontalTargetPos = 0.3;
+                                prevAction = System.currentTimeMillis();
+                                aSpecificInstruction = specificInstructions.ARM_DELAY;
+                                break;
+                            case ARM_DELAY:
+                                if (System.currentTimeMillis() - prevAction > 500) {
+                                    armTargetPos = 0.1;
+                                    clawTargetPos = 0.2;
+                                    prevAction = System.currentTimeMillis();
+                                    aSpecificInstruction = specificInstructions.ARM_DOWN;
+                                }
+                                break;
+                            case ARM_DOWN:
+                                if (System.currentTimeMillis() - prevAction > 1000) {
+                                    armTargetPos = -0.1;
+                                }
+                                break;
+                        }
+                        break;
+                    case FALLEN_CONE_PICK:
+                        switch (aSpecificInstruction) {
+                            case CLOSE_CLAW:
+                                clawTargetPos = 0.5;
+                                prevAction = System.currentTimeMillis();
+                                aSpecificInstruction = specificInstructions.ARM_DOWN_TO_UP;
+                                break;
+                            case ARM_DOWN_TO_UP:
+                                if (System.currentTimeMillis() - prevAction > 200) {
+                                    armTargetPos = 0.41;
+                                    prevAction = System.currentTimeMillis();
+                                    aSpecificInstruction = specificInstructions.LOWER_VERTICAL;
+                                }
+                                break;
+                            case LOWER_VERTICAL:
+                                if (System.currentTimeMillis() - prevAction > 500) {
+                                    verticalTargetPos = 10;
+                                    prevAction = System.currentTimeMillis();
+                                }
+                                break;
+                        }
+                        break;
                     case AUTO_CLOSE:
                         switch (aSpecificInstruction) {
                             case INITIAL_CLOSE:
-                                verticalTargetPos = 0;
+                                verticalTargetPos = 10;
                                 turretTargetPos = 585;
                                 horizontalTargetPos = 0.05;
                                 clawTargetPos = 0.5;
@@ -91,8 +163,8 @@ public class IntakeAndOuttake {
                                 }
                                 break;
                             case CLOSED_TO_INTAKE:
-                                if (System.currentTimeMillis() - prevAction > 200) {
-                                    armTargetPos = 0.135;
+                                if (System.currentTimeMillis() - prevAction > 400) {
+                                    armTargetPos = 0.115;
                                     prevAction = System.currentTimeMillis();
                                     aSpecificInstruction = specificInstructions.INITIAL_CLOSE;
                                 }
@@ -985,7 +1057,7 @@ public class IntakeAndOuttake {
                         switch (aSpecificInstruction) {
                             case CLOSE_CLAW:
                                 clawTargetPos = 0.5;
-                                armTargetPos = 0.12;
+                                armTargetPos = 0.1;
                                 horizontalTargetPos = 0.05;
                                 break;
                         }
@@ -1458,6 +1530,7 @@ public class IntakeAndOuttake {
     }
 
     public enum Instructions {
+        DESCORE_UP,
         CLOSED,
         INTAKE,
         AUTO_RIGHT_INTAKE,
@@ -1484,10 +1557,15 @@ public class IntakeAndOuttake {
         AUTO_TURRET_POS,
         LEFT_TELEOP_INTAKE, LAST_CONE,
         PRELOAD,
-        SIXTH_CONE
+        SIXTH_CONE,
+        DESCORE,
+        FALLEN_CONE, FALLEN_CONE_PICK,
     }
 
     public enum specificInstructions {
+        SET_TO_POS,
+        ARM_DOWN,
+        DESCORE_POSE,
         INITIAL_CLOSE,
         ARM_DELAY,
         DEPOSIT_CONE,

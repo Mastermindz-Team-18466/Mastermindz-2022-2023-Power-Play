@@ -33,14 +33,12 @@ public class newVerticalSlides {
 
     public void set(double targetPosition) {
 
-        if (targetPosition >= 1720) {
-            targetPosition = 1720;
+        if (targetPosition >= 2150) {
+            targetPosition = 2150;
         }
-        if (targetPosition <= 0) {
-            targetPosition = 0;
+        if (targetPosition <= 10) {
+            targetPosition = 10;
         }
-
-        targetPosition = targetPosition * 2150 / 1720;
 
         previousTargetPos = targetPosition;
 

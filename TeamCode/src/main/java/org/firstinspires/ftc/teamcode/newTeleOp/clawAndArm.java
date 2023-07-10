@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.newTeleOp;
 
-import static android.os.SystemClock.sleep;
-
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -20,9 +18,7 @@ public class clawAndArm {
     public static double MAX_POS = 0.7;     // Maximum rotational position
     public static double MIN_POS = 0.05;
 
-    double positionl = (MAX_POS - MIN_POS) / 2;
-    double positionr = (MAX_POS - MIN_POS) / 2;
-    double positionRight, positionLeft;
+    double position = (MAX_POS + MIN_POS) / 2;
     boolean done = false;
 
     public clawAndArm(HardwareMap hardwareMap) {
@@ -32,6 +28,7 @@ public class clawAndArm {
         armRight = hardwareMap.servo.get("armRight");
 
         claw.setDirection(Servo.Direction.REVERSE);
+        armRight.setDirection(Servo.Direction.REVERSE);
     }
 
     public void clawControl(double clawTargetPos) {
@@ -46,7 +43,7 @@ public class clawAndArm {
             aClawTargetPos = 0.2;
         }
 
-        aClawTargetPos = 0.1 + ((aClawTargetPos - 0.2) * (0.9)) / (0.3);
+        aClawTargetPos = 0.1 + ((aClawTargetPos - 0.2) * (0.7)) / (0.3);
 
         claw.setPosition(aClawTargetPos);
     }
@@ -58,56 +55,17 @@ public class clawAndArm {
         if (aTargetPos > 0.75) {
             aTargetPos = 0.75;
         }
-        if (aTargetPos < 0.07) {
-            aTargetPos = 0.07;
-        }
 
-        aTargetPos = 0.05 + ((aTargetPos - 0.07) * (0.65)) / (0.68);
+        aTargetPos = 0.56 + ((aTargetPos - 0.1) * (-0.56)) / (0.635);
 
-        if (aTargetPos <= 0.325) {
-            positionLeft = aTargetPos;
-            positionRight = 0.75 - aTargetPos;
-            done = false;
-        } else {
-            positionLeft = 0.75 - aTargetPos;
-            positionRight = aTargetPos;
-            done = true;
-        }
-
-        while (positionl != positionLeft && positionr != positionRight) {
-            if (done) {
-                positionr -= INCREMENT;
-                positionl += INCREMENT;
-
-                if (positionr <= positionRight) {
-                    positionr = positionRight;
-                }
-
-                if (positionl >= positionLeft) {
-                    positionl = positionLeft;
-                }
-
-            } else {
-                positionl -= INCREMENT;
-                positionr += INCREMENT;
-
-                if (positionl <= positionLeft) {
-                    positionl = positionLeft;
-                }
-
-                if (positionr >= positionRight) {
-                    positionr = positionRight;
-                }
-            }
-
-            armRight.setPosition(positionr);
-            armLeft.setPosition(positionl);
-            sleep(CYCLE_MS);
-        }
+        armRight.setPosition(aTargetPos);
+        armLeft.setPosition(aTargetPos);
     }
 
     public void clawSpin(double clawSpinPos) {
-        if (clawSpinPos == 1) {
+        if (clawSpinPos == 0) {
+            clawSpinPos = 0.02;
+        } else if (clawSpinPos == 1) {
             clawSpinPos = 0.7;
         }
         clawSpin.setPosition(clawSpinPos);
