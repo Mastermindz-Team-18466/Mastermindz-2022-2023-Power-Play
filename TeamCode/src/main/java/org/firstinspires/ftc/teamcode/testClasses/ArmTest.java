@@ -20,55 +20,26 @@ public class ArmTest extends LinearOpMode {
     public static double MAX_POS = 0.7;     // Maximum rotational position
     public static double MIN_POS = 0.05;
 
-    double positionLeft = (MAX_POS - MIN_POS) / 2;
-    double positionRight = (MAX_POS - MIN_POS) / 2;
-
     @Override
     public void runOpMode() throws InterruptedException {
         rightServo = hardwareMap.servo.get("armRight");
         leftServo = hardwareMap.servo.get("armLeft");
 
+        rightServo.setDirection(Servo.Direction.REVERSE);
+
         waitForStart();
         while (opModeIsActive()) {
             if (gamepad1.a) {
-                while (positionLeft != MAX_POS && positionRight != MIN_POS) {
-                    positionLeft += INCREMENT;
-                    positionRight -= INCREMENT;
-
-                    if (positionLeft >= MAX_POS) {
-                        positionLeft = MAX_POS;
-                    }
-
-                    if (positionRight <= MIN_POS) {
-                        positionRight = MIN_POS;
-                    }
-
-                    rightServo.setPosition(positionRight);
-                    leftServo.setPosition(positionLeft);
-                    sleep(CYCLE_MS);
-                }
+                rightServo.setPosition(MIN_POS);
+                leftServo.setPosition(MIN_POS);
 
             } else if (gamepad1.b) {
-                while (positionLeft != MIN_POS && positionRight != MAX_POS) {
-                    positionLeft -= INCREMENT;
-                    positionRight += INCREMENT;
-
-                    if (positionLeft <= MIN_POS) {
-                        positionLeft = MIN_POS;
-                    }
-
-                    if (positionRight >= MAX_POS) {
-                        positionRight = MAX_POS;
-                    }
-
-                    rightServo.setPosition(positionRight);
-                    leftServo.setPosition(positionLeft);
-                    sleep(CYCLE_MS);
-                }
-                telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-                telemetry.addData("Running:", telemetry);
-                telemetry.update();
+                rightServo.setPosition(MAX_POS);
+                leftServo.setPosition(MAX_POS);
             }
+            telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+            telemetry.addData("Running:", telemetry);
+            telemetry.update();
         }
     }
 }

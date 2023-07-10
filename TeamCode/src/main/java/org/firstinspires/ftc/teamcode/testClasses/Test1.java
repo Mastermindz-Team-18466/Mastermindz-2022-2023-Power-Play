@@ -27,6 +27,7 @@ public class Test1 extends LinearOpMode {
         armRight = hardwareMap.servo.get("armRight");
 
         rightHoriz.setDirection(Servo.Direction.REVERSE);
+        armRight.setDirection(Servo.Direction.REVERSE);
 
         boolean toggled = false;
 
@@ -41,9 +42,9 @@ public class Test1 extends LinearOpMode {
             } else if (gamepad1.y) {
                 clawSpin.setPosition(0);
             } else if (gamepad1.right_bumper) {
-                armLeft.setPosition(0.05);
+                armLeft.setPosition(0);
             } else if (gamepad1.left_bumper) {
-                armRight.setPosition(0.7);
+                armRight.setPosition(0);
             }
         }
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());

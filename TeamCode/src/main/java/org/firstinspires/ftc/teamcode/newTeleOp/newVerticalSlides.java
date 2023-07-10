@@ -1,17 +1,15 @@
 package org.firstinspires.ftc.teamcode.newTeleOp;
 
 import com.arcrobotics.ftclib.controller.PIDController;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.Range;
 
 public class newVerticalSlides {
     private PIDController controller;
 
-    private static final double p = 0.01, i = 0, d = 0.0001;
-    private static final double f = 0.01;
+    private static final double p = 0.01, i = 0, d = 0;
+    private static final double f = 0.00004;
 
     public DcMotorEx liftMotor1;
     public DcMotorEx liftMotor2;
@@ -35,12 +33,14 @@ public class newVerticalSlides {
 
     public void set(double targetPosition) {
 
-        if (targetPosition >= 2500) {
-            targetPosition = 2500;
+        if (targetPosition >= 1720) {
+            targetPosition = 1720;
         }
         if (targetPosition <= 0) {
             targetPosition = 0;
         }
+
+        targetPosition = targetPosition * 2150 / 1720;
 
         previousTargetPos = targetPosition;
 

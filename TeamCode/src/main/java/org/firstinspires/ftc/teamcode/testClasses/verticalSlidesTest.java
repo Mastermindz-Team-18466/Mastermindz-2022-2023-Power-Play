@@ -16,8 +16,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 public class verticalSlidesTest extends OpMode {
     private PIDController controller;
 
-    public static double p = 0.01, i = 0, d = 0.0001;
-    public static double f = 0.01;
+    public static final double p = 0.01, i = 0, d = 0;
+    public static final double f = 0.00004;
 
     public static double targetPosition = 0;
 
