@@ -47,6 +47,9 @@ public class newAutoModeRight extends LinearOpMode {
     AprilTagDetection tagOfInterest = null;
     private double verticalOffset = 635;
 
+    boolean tagFound = false;
+    int position;
+
     @Override
     public void runOpMode() {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
@@ -150,8 +153,11 @@ public class newAutoModeRight extends LinearOpMode {
             telemetry.update();
         }
 
-        int position = tagOfInterest.id;
-
+        if (tagFound) {
+            position = tagOfInterest.id;
+        } else {
+            position = 2;
+        }
 
         Vector2d endPosition = new Vector2d(1.5 * 23.5 - Math.sqrt(37.5) - 0, -3 * 23.5 + 49 + Math.sqrt(37.5));
         drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(startPose)
@@ -190,7 +196,7 @@ public class newAutoModeRight extends LinearOpMode {
 
             inOutTake.verticalIntakeOffset = verticalOffset;
 
-            if (currentTime - startTime >= 2000 && cycles <= 4) {
+            if (currentTime - startTime >= 2000 && cycles <= 5) {
 
                 if (!drive.isBusy()) {
                     drive.followTrajectorySequenceAsync(
@@ -212,7 +218,7 @@ public class newAutoModeRight extends LinearOpMode {
                     );
                 }
 
-                if (cyclePos && currentTime - previousAction >= 1920) {
+                if (cyclePos && currentTime - previousAction >= 3000) {
 
                     inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
                     inOutTake.setaInstructions(IntakeAndOuttake.Instructions.AUTO_RIGHT_INTAKE);
@@ -221,7 +227,7 @@ public class newAutoModeRight extends LinearOpMode {
                     previousAction = System.currentTimeMillis();
 
                     cyclePos = false;
-                } else if (!cyclePos && currentTime - previousAction >= 1680) {
+                } else if (!cyclePos && currentTime - previousAction >= 3000) {
                     inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP);
                     inOutTake.setaInstructions(IntakeAndOuttake.Instructions.RIGHT_STACK_DEPOSIT);
                     inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
@@ -232,67 +238,6 @@ public class newAutoModeRight extends LinearOpMode {
                     cycles++;
                     verticalOffset -= 100;
                 }
-            } else if (currentTime - startTime > 18000 && currentTime - startTime < 28700 && !drive.isBusy() && otherSideCheck) {
-                drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                        .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                            inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
-                            inOutTake.setaInstructions(IntakeAndOuttake.Instructions.OTHER_SIDE);
-                            inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.INITIAL_CLOSE);
-                        })
-                        .resetConstraints()
-                        .lineToLinearHeading(new Pose2d(1.5 * 23.5 - 3, -3 * 23.5 + 45, Math.PI / 2 + Math.toRadians(90)))
-                        .UNSTABLE_addTemporalMarkerOffset(0.6, () -> {
-                            inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP);
-                            inOutTake.setaInstructions(IntakeAndOuttake.Instructions.SIXTH_CONE);
-                            inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
-                        })
-                        .waitSeconds(0.1)
-                        .lineToLinearHeading(new Pose2d(-(1.5 * 23.5 + 5), -3 * 23.5 + 45, Math.PI / 2 + Math.toRadians(90)))
-                        .setConstraints(new TrajectoryVelocityConstraint() {
-                            @Override
-                            public double get(double v, @NonNull Pose2d pose2d, @NonNull Pose2d pose2d1, @NonNull Pose2d pose2d2) {
-                                return 50;
-                            }
-                        }, new TrajectoryAccelerationConstraint() {
-                            @Override
-                            public double get(double v, @NonNull Pose2d pose2d, @NonNull Pose2d pose2d1, @NonNull Pose2d pose2d2) {
-                                return 50;
-                            }
-                        })
-                        .lineToLinearHeading(new Pose2d(-(1.5 * 23.5 - Math.sqrt(85) + 2.5 + 6), -3 * 23.5 + 50 + Math.sqrt(85), Math.PI / 2 + Math.toRadians(130)))
-                        .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                            otherSideCheck = false;
-                            cyclePos = true;
-                            verticalOffset = 690;
-                        })
-                        .build()
-                );
-            } else if (currentTime - startTime > 20900 && currentTime - startTime < 28849 && otherSideCheck == false) {
-
-                if (cyclePos && currentTime - previousAction >= 1920) {
-
-                    inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
-                    inOutTake.setaInstructions(IntakeAndOuttake.Instructions.AUTO_LEFT_INTAKE);
-                    inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.DEPOSIT_CONE);
-
-                    previousAction = System.currentTimeMillis();
-
-                    cyclePos = false;
-                } else if (!cyclePos && currentTime - previousAction >= 1680) {
-                    inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP);
-                    inOutTake.setaInstructions(IntakeAndOuttake.Instructions.LEFT_STACK_DEPOSIT);
-                    inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
-
-                    previousAction = System.currentTimeMillis();
-
-                    cyclePos = true;
-                    cycles++;
-                    verticalOffset -= 100;
-                }
-            } else if (currentTime - startTime >= 28900 && currentTime - startTime < 29300) {
-                inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP);
-                inOutTake.setaInstructions(IntakeAndOuttake.Instructions.LAST_CONE);
-                inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.DEPOSIT_CONE);
             } else if (currentTime - startTime >= 29400 && park) {
                 System.out.println("Entered");
 

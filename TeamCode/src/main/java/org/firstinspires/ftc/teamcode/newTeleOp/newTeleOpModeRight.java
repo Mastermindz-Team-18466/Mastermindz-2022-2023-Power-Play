@@ -245,12 +245,6 @@ public class newTeleOpModeRight extends LinearOpMode {
                         inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.INTAKE_EXTENSION);
                     }
 
-                    if (currentGamepad1.back && !previousGamepad1.back) {
-                        inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
-                        inOutTake.setaInstructions(IntakeAndOuttake.Instructions.PARK);
-                        inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.INTAKE_EXTENSION);
-                    }
-
                     if (currentGamepad1.b && !previousGamepad1.b) {
                         inOutTake.turretOuttakeOffset = 585;
                     }

@@ -49,6 +49,10 @@ public class newAutoModeLeft extends LinearOpMode {
 
     AprilTagDetection tagOfInterest = null;
 
+    boolean tagFound = false;
+
+    int position;
+
     @Override
     public void runOpMode() {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
@@ -104,7 +108,6 @@ public class newAutoModeLeft extends LinearOpMode {
             ArrayList<AprilTagDetection> currentDetections = aprilTagDetectionPipeline.getLatestDetections();
 
             if (currentDetections.size() != 0) {
-                boolean tagFound = false;
 
                 for (AprilTagDetection tag : currentDetections) {
                     if (tag.id == LEFT || tag.id == RIGHT || tag.id == MIDDLE) {
@@ -155,7 +158,12 @@ public class newAutoModeLeft extends LinearOpMode {
             telemetry.update();
         }
 
-        int position = tagOfInterest.id;
+        if (tagFound) {
+            position = tagOfInterest.id;
+        } else {
+            position = 2;
+        }
+
 
         Vector2d endPosition = new Vector2d(-(1.5 * 23.5 - Math.sqrt(37.5) + 1.25), -3 * 23.5 + 49 + Math.sqrt(37.5));
         drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(startPose)
