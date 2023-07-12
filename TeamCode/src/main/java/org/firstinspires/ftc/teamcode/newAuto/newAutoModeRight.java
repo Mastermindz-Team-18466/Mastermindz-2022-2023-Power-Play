@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.newAuto;
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -45,10 +44,19 @@ public class newAutoModeRight extends LinearOpMode {
     Pose2d startPose = new Pose2d(1.5 * 23.5, -3 * 23.5, Math.PI / 2);
     boolean park = true;
     AprilTagDetection tagOfInterest = null;
-    private double verticalOffset = 635;
-
     boolean tagFound = false;
     int position;
+    boolean lastConeCheck = false;
+    private double verticalOffset = 635;
+    boolean preload_deposit = false;
+    boolean turned = false;
+    boolean moved = false;
+    boolean moved2 = false;
+    boolean movedTrans = false;
+    boolean pidOnPose = true;
+    double posConstraint = 70;
+
+    Pose2d endPosition;
 
     @Override
     public void runOpMode() {
@@ -57,6 +65,8 @@ public class newAutoModeRight extends LinearOpMode {
         drive.autoCheck = true;
 
         drive.setPoseEstimate(startPose);
+
+        newHorizontalSlides.auto = true;
 
         AprilTagDetectionPipeline aprilTagDetectionPipeline = new AprilTagDetectionPipeline(0.166, 587.272, 578.272, 402.145, 221.506);
 
@@ -159,26 +169,26 @@ public class newAutoModeRight extends LinearOpMode {
             position = 2;
         }
 
-        Vector2d endPosition = new Vector2d(1.5 * 23.5 - Math.sqrt(37.5) - 0, -3 * 23.5 + 49 + Math.sqrt(37.5));
+        endPosition = new Pose2d(1.5 * 23.5 - 6, -3 * 23.5 + 59.4, Math.PI / 2 + Math.toRadians(84));
+        Pose2d endPosition1 = new Pose2d(1.5 * 23.5 - 2, -3 * 23.5 + 59.4, Math.PI / 2 + Math.toRadians(84));
         drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(startPose)
-                .UNSTABLE_addTemporalMarkerOffset(0.375, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(3, () -> {
                     inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP);
                     inOutTake.setaInstructions(IntakeAndOuttake.Instructions.PRELOAD);
                     inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
                 })
-                .lineToSplineHeading(new Pose2d(1.5 * 23.5 - 3, -3 * 23.5 + 49, Math.PI / 2 + Math.toRadians(40)))
+                .lineToSplineHeading(endPosition1)
                 .setConstraints(new TrajectoryVelocityConstraint() {
                     @Override
                     public double get(double v, @NonNull Pose2d pose2d, @NonNull Pose2d pose2d1, @NonNull Pose2d pose2d2) {
-                        return 50;
+                        return 30;
                     }
                 }, new TrajectoryAccelerationConstraint() {
                     @Override
                     public double get(double v, @NonNull Pose2d pose2d, @NonNull Pose2d pose2d1, @NonNull Pose2d pose2d2) {
-                        return 50;
+                        return 30;
                     }
                 })
-                .lineToConstantHeading(endPosition)
                 .build()
         );
 
@@ -196,84 +206,87 @@ public class newAutoModeRight extends LinearOpMode {
 
             inOutTake.verticalIntakeOffset = verticalOffset;
 
-            if (currentTime - startTime >= 2000 && cycles <= 5) {
+            if (currentTime - startTime >= 0 && cycles <= 5) {
 
-                if (!drive.isBusy()) {
+                if (!drive.isBusy() && pidOnPose) {
                     drive.followTrajectorySequenceAsync(
                             drive.trajectorySequenceBuilder(currentPose)
                                     .setConstraints(new TrajectoryVelocityConstraint() {
                                         @Override
                                         public double get(double v, @NonNull Pose2d pose2d, @NonNull Pose2d pose2d1, @NonNull Pose2d pose2d2) {
-                                            return 50;
+                                            return 30;
                                         }
                                     }, new TrajectoryAccelerationConstraint() {
                                         @Override
                                         public double get(double v, @NonNull Pose2d pose2d, @NonNull Pose2d pose2d1, @NonNull Pose2d pose2d2) {
-                                            return 50;
+                                            return 30;
                                         }
                                     })
-                                    .setTurnConstraint(Math.toRadians(330), Math.toRadians(270))
-                                    .lineToConstantHeading(endPosition)
+//                                    .setTurnConstraint(Math.toRadians(330), Math.toRadians(270))
+                                    .lineToSplineHeading(endPosition)
                                     .build()
                     );
                 }
 
-                if (cyclePos && currentTime - previousAction >= 3000) {
+
+                if (currentTime - startTime >= 4100 && currentTime - startTime < 28650) {
+                    if (cyclePos && currentTime - previousAction >= 2000) {
+                        inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
+                        inOutTake.setaInstructions(IntakeAndOuttake.Instructions.AUTO_RIGHT_INTAKE);
+                        inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.DEPOSIT_CONE);
+
+                        previousAction = System.currentTimeMillis();
+
+                        cyclePos = false;
+                    } else if (!cyclePos && currentTime - previousAction >= 2000) {
+                        inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP);
+                        inOutTake.setaInstructions(IntakeAndOuttake.Instructions.RIGHT_STACK_DEPOSIT);
+                        inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
+
+                        previousAction = System.currentTimeMillis();
+
+                        cyclePos = true;
+                        cycles++;
+                        verticalOffset -= 100;
+                    }
+                } else if (currentTime - startTime >= 28650 && park) {
+                    System.out.println("Entered");
 
                     inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
-                    inOutTake.setaInstructions(IntakeAndOuttake.Instructions.AUTO_RIGHT_INTAKE);
-                    inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.DEPOSIT_CONE);
+                    inOutTake.setaInstructions(IntakeAndOuttake.Instructions.AUTO_TO_TELE);
+                    inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.INTAKE_EXTENSION);
 
-                    previousAction = System.currentTimeMillis();
+                    Pose2d endPose = new Pose2d(-(1.5 * 23.5 + 1.5) + Math.sqrt(45), -3 * 23.5 + 53 + Math.sqrt(45), Math.PI / 2 + Math.toRadians(85));
+                    switch (position) {
+                        case 1:
+                            drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                                    .resetConstraints()
+                                    .lineToSplineHeading(endPose)
+                                    .lineToSplineHeading(new Pose2d(-(1.5 * 23.5 + 25.5), -3 * 23.5 + 49 + Math.sqrt(45), Math.PI / 2 + Math.toRadians(90)))
+                                    .build()
+                            );
+                            break;
+                        case 2:
+                            drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                                    .resetConstraints()
+                                    .lineToSplineHeading(endPose)
+                                    .lineToSplineHeading(new Pose2d(-(1.5 * 23.5 + 2.5), -3 * 23.5 + 46 + Math.sqrt(45), Math.PI / 2 + Math.toRadians(90)))
+                                    .build()
+                            );
+                            break;
+                        case 3:
+                            drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                                    .resetConstraints()
+                                    .lineToSplineHeading(endPose)
+                                    .lineToSplineHeading(new Pose2d(-(1.5 * 23.5 - 21.5), -3 * 23.5 + 49 + Math.sqrt(45), Math.PI / 2 + Math.toRadians(90)))
+                                    .build()
+                            );
+                            break;
+                    }
 
-                    cyclePos = false;
-                } else if (!cyclePos && currentTime - previousAction >= 3000) {
-                    inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP);
-                    inOutTake.setaInstructions(IntakeAndOuttake.Instructions.RIGHT_STACK_DEPOSIT);
-                    inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
-
-                    previousAction = System.currentTimeMillis();
-
-                    cyclePos = true;
-                    cycles++;
-                    verticalOffset -= 100;
-                }
-            } else if (currentTime - startTime >= 29400 && park) {
-                System.out.println("Entered");
-
-                inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
-                inOutTake.setaInstructions(IntakeAndOuttake.Instructions.AUTO_TO_TELE);
-                inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.INTAKE_EXTENSION);
-
-                Pose2d endPose = new Pose2d(-(1.5 * 23.5 + 1.5) + Math.sqrt(45), -3 * 23.5 + 53 + Math.sqrt(45), Math.PI / 2 + Math.toRadians(90));
-                switch (position) {
-                    case 1:
-                        drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                                .resetConstraints()
-                                .lineToSplineHeading(endPose)
-                                .lineToSplineHeading(new Pose2d(-(1.5 * 23.5 + 25.5), -3 * 23.5 + 49 + Math.sqrt(45), Math.PI / 2 + Math.toRadians(90)))
-                                .build()
-                        );
-                        break;
-                    case 2:
-                        drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                                .resetConstraints()
-                                .lineToSplineHeading(endPose)
-                                .lineToSplineHeading(new Pose2d(-(1.5 * 23.5 + 2.5), -3 * 23.5 + 46 + Math.sqrt(45), Math.PI / 2 + Math.toRadians(90)))
-                                .build()
-                        );
-                        break;
-                    case 3:
-                        drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                                .resetConstraints()
-                                .lineToSplineHeading(endPose)
-                                .lineToSplineHeading(new Pose2d(-(1.5 * 23.5 - 21.5), -3 * 23.5 + 49 + Math.sqrt(45), Math.PI / 2 + Math.toRadians(90)))
-                                .build()
-                        );
-                        break;
+                    park = false;
                 }
 
-                park = false;
             }
 
 

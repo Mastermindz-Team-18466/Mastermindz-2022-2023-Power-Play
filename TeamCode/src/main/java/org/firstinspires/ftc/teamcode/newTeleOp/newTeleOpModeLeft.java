@@ -46,6 +46,8 @@ public class newTeleOpModeLeft extends LinearOpMode {
         verticalSlides = new newVerticalSlides(hardwareMap);
         horizontalSlides = new newHorizontalSlides(hardwareMap);
 
+        newHorizontalSlides.auto = false;
+
         turret.turretMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         turret.turretMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 

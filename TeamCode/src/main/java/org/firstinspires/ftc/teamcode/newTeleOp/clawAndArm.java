@@ -19,6 +19,7 @@ public class clawAndArm {
     public static double MIN_POS = 0.05;
 
     double position = (MAX_POS + MIN_POS) / 2;
+    double prevAction = System.currentTimeMillis();
     boolean done = false;
 
     public clawAndArm(HardwareMap hardwareMap) {
@@ -58,8 +59,23 @@ public class clawAndArm {
 
         aTargetPos = 0.56 + ((aTargetPos - 0.1) * (-0.56)) / (0.635);
 
-        armRight.setPosition(aTargetPos);
-        armLeft.setPosition(aTargetPos);
+        if (newHorizontalSlides.auto) {
+            if (System.currentTimeMillis() - prevAction > 50 / 3 / 2.5 / 4) {
+                prevAction = System.currentTimeMillis();
+                if (position < aTargetPos - 0.1) {
+                    position += 0.0165;
+                } else if (position > aTargetPos + 0.1) {
+                    position -= 0.0165;
+                } else {
+                    position = aTargetPos;
+                }
+            }
+        } else {
+            position = aTargetPos;
+        }
+
+        armRight.setPosition(position);
+        armLeft.setPosition(position);
     }
 
     public void clawSpin(double clawSpinPos) {

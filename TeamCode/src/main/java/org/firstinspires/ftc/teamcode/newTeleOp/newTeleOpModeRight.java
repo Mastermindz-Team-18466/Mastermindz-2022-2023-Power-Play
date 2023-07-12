@@ -42,6 +42,7 @@ public class newTeleOpModeRight extends LinearOpMode {
         TeleOpFieldCentric driver = new TeleOpFieldCentric(hardwareMap, new SampleMecanumDrive(hardwareMap), gamepad1);
 
         turret = new newTurret(hardwareMap);
+        newHorizontalSlides.auto = false;
         clawAndArm = new clawAndArm(hardwareMap);
         verticalSlides = new newVerticalSlides(hardwareMap);
         horizontalSlides = new newHorizontalSlides(hardwareMap);
@@ -312,6 +313,8 @@ public class newTeleOpModeRight extends LinearOpMode {
 
             telemetry.addData("VerticalTargetPos:", inOutTake.verticalTargetPos);
             telemetry.addData("VerticalCurrentPos:", verticalSlides.liftMotor1.getCurrentPosition());
+            telemetry.addData("Odometry Position X:", driver.drive.getPoseEstimate().getX());
+            telemetry.addData("Odometry Position Y:", driver.drive.getPoseEstimate().getY());
             telemetry.addData("Power", verticalSlides.publicPower);
 //            telemetry.addData("ServoPos:", clawAndArm.armRight.getPosition());
             telemetry.update();

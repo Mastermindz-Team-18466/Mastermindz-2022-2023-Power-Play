@@ -36,7 +36,7 @@ public class Test1 extends LinearOpMode {
             if (gamepad1.a) {
                 rightHoriz.setPosition(0);
             } else if (gamepad1.b) {
-                leftHoriz.setPosition(0.1);
+                leftHoriz.setPosition(0);
             } else if (gamepad1.x) {
                 claw.setPosition(0.2);
             } else if (gamepad1.y) {
