@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.newAuto;
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -55,6 +56,7 @@ public class newAutoModeRight extends LinearOpMode {
     boolean movedTrans = false;
     boolean pidOnPose = true;
     double posConstraint = 70;
+    boolean park2 = true;
 
     Pose2d endPosition;
 
@@ -177,19 +179,19 @@ public class newAutoModeRight extends LinearOpMode {
                     inOutTake.setaInstructions(IntakeAndOuttake.Instructions.PRELOAD);
                     inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
                 })
-                .lineToSplineHeading(endPosition1)
-                .setConstraints(new TrajectoryVelocityConstraint() {
-                    @Override
-                    public double get(double v, @NonNull Pose2d pose2d, @NonNull Pose2d pose2d1, @NonNull Pose2d pose2d2) {
-                        return 30;
-                    }
-                }, new TrajectoryAccelerationConstraint() {
-                    @Override
-                    public double get(double v, @NonNull Pose2d pose2d, @NonNull Pose2d pose2d1, @NonNull Pose2d pose2d2) {
-                        return 30;
-                    }
-                })
-                .build()
+                        .lineToSplineHeading(endPosition1)
+                        .setConstraints(new TrajectoryVelocityConstraint() {
+                            @Override
+                            public double get(double v, @NonNull Pose2d pose2d, @NonNull Pose2d pose2d1, @NonNull Pose2d pose2d2) {
+                                return 30;
+                            }
+                        }, new TrajectoryAccelerationConstraint() {
+                            @Override
+                            public double get(double v, @NonNull Pose2d pose2d, @NonNull Pose2d pose2d1, @NonNull Pose2d pose2d2) {
+                                return 30;
+                            }
+                        })
+                        .build()
         );
 
         waitForStart();
@@ -229,7 +231,8 @@ public class newAutoModeRight extends LinearOpMode {
                 }
 
 
-                if (currentTime - startTime >= 4100 && currentTime - startTime < 28650) {
+               if (currentTime - startTime >= 4100 && currentTime - startTime < 25000) {
+
                     if (cyclePos && currentTime - previousAction >= 2000) {
                         inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
                         inOutTake.setaInstructions(IntakeAndOuttake.Instructions.AUTO_RIGHT_INTAKE);
@@ -248,43 +251,52 @@ public class newAutoModeRight extends LinearOpMode {
                         cyclePos = true;
                         cycles++;
                         verticalOffset -= 100;
-                    }
-                } else if (currentTime - startTime >= 28650 && park) {
+                  }
+                } if (currentTime - startTime >= 25000 && park) {
                     System.out.println("Entered");
 
                     inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
                     inOutTake.setaInstructions(IntakeAndOuttake.Instructions.AUTO_TO_TELE);
                     inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.INTAKE_EXTENSION);
 
-                    Pose2d endPose = new Pose2d(-(1.5 * 23.5 + 1.5) + Math.sqrt(45), -3 * 23.5 + 53 + Math.sqrt(45), Math.PI / 2 + Math.toRadians(85));
+                    endPosition = new Pose2d(1.5 * 23.5 - 2, -3 * 23.5 + 49, Math.PI);
+
+                    drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                            .resetConstraints()
+                            .lineToSplineHeading(endPosition)
+                            .build()
+                    );
+
+                    park = false;
+
+                } else if (currentTime - startTime >= 28000 && park2) {
                     switch (position) {
                         case 1:
                             drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                                    .resetConstraints()
-                                    .lineToSplineHeading(endPose)
-                                    .lineToSplineHeading(new Pose2d(-(1.5 * 23.5 + 25.5), -3 * 23.5 + 49 + Math.sqrt(45), Math.PI / 2 + Math.toRadians(90)))
+                                    //.lineToConstantHeading(new Vector2d(endPosition.getX(), endPosition.getY()))
                                     .build()
                             );
                             break;
                         case 2:
+                            endPosition = new Pose2d(endPosition.getX() - 23.5, endPosition.getY(), endPosition.getHeading());
                             drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                                    .resetConstraints()
-                                    .lineToSplineHeading(endPose)
-                                    .lineToSplineHeading(new Pose2d(-(1.5 * 23.5 + 2.5), -3 * 23.5 + 46 + Math.sqrt(45), Math.PI / 2 + Math.toRadians(90)))
+                                    //.resetConstraints()
+                                    .lineToConstantHeading(new Vector2d(endPosition.getX(), endPosition.getY()))
                                     .build()
                             );
                             break;
                         case 3:
+                            endPosition = new Pose2d(endPosition.getX() - 23.5 * 2, endPosition.getY(), endPosition.getHeading());
                             drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                                    .resetConstraints()
-                                    .lineToSplineHeading(endPose)
-                                    .lineToSplineHeading(new Pose2d(-(1.5 * 23.5 - 21.5), -3 * 23.5 + 49 + Math.sqrt(45), Math.PI / 2 + Math.toRadians(90)))
+                                    //.resetConstraints()
+                                    .lineToConstantHeading(new Vector2d(endPosition.getX(), endPosition.getY()))
+                                    //.lineToSplineHeading(new Pose2d(-(1.5 * 23.5 - 21.5), -3 * 23.5 + 49 + Math.sqrt(45), Math.PI / 2 + Math.toRadians(90)))
                                     .build()
                             );
                             break;
                     }
 
-                    park = false;
+                    park2 = false;
                 }
 
             }
