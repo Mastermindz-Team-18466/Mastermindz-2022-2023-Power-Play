@@ -269,9 +269,9 @@ public class newAutoModeRight extends LinearOpMode {
 
                     park = false;
 
-                } else if (currentTime - startTime >= 28000 && park2) {
+                } else if (currentTime - startTime >= 27250 && park2) {
                     switch (position) {
-                        case 1:
+                        case 3:
                             drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                                     //.lineToConstantHeading(new Vector2d(endPosition.getX(), endPosition.getY()))
                                     .build()
@@ -285,7 +285,7 @@ public class newAutoModeRight extends LinearOpMode {
                                     .build()
                             );
                             break;
-                        case 3:
+                        case 1:
                             endPosition = new Pose2d(endPosition.getX() - 23.5 * 2, endPosition.getY(), endPosition.getHeading());
                             drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                                     //.resetConstraints()

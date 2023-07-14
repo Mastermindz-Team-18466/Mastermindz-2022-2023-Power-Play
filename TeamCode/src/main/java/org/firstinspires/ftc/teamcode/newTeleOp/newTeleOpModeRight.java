@@ -118,7 +118,7 @@ public class newTeleOpModeRight extends LinearOpMode {
                         inOutTake.setaInstructions(IntakeAndOuttake.Instructions.DESCORE);
                         inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.DESCORE_POSE);
                         if (inOutTake.aInstructions == IntakeAndOuttake.Instructions.DESCORE) {
-                            inOutTake.verticalDescoreOffset += 200;
+                            inOutTake.verticalDescoreOffset += 100;
                         }
                     }
 
@@ -127,7 +127,7 @@ public class newTeleOpModeRight extends LinearOpMode {
                         inOutTake.setaInstructions(IntakeAndOuttake.Instructions.DESCORE);
                         inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.DESCORE_POSE);
                         if (inOutTake.aInstructions == IntakeAndOuttake.Instructions.DESCORE) {
-                            inOutTake.verticalDescoreOffset -= 200;
+                            inOutTake.verticalDescoreOffset -= 100;
                         }
                     }
 
