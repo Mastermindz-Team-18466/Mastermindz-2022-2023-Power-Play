@@ -171,27 +171,27 @@ public class newAutoModeRight extends LinearOpMode {
             position = 2;
         }
 
-        endPosition = new Pose2d(1.5 * 23.5 - 6, -3 * 23.5 + 59.4, Math.PI / 2 + Math.toRadians(84));
-        Pose2d endPosition1 = new Pose2d(1.5 * 23.5 - 2, -3 * 23.5 + 59.4, Math.PI / 2 + Math.toRadians(84));
+        endPosition = new Pose2d(1.5 * 23.5 - 6, -3 * 23.5 + 58, Math.PI / 2 + Math.toRadians(84.5));
+        Pose2d endPosition1 = new Pose2d(1.5 * 23.5 - 2, -3 * 23.5 + 58, Math.PI / 2 + Math.toRadians(84.5));
         drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(startPose)
                 .UNSTABLE_addTemporalMarkerOffset(3, () -> {
                     inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP);
                     inOutTake.setaInstructions(IntakeAndOuttake.Instructions.PRELOAD);
                     inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.CLOSE_CLAW);
                 })
-                        .lineToSplineHeading(endPosition1)
-                        .setConstraints(new TrajectoryVelocityConstraint() {
-                            @Override
-                            public double get(double v, @NonNull Pose2d pose2d, @NonNull Pose2d pose2d1, @NonNull Pose2d pose2d2) {
-                                return 30;
-                            }
-                        }, new TrajectoryAccelerationConstraint() {
-                            @Override
-                            public double get(double v, @NonNull Pose2d pose2d, @NonNull Pose2d pose2d1, @NonNull Pose2d pose2d2) {
-                                return 30;
-                            }
-                        })
-                        .build()
+                .lineToSplineHeading(endPosition1)
+                .setConstraints(new TrajectoryVelocityConstraint() {
+                    @Override
+                    public double get(double v, @NonNull Pose2d pose2d, @NonNull Pose2d pose2d1, @NonNull Pose2d pose2d2) {
+                        return 30;
+                    }
+                }, new TrajectoryAccelerationConstraint() {
+                    @Override
+                    public double get(double v, @NonNull Pose2d pose2d, @NonNull Pose2d pose2d1, @NonNull Pose2d pose2d2) {
+                        return 30;
+                    }
+                })
+                .build()
         );
 
         waitForStart();
@@ -231,7 +231,7 @@ public class newAutoModeRight extends LinearOpMode {
                 }
 
 
-               if (currentTime - startTime >= 4100 && currentTime - startTime < 25000) {
+                if (currentTime - startTime >= 4100 && currentTime - startTime < 25000) {
 
                     if (cyclePos && currentTime - previousAction >= 2000) {
                         inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
@@ -251,15 +251,16 @@ public class newAutoModeRight extends LinearOpMode {
                         cyclePos = true;
                         cycles++;
                         verticalOffset -= 100;
-                  }
-                } if (currentTime - startTime >= 25000 && park) {
+                    }
+                }
+                if (currentTime - startTime >= 25000 && park) {
                     System.out.println("Entered");
 
                     inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
                     inOutTake.setaInstructions(IntakeAndOuttake.Instructions.AUTO_TO_TELE);
                     inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.INTAKE_EXTENSION);
 
-                    endPosition = new Pose2d(1.5 * 23.5 - 2, -3 * 23.5 + 49, Math.PI);
+                    endPosition = new Pose2d(1.5 * 23.5 - 2, -3 * 23.5 + 49, Math.PI + Math.toRadians(3));
 
                     drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                             .resetConstraints()
@@ -278,7 +279,7 @@ public class newAutoModeRight extends LinearOpMode {
                             );
                             break;
                         case 2:
-                            endPosition = new Pose2d(endPosition.getX() - 23.5, endPosition.getY(), endPosition.getHeading());
+                            endPosition = new Pose2d(endPosition.getX() - 23.5, endPosition.getY() - 3, endPosition.getHeading());
                             drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                                     //.resetConstraints()
                                     .lineToConstantHeading(new Vector2d(endPosition.getX(), endPosition.getY()))
@@ -286,7 +287,7 @@ public class newAutoModeRight extends LinearOpMode {
                             );
                             break;
                         case 1:
-                            endPosition = new Pose2d(endPosition.getX() - 23.5 * 2, endPosition.getY(), endPosition.getHeading());
+                            endPosition = new Pose2d(endPosition.getX() - 23.5 * 2, endPosition.getY() - 3, endPosition.getHeading());
                             drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                                     //.resetConstraints()
                                     .lineToConstantHeading(new Vector2d(endPosition.getX(), endPosition.getY()))

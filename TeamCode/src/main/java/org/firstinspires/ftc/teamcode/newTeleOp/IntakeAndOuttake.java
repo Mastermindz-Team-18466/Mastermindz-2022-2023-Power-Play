@@ -769,7 +769,7 @@ public class IntakeAndOuttake {
                         switch (aSpecificInstruction) {
                             case DEPOSIT_CONE:
                                 armTargetPos = 0.66 + armIntakeOffset;
-                                verticalTargetPos = 1790;
+                                verticalTargetPos = 1810;
                                 prevAction = System.currentTimeMillis();
                                 aSpecificInstruction = specificInstructions.INCREASE_DEPOSIT_ACCURACY;
                                 break;
@@ -794,8 +794,8 @@ public class IntakeAndOuttake {
                                 }
                                 break;
                             case CLOSE_CLAW:
-                                if (System.currentTimeMillis() - prevAction > 50) {
-                                    armTargetPos = 0.1 + armIntakeOffset;
+                                if (System.currentTimeMillis() - prevAction > 200) {
+                                    armTargetPos = 0.115 + armIntakeOffset;
                                     prevAction = System.currentTimeMillis();
                                     aSpecificInstruction = specificInstructions.TURRET_RESET_DELAY;
                                 }
@@ -803,7 +803,7 @@ public class IntakeAndOuttake {
                             case NO_DEPOSIT_CONE:
                                 horizontalTargetPos = 0.2;
                                 verticalTargetPos = 10 + verticalIntakeOffset;
-                                armTargetPos = 0.1 + armIntakeOffset;
+                                armTargetPos = 0.115 + armIntakeOffset;
 //                                turretTargetPos = 915 + turretIntakeOffset;
 //                                turretTargetPos = 920;
                                 if (System.currentTimeMillis() - prevAction > 130) {
@@ -818,7 +818,7 @@ public class IntakeAndOuttake {
 //                                turretTargetPos = 915 + turretIntakeOffset;
                                 turretTargetPos = 1260;
                                 verticalTargetPos = 10 + verticalIntakeOffset;
-                                armTargetPos = 0.1 + armIntakeOffset;
+                                armTargetPos = 0.115 + armIntakeOffset;
                                 if (System.currentTimeMillis() - prevAction > 50) {
                                     prevAction = System.currentTimeMillis();
                                     aSpecificInstruction = specificInstructions.INTAKE_EXTENSION;
@@ -828,7 +828,7 @@ public class IntakeAndOuttake {
                                 horizontalTargetPos = 0.2;
 //                                turretTargetPos = 915 + turretIntakeOffset;
                                 turretTargetPos = 1260;
-                                armTargetPos = 0.1 + armIntakeOffset;
+                                armTargetPos = 0.115 + armIntakeOffset;
                                 verticalTargetPos = 10 + verticalIntakeOffset;
                                 if (System.currentTimeMillis() - prevAction > 130) {
                                     clawTargetPos = 0.23;
@@ -839,7 +839,7 @@ public class IntakeAndOuttake {
                                 horizontalTargetPos = 0.25;
 //                                turretTargetPos = 915 + turretIntakeOffset;
                                 turretTargetPos = 1260;
-                                armTargetPos = 0.1 + armIntakeOffset;
+                                armTargetPos = 0.115 + armIntakeOffset;
                                 verticalTargetPos = 10 + verticalIntakeOffset;
                                 if (System.currentTimeMillis() - prevAction > 300) {
                                     horizontalTargetPos = 0.25 + horizontalIntakeOffset;
@@ -848,10 +848,10 @@ public class IntakeAndOuttake {
                                 }
                                 break;
                             case HOLD_POS:
-                                horizontalTargetPos = 0.485 + horizontalIntakeOffset;
+                                horizontalTargetPos = 0.482 + horizontalIntakeOffset;
 //                                turretTargetPos = 915 + turretIntakeOffset;
                                 turretTargetPos = 1260;
-                                armTargetPos = 0.1 + armIntakeOffset;
+                                armTargetPos = 0.115 + armIntakeOffset;
                                 verticalTargetPos = 10 + verticalIntakeOffset;
                                 break;
                             case CLOSED_TO_INTAKE:
@@ -1524,7 +1524,7 @@ public class IntakeAndOuttake {
                                 break;
                             case ARM_DELAY:
                                 if (System.currentTimeMillis() - prevAction > 200) {
-                                    verticalTargetPos = 1790;
+                                    verticalTargetPos = 1810;
                                     prevAction = System.currentTimeMillis();
                                     aSpecificInstruction = specificInstructions.DELAY1;
                                 }
@@ -1538,7 +1538,7 @@ public class IntakeAndOuttake {
                                 }
                                 break;
                             case RETRACT_HORIZONTAL_SLIDES:
-                                verticalTargetPos = 1790;
+                                verticalTargetPos = 1810;
 //                                turretTargetPos = 1120 + turretOuttakeOffset;
                                 turretTargetPos = 1260;
                                 if (System.currentTimeMillis() - prevAction > 200) {
@@ -1549,7 +1549,7 @@ public class IntakeAndOuttake {
                                 }
                                 break;
                             case DELAY_TURRET_DEPOSIT:
-                                verticalTargetPos = 1790;
+                                verticalTargetPos = 1810;
                                 horizontalTargetPos = 0.2 + horizontalOuttakeOffset;
 //                                turretTargetPos = 1120 + turretOuttakeOffset;
                                 turretTargetPos = 1260;
@@ -1562,7 +1562,7 @@ public class IntakeAndOuttake {
                                 break;
                             case LOWER_VERTICAL:
                                 horizontalTargetPos = 0.05 + horizontalOuttakeOffset;
-                                verticalTargetPos = 1790;
+                                verticalTargetPos = 1810;
 //                                turretTargetPos = 1120 + turretOuttakeOffset;
                                 turretTargetPos = 1260;
                                 armTargetPos = 0.66 + armOuttakeOffset;
