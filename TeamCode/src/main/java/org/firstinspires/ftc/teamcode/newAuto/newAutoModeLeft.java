@@ -171,8 +171,8 @@ public class newAutoModeLeft extends LinearOpMode {
             position = 2;
         }
 
-        endPosition = new Pose2d(1.5 * 23.5, -(-3 * 23.5 + 62), -(Math.PI / 2 + Math.toRadians(80)));
-        Pose2d endPosition1 = new Pose2d(1.5 * 23.5 - 2, -(-3 * 23.5 + 62), -(Math.PI / 2 + Math.toRadians(80)));
+        endPosition = new Pose2d(1.5 * 23.5 + 2, -(-3 * 23.5 + 60), -(Math.PI / 2 + Math.toRadians(80)));
+        Pose2d endPosition1 = new Pose2d(1.5 * 23.5, -(-3 * 23.5 + 60), -(Math.PI / 2 + Math.toRadians(80)));
         drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(startPose)
                 .UNSTABLE_addTemporalMarkerOffset(3, () -> {
                     inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP);
@@ -231,7 +231,7 @@ public class newAutoModeLeft extends LinearOpMode {
                 }
 
 
-                if (currentTime - startTime >= 4100 && currentTime - startTime < 25000) {
+                if (currentTime - startTime >= 4100 && currentTime - startTime < 24500) {
 
                     if (cyclePos && currentTime - previousAction >= 2000) {
                         inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
@@ -252,7 +252,7 @@ public class newAutoModeLeft extends LinearOpMode {
                         cycles++;
                         verticalOffset -= 100;
                     }
-                } if (currentTime - startTime >= 25000 && park) {
+                } if (currentTime - startTime >= 24500 && park) {
                     System.out.println("Entered");
 
                     inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);

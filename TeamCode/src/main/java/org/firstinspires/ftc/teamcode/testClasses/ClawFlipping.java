@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.testClasses;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @Config
+@Disabled
 @TeleOp(name = "ClawSpin", group = "Test")
 public class ClawFlipping extends LinearOpMode {
 

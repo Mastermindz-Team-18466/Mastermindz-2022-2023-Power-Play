@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.testClasses;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 @TeleOp
+@Disabled
 public class ResetVert extends LinearOpMode {
 
     DcMotorEx motor1, motor2, motor3;

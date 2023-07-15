@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.vision.center;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -12,6 +13,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
 @Config
+@Disabled
 @TeleOp
 public class CenterOfPipeInitDetection extends LinearOpMode {
     OpenCvCamera camera;

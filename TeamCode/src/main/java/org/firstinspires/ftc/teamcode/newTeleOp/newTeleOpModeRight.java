@@ -228,6 +228,12 @@ public class newTeleOpModeRight extends LinearOpMode {
                         inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.INTAKE_EXTENSION);
                     }
 
+                    if (currentGamepad2.right_stick_button && !(previousGamepad2.right_stick_button)) {
+                        inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
+                        inOutTake.setaInstructions(IntakeAndOuttake.Instructions.RESET_CONE);
+                        inOutTake.setaSpecificInstruction(IntakeAndOuttake.specificInstructions.ARM_DOWN);
+                    }
+
                     if (currentGamepad2.right_trigger > .75 && !(previousGamepad2.right_trigger > .75)) {
                         inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP);
                         inOutTake.setaInstructions(IntakeAndOuttake.Instructions.STRAIGHT_DEPOSIT);

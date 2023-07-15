@@ -3,11 +3,13 @@ package org.firstinspires.ftc.teamcode.testClasses;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @Config
+@Disabled
 @TeleOp(name = "AxonLeft", group = "Test")
 public class ArmTestLeft extends LinearOpMode {
     public static double endPos1 = 0.5; //21.5 in

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.newTeleOp;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -8,11 +9,11 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.PoseStorage;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
-import org.firstinspires.ftc.teamcode.newAuto.Trajectories;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.newAuto.Trajectories;
 
 @TeleOp(name = "*newTeleOpModeLeft", group = "Concept")
-//@Disabled
+@Disabled
 public class newTeleOpModeLeft extends LinearOpMode {
 
     enum Mode {
