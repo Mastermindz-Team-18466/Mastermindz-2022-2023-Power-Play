@@ -233,6 +233,7 @@ public class newAutoModeRight extends LinearOpMode {
 
                if (currentTime - startTime >= 4100 && currentTime - startTime < 24500) {
 
+
                     if (cyclePos && currentTime - previousAction >= 2000) {
                         inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.GROUND);
                         inOutTake.setaInstructions(IntakeAndOuttake.Instructions.AUTO_RIGHT_INTAKE);
@@ -250,6 +251,7 @@ public class newAutoModeRight extends LinearOpMode {
 
                         cyclePos = true;
                         cycles++;
+
                         verticalOffset -= 105;
                   }
                 } if (currentTime - startTime >= 24500 && park) {
