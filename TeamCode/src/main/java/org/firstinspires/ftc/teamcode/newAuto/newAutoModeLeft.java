@@ -165,11 +165,7 @@ public class newAutoModeLeft extends LinearOpMode {
             telemetry.update();
         }
 
-        if (tagFound) {
-            position = tagOfInterest.id;
-        } else {
-            position = 2;
-        }
+        position = tagOfInterest.id;
 
         endPosition = new Pose2d(1.5 * 23.5 + 2, -(-3 * 23.5 + 60), -(Math.PI / 2 + Math.toRadians(80)));
         Pose2d endPosition1 = new Pose2d(1.5 * 23.5, -(-3 * 23.5 + 60), -(Math.PI / 2 + Math.toRadians(80)));

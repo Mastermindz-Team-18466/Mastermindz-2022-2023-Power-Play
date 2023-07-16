@@ -143,7 +143,7 @@ public class IntakeAndOuttake {
                                 break;
                             case ARM_DELAY:
                                 if (System.currentTimeMillis() - prevAction > 200) {
-                                    armTargetPos = 0.7;
+                                    armTargetPos = 0.64;
                                     prevAction = System.currentTimeMillis();
                                 }
                                 break;
@@ -531,13 +531,13 @@ public class IntakeAndOuttake {
                                 break;
                             case INTAKE_EXTENSION:
                                 if (System.currentTimeMillis() - prevAction > 275) {
-                                    verticalTargetPos = 900;
+                                    verticalTargetPos = 1200;
                                     prevAction = System.currentTimeMillis();
                                     aSpecificInstruction = specificInstructions.RETRACT_HORIZONTAL_SLIDES;
                                 }
                                 break;
                             case RETRACT_HORIZONTAL_SLIDES:
-                                if (System.currentTimeMillis() - prevAction > 500) {
+                                if (System.currentTimeMillis() - prevAction > 750) {
                                     clawSpin = 0.69;
                                     armTargetPos = 0.66 + armOuttakeOffset;
                                     horizontalTargetPos = 0.05;

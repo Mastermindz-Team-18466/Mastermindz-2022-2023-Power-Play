@@ -165,14 +165,10 @@ public class newAutoModeRight extends LinearOpMode {
             telemetry.update();
         }
 
-        if (tagFound) {
-            position = tagOfInterest.id;
-        } else {
-            position = 2;
-        }
+        position = tagOfInterest.id;
 
         endPosition = new Pose2d(1.5 * 23.5 - 5, -3 * 23.5 + 59, Math.PI / 2 + Math.toRadians(85));
-        Pose2d endPosition1 = new Pose2d(1.5 * 23.5 - 1, -3 * 23.5 + 59, Math.PI / 2 + Math.toRadians(85));
+        Pose2d endPosition1 = new Pose2d(1.5 * 23.5 - 3, -3 * 23.5 + 59, Math.PI / 2 + Math.toRadians(85));
         drive.followTrajectorySequenceAsync(drive.trajectorySequenceBuilder(startPose)
                 .UNSTABLE_addTemporalMarkerOffset(3, () -> {
                     inOutTake.setaVerticalPos(IntakeAndOuttake.verticalPos.TOP);
