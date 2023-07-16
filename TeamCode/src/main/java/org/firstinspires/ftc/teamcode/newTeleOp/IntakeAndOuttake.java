@@ -53,6 +53,11 @@ public class IntakeAndOuttake {
         switch (aVerticalPos) {
             case GROUND:
                 switch (aInstructions) {
+                    case CLOSED_CLAW:
+                        switch (aSpecificInstruction) {
+                            case CLOSE_CLAW:
+                                clawTargetPos = 0.5;
+                        }
                     case DESCORE:
                         switch (aSpecificInstruction) {
                             case DESCORE_POSE:
@@ -279,6 +284,38 @@ public class IntakeAndOuttake {
                                 break;
                         }
                         break;
+
+                    case TRANSFORMER_UP:
+                        switch (aSpecificInstruction) {
+                            case INTAKE_EXTENSION:
+                                clawTargetPos = 0.5;
+                                if (System.currentTimeMillis() - prevAction > 200) {
+                                    armTargetPos = 0.3;
+                                    horizontalTargetPos = 0.05;
+                                    verticalTargetPos = 10;
+                                    prevAction = System.currentTimeMillis();
+                                    aSpecificInstruction = specificInstructions.CLOSE_CLAW;
+                                }
+                                break;
+
+                            case CLOSE_CLAW:
+                                if (System.currentTimeMillis() - prevAction > 500) {
+                                    clawSpin = 0.69;
+                                    verticalTargetPos = 1790;
+                                    prevAction = System.currentTimeMillis();
+                                    aSpecificInstruction = specificInstructions.ARM_DOWN;
+                                }
+                                break;
+
+                            case ARM_DOWN:
+                                if (System.currentTimeMillis() - prevAction > 1000) {
+                                    armTargetPos = 0.7;
+                                    prevAction = System.currentTimeMillis();
+                                }
+                                break;
+                        }
+                        break;
+
 
                     case DRIVING:
                         turretTargetPos = 0;
@@ -1733,7 +1770,7 @@ public class IntakeAndOuttake {
         PRELOAD,
         SIXTH_CONE,
         DESCORE,
-        FALLEN_CONE, FALLEN_CONE_PICK, RESET_CONE,
+        FALLEN_CONE, FALLEN_CONE_PICK, RESET_CONE, CLOSED_CLAW, TRANSFORMER_UP,
     }
 
     public enum specificInstructions {
